@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -20,6 +21,7 @@ class User extends Authenticatable
         'phone',
         'address',
         'is_active',
+        'avatar_path',
     ];
 
     protected $hidden = [
@@ -84,5 +86,20 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    /**
+     * Returns the URL to the user's uploaded avatar, or a generated
+     * initials-based placeholder if none has been uploaded.
+     * Uses a streaming route instead of the public storage symlink,
+     * since `storage:link` often fails on Windows without admin rights.
+     */
+    public function avatarUrl(): string
+    {
+        if ($this->avatar_path && Storage::disk('public')->exists($this->avatar_path)) {
+            return route('avatar.show', $this);
+        }
+
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=1a1d2e&color=fff&size=128';
     }
 }
