@@ -190,6 +190,12 @@
                     <a href="{{ route('admin.security-events.index') }}" class="nav-link {{ request()->routeIs('admin.security-events.*') ? 'active' : '' }}">
                         Security Events
                     </a>
+                    <a href="{{ route('admin.settings.penalties') }}" class="nav-link {{ request()->routeIs('admin.settings.penalties*') ? 'active' : '' }}">
+                        Penalty Management
+                    </a>
+                    <a href="{{ route('admin.settings.system') }}" class="nav-link {{ request()->routeIs('admin.settings.system*') ? 'active' : '' }}">
+                        System Settings
+                    </a>
                 @endif
             </div>
 

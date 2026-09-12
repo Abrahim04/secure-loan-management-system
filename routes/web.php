@@ -19,3 +19,4 @@ require __DIR__.'/schedule.php';
 require __DIR__.'/admin-monitoring.php';
 require __DIR__.'/admin-users.php';
 require __DIR__.'/profile.php';
+require __DIR__.'/admin-settings.php';

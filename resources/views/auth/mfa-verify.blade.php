@@ -3,7 +3,7 @@
 @section('title', 'Verify Code')
 
 @section('content')
-<div class="row justify-content-center">
+<div class="row justify-content-center align-items-center min-vh-100">
     <div class="col-md-5">
         <div class="card shadow-sm">
             <div class="card-body p-4 text-center">
