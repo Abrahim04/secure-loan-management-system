@@ -179,7 +179,7 @@
                 @if (auth()->user()->isAdmin())
                     <div class="nav-section-label">Administration</div>
                     <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                        User Management
+                        Borrower Management
                     </a>
                     <a href="{{ route('admin.reports.index') }}" class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
                         Reports

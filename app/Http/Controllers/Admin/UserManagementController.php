@@ -58,9 +58,9 @@ class UserManagementController extends Controller
             'email_verified_at' => $validated['verification_status'] === 'verified' ? now() : null,
         ]);
 
-        AuditLog::record(auth()->id(), 'Created User', 'User', $user->id, "Created {$user->name} ({$user->email}) with role {$user->role}");
+        AuditLog::record(auth()->id(), 'Created Borrower', 'User', $user->id, "Created {$user->name} ({$user->email}) with role {$user->role}");
 
-        return back()->with('status', "User \"{$user->name}\" created successfully.");
+        return back()->with('status', "Borrower \"{$user->name}\" created successfully.");
     }
 
     public function update(Request $request, User $user): RedirectResponse
@@ -83,9 +83,9 @@ class UserManagementController extends Controller
                 : null,
         ]);
 
-        AuditLog::record(auth()->id(), 'Updated User', 'User', $user->id, "Updated {$user->name} ({$user->email})");
+        AuditLog::record(auth()->id(), 'Updated Borrower', 'User', $user->id, "Updated {$user->name} ({$user->email})");
 
-        return back()->with('status', "User \"{$user->name}\" updated successfully.");
+        return back()->with('status', "Borrower \"{$user->name}\" updated successfully.");
     }
 
     public function toggleStatus(User $user): RedirectResponse
@@ -94,15 +94,15 @@ class UserManagementController extends Controller
 
         AuditLog::record(
             auth()->id(),
-            $user->is_active ? 'Activated User' : 'Blocked User',
+            $user->is_active ? 'Activated Borrower' : 'Blocked Borrower',
             'User',
             $user->id,
-            "User: {$user->name} ({$user->email})"
+            "Borrower: {$user->name} ({$user->email})"
         );
 
         return back()->with('status', $user->is_active
-            ? "{$user->name} has been reactivated."
-            : "{$user->name} has been blocked.");
+            ? "Borrower \"{$user->name}\" has been reactivated."
+            : "Borrower \"{$user->name}\" has been blocked.");
     }
 
     public function destroy(User $user): RedirectResponse
@@ -114,9 +114,9 @@ class UserManagementController extends Controller
         $name = $user->name;
         $user->delete(); // soft delete — sets deleted_at
 
-        AuditLog::record(auth()->id(), 'Deleted User (soft)', 'User', $user->id, "Moved {$name} to trash");
+        AuditLog::record(auth()->id(), 'Deleted Borrower (soft)', 'User', $user->id, "Moved {$name} to trash");
 
-        return back()->with('status', "\"{$name}\" moved to trash.");
+        return back()->with('status', "Borrower \"{$name}\" moved to trash successfully.");
     }
 
     public function restore(int $id): RedirectResponse
@@ -124,27 +124,27 @@ class UserManagementController extends Controller
         $user = User::onlyTrashed()->findOrFail($id);
         $user->restore();
 
-        AuditLog::record(auth()->id(), 'Restored User', 'User', $user->id, "Restored {$user->name} ({$user->email}) from trash");
+        AuditLog::record(auth()->id(), 'Restored Borrower', 'User', $user->id, "Restored {$user->name} ({$user->email}) from trash");
 
-        return back()->with('status', "\"{$user->name}\" restored.");
+        return back()->with('status', "Borrower \"{$user->name}\" restored successfully.");
     }
 
     public function forceDelete(int $id): RedirectResponse
     {
         $user = User::onlyTrashed()->findOrFail($id);
 
-        // Refuse to cascade-delete a user's financial history through a UI click.
+        // Refuse to cascade-delete a borrower's financial history through a UI click.
         if ($user->loans()->exists()) {
-            return back()->with('error', "Cannot permanently delete \"{$user->name}\": this account has loan records, and permanently deleting the user would also delete that financial history. Restore the account instead if it needs to remain reachable, or handle the loan records first.");
+            return back()->with('error', "Cannot permanently delete \"{$user->name}\" because financial loan records exist for this borrower. Restore the account instead if it needs to remain reachable, or handle the loan records first.");
         }
 
         $name = $user->name;
         $email = $user->email;
         $user->forceDelete();
 
-        // Record against the acting admin, not the now-deleted user.
-        AuditLog::record(auth()->id(), 'Permanently Deleted User', 'User', null, "Permanently deleted {$name} ({$email})");
+        // Record against the acting admin, not the now-deleted borrower.
+        AuditLog::record(auth()->id(), 'Permanently Deleted Borrower', 'User', null, "Permanently deleted {$name} ({$email})");
 
-        return back()->with('status', "\"{$name}\" permanently deleted.");
+        return back()->with('status', "Borrower \"{$name}\" permanently deleted.");
     }
 }

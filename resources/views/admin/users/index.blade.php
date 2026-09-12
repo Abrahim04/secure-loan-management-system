@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', $showingTrash ? 'Archived Users' : 'User Management')
+@section('title', $showingTrash ? 'Archived Borrowers' : 'Borrower Management')
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-    <h4 class="mb-0">{{ $showingTrash ? 'Archived Users' : 'User Management' }}</h4>
+    <h4 class="mb-0">{{ $showingTrash ? 'Archived Borrowers' : 'Borrower Management' }}</h4>
     <div class="d-flex gap-2">
         <a href="{{ route('admin.users.index', $showingTrash ? [] : ['trashed' => 1]) }}" class="btn btn-outline-secondary">
-            {{ $showingTrash ? 'View Active Users' : 'View Trash / Archived Users' }}
+            {{ $showingTrash ? 'View Active Borrowers' : 'View Trash / Archived Borrowers' }}
         </a>
         @unless ($showingTrash)
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
-                + Add User
+                + Add Borrower
             </button>
         @endunless
     </div>
@@ -43,7 +43,7 @@
 @endunless
 
 @if ($users->isEmpty())
-    <div class="alert alert-info">{{ $showingTrash ? 'No archived users.' : 'No borrowers found.' }}</div>
+    <div class="alert alert-info">{{ $showingTrash ? 'No archived borrowers.' : 'No borrowers found.' }}</div>
 @else
     <div class="table-responsive">
         <table class="table table-bordered bg-white align-middle">
@@ -89,16 +89,16 @@
                                 <form method="POST" action="{{ route('admin.users.toggle-status', $user) }}" class="d-inline">
                                     @csrf
                                     @if ($user->is_active)
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Block {{ $user->name }}? They will be unable to log in.')">Block</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Block borrower {{ $user->name }}? They will be unable to log in.')">Block</button>
                                     @else
-                                        <button type="submit" class="btn btn-sm btn-outline-success" onclick="return confirm('Reactivate {{ $user->name }}?')">Activate</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-success" onclick="return confirm('Reactivate borrower {{ $user->name }}?')">Activate</button>
                                     @endif
                                 </form>
 
                                 <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Move {{ $user->name }} to trash? They will be unable to log in until restored.')">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Move borrower {{ $user->name }} to trash? They will be unable to log in until restored.')">Delete</button>
                                 </form>
                             </td>
 
@@ -110,7 +110,7 @@
                                             @csrf
                                             @method('PUT')
                                             <div class="modal-header">
-                                                <h5 class="modal-title">Edit User</h5>
+                                                <h5 class="modal-title">Edit Borrower Details</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
                                             <div class="modal-body">
@@ -158,12 +158,12 @@
                                 <form method="POST" action="{{ route('admin.users.restore', $user->id) }}" class="d-inline">
                                     @csrf
                                     @method('PUT')
-                                    <button type="submit" class="btn btn-sm btn-outline-success" onclick="return confirm('Restore {{ $user->name }}?')">Restore</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-success" onclick="return confirm('Restore borrower {{ $user->name }}?')">Restore</button>
                                 </form>
                                 <form method="POST" action="{{ route('admin.users.force-delete', $user->id) }}" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Permanently delete {{ $user->name }}? This cannot be undone.')">Permanently Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Permanently delete borrower {{ $user->name }}? This cannot be undone.')">Permanently Delete</button>
                                 </form>
                             </td>
                         @endunless
@@ -176,14 +176,14 @@
     {{ $users->links() }}
 @endif
 
-{{-- Add User Modal --}}
+{{-- Add Borrower Modal --}}
 <div class="modal fade" id="addUserModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST" action="{{ route('admin.users.store') }}">
                 @csrf
                 <div class="modal-header">
-                    <h5 class="modal-title">Add User</h5>
+                    <h5 class="modal-title">Add New Borrower</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -229,7 +229,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Create User</button>
+                    <button type="submit" class="btn btn-primary">Create Borrower</button>
                 </div>
             </form>
         </div>
@@ -238,7 +238,7 @@
 
 @push('scripts')
 <script>
-    // Re-open the Add User modal automatically if validation failed on submit.
+    // Re-open the Add Borrower modal automatically if validation failed on submit.
     @if ($errors->any() && old('name') !== null)
         document.addEventListener('DOMContentLoaded', function () {
             new bootstrap.Modal(document.getElementById('addUserModal')).show();
