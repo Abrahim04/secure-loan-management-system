@@ -51,6 +51,7 @@ class SystemSettingsController extends Controller
             'otp_expiry_minutes' => SystemSetting::get('otp_expiry_minutes', 5),
             'otp_max_attempts' => SystemSetting::get('otp_max_attempts', 3),
             'otp_resend_cooldown_seconds' => SystemSetting::get('otp_resend_cooldown_seconds', 60),
+            'otp_free_resend_attempts' => SystemSetting::get('otp_free_resend_attempts', 5),
         ];
 
         return view('admin.settings.system', compact('settings'));
@@ -62,6 +63,7 @@ class SystemSettingsController extends Controller
             'otp_expiry_minutes' => ['required', 'integer', 'min:1', 'max:60'],
             'otp_max_attempts' => ['required', 'integer', 'min:1', 'max:10'],
             'otp_resend_cooldown_seconds' => ['required', 'integer', 'min:10', 'max:600'],
+            'otp_free_resend_attempts' => ['required', 'integer', 'min:0', 'max:20'],
         ]);
 
         foreach ($validated as $key => $value) {
@@ -73,7 +75,7 @@ class SystemSettingsController extends Controller
             'Updated System Settings',
             'SystemSetting',
             null,
-            "otp_expiry_minutes={$validated['otp_expiry_minutes']}, otp_max_attempts={$validated['otp_max_attempts']}, otp_resend_cooldown_seconds={$validated['otp_resend_cooldown_seconds']}"
+            "otp_expiry_minutes={$validated['otp_expiry_minutes']}, otp_max_attempts={$validated['otp_max_attempts']}, otp_resend_cooldown_seconds={$validated['otp_resend_cooldown_seconds']}, otp_free_resend_attempts={$validated['otp_free_resend_attempts']}"
         );
 
         return back()->with('status', 'System settings updated.');

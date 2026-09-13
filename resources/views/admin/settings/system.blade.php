@@ -44,10 +44,20 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label">Free Resend Attempts</label>
+                <input type="number" name="otp_free_resend_attempts" class="form-control"
+                       value="{{ old('otp_free_resend_attempts', $settings['otp_free_resend_attempts']) }}" min="0" max="20" required>
+                <div class="form-text">
+                    Number of resend clicks or incorrect code attempts allowed before the resend cooldown kicks in.
+                    The resend button stays immediately clickable until this many combined attempts are used.
+                </div>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label">Resend Cooldown (seconds)</label>
                 <input type="number" name="otp_resend_cooldown_seconds" class="form-control"
                        value="{{ old('otp_resend_cooldown_seconds', $settings['otp_resend_cooldown_seconds']) }}" min="10" max="600" required>
-                <div class="form-text">Minimum wait time before a user can request another OTP.</div>
+                <div class="form-text">Wait time between resends once the free-attempts limit above is reached.</div>
             </div>
 
             <button type="submit" class="btn btn-primary">Save System Settings</button>

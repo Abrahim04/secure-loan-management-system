@@ -11,6 +11,7 @@ use App\Mail\OtpMail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
@@ -48,10 +49,23 @@ class AuthenticatedSessionController extends Controller
         $otpExpiry = (int) SystemSetting::get('otp_expiry_minutes', 5);
         $otp = Mfa::generateFor($user, $otpExpiry);
 
-        Mail::to($user->email)->send(new OtpMail($otp->otp_code, $otpExpiry));
+        // The user's identity is already confirmed at this point (valid credentials),
+        // so it's safe to surface a specific error here — no enumeration risk.
+        try {
+            Mail::to($user->email)->send(new OtpMail($otp->otp_code, $otpExpiry));
+        } catch (\Exception $e) {
+            Log::error('OTP Mail Delivery Failed: ' . $e->getMessage());
 
+            throw ValidationException::withMessages([
+                'email' => 'Unable to send OTP email. Please verify your email address or try again later.',
+            ]);
+        }
+
+        // Only reached on a successful send — no MFA session state is created
+        // (and no attempt counters touched) if delivery failed above.
         $request->session()->put('mfa_user_id', $user->id);
         $request->session()->put('mfa_otp_sent_at', now()->timestamp);
+        $request->session()->forget(['mfa_resend_count', 'mfa_last_resend_at']);
 
         return redirect()->route('mfa.verify');
     }

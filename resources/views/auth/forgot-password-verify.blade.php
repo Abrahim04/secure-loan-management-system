@@ -37,11 +37,57 @@
                     <button type="submit" class="btn btn-primary w-100">Verify</button>
                 </form>
 
-                <p class="mt-3 mb-0">
+                <div id="resend-cooldown-text" class="text-muted small mt-3 mb-1" style="{{ $resendCooldown <= 0 ? 'display:none;' : '' }}">
+                    Resend code in <span id="cooldown-timer">{{ sprintf('%02d:%02d', intdiv($resendCooldown, 60), $resendCooldown % 60) }}</span>
+                </div>
+
+                <form method="POST" action="{{ route('password.reset.send') }}" class="mt-2">
+                    @csrf
+                    <input type="hidden" name="email" value="{{ session('password_reset_email') }}">
+                    <button type="submit" class="btn btn-link" id="resend-btn" {{ $resendCooldown > 0 ? 'disabled' : '' }}>
+                        Resend code
+                    </button>
+                </form>
+
+                <p class="mt-1 mb-0">
                     <a href="{{ route('password.reset.request') }}">Start over</a>
                 </p>
             </div>
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    let remaining = {{ $resendCooldown }};
+    const resendBtn = document.getElementById('resend-btn');
+    const cooldownText = document.getElementById('resend-cooldown-text');
+    const timerSpan = document.getElementById('cooldown-timer');
+
+    function formatTime(totalSeconds) {
+        const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+        const s = (totalSeconds % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+    }
+
+    if (remaining > 0) {
+        resendBtn.disabled = true;
+        resendBtn.style.pointerEvents = 'none';
+
+        const countdownInterval = setInterval(() => {
+            remaining--;
+
+            if (remaining <= 0) {
+                clearInterval(countdownInterval);
+                resendBtn.disabled = false;
+                resendBtn.style.pointerEvents = 'auto';
+                cooldownText.style.display = 'none';
+                return;
+            }
+
+            timerSpan.textContent = formatTime(remaining);
+        }, 1000);
+    }
+</script>
+@endpush
 @endsection
