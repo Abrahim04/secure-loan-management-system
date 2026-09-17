@@ -75,7 +75,7 @@
             padding: 1rem;
             border-top: 1px solid rgba(255,255,255,.08);
         }
-        .sidebar-footer form button {
+        .sidebar-footer .btn {
             width: 100%;
         }
 
@@ -200,12 +200,30 @@
             </div>
 
             <div class="sidebar-footer">
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" id="logout-form">
                     @csrf
-                    <button class="btn btn-outline-light btn-sm" type="submit">Logout</button>
                 </form>
+                <button type="button" class="btn btn-outline-light btn-sm w-100" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</button>
             </div>
         </nav>
+
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirm Logout</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to log out of your account?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" form="logout-form" class="btn btn-danger">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endauth
 
     <div class="main-content">

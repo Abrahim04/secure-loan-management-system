@@ -207,6 +207,9 @@
                     <div class="mb-3">
                         <label class="form-label">Password</label>
                         <input type="password" name="password" class="form-control" required>
+                        <div class="form-text">
+                            Must be at least 8 characters and include an uppercase letter, a lowercase letter, a number, and a special character (e.g. !@#$%).
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Confirm Password</label>
