@@ -81,12 +81,13 @@
         color: #fff;
     }
     .hero-slate-bg {
-        background-image:
-            linear-gradient(90deg, rgba(15,23,42,.55) 0%, rgba(15,23,42,.18) 60%, rgba(15,23,42,.05) 100%),
-            url('{{ asset('images/landing-hero.jpg') }}');
-        background-size: cover;
-        background-position: center;
-    }
+    background-image: 
+        linear-gradient(90deg, rgba(15, 23, 42, .55) 0%, rgba(15, 23, 42, .18) 60%, rgba(15, 23, 42, .05) 100%), 
+        url('{{ asset('images/landing-hero.png') }}');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
     .hero-eyebrow {
         font-size: 1.35rem;
         font-weight: 600;
@@ -135,6 +136,27 @@
         padding-bottom: .5rem;
         max-width: 260px;
     }
+
+   .hero-section {
+    min-height: 100vh !important;
+    height: 100vh !important;
+    width: 100% !important;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background-color: #0d131f; /* Ito ang gagamiting kulay para hindi puti kung sakaling magkaroon man ng lag */
+}
+
+.hero-slate-bg {
+    background-image: 
+        linear-gradient(90deg, rgba(15, 23, 42, .55) 0%, rgba(15, 23, 42, .18) 60%, rgba(15, 23, 42, .05) 100%), 
+        url('{{ asset('images/landing-hero.png') }}');
+    background-size: cover !important; /* Tatakpan nito ang 100% ng screen nang walang puwang */
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: scroll !important; /* Iniiwasan nito ang white gaps sa mobile at browser resize */
+}
 
     /* --- About feature cards --- */
     .feature-icon-crimson {

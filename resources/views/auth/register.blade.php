@@ -152,6 +152,32 @@
             font-size: 0.78rem;
             color: #166534;
         }
+
+        /* Back to Home Button Style */
+        .btn-back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 50px;
+            color: #475569;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.25s ease-in-out;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-back-home:hover {
+            background-color: #e6f4ea;
+            border-color: #10b981;
+            color: #059669;
+            transform: translateX(-3px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+        }
+
     </style>
 </head>
 <body>
@@ -171,8 +197,12 @@
                         <div class="text-muted small mt-1" style="font-size: 0.78rem;">Your Loan, Our Priority</div>
                     </div>
                 </div>
-                <a href="/" class="text-secondary text-decoration-none small fw-semibold">
-                    <i class="bi bi-arrow-left me-1"></i> Back to Home
+                <a href="{{ url('/') }}" class="btn-back-home">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>Back to Home</span>
                 </a>
             </div>
 

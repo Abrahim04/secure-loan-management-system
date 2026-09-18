@@ -127,9 +127,9 @@
             justify-content: space-between;
             padding: 4.5rem 4rem;
             min-height: 100vh;
-        }
 
-        .feature-circle {
+        }
+            .feature-circle {
             width: 52px;
             height: 52px;
             border-radius: 50%;
@@ -142,6 +142,59 @@
             font-size: 1.35rem;
             margin-bottom: 0.75rem;
         }
+
+        /* Professional Glass Button */
+.btn-outline-glass {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8 !important;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 10px;
+    transition: all 0.25s ease-in-out;
+    text-decoration: none;
+}
+
+.btn-outline-glass:hover {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #10b981 !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+/* Fix sa Autofill Background Color */
+.form-control-dark:-webkit-autofill,
+.form-control-dark:-webkit-autofill:hover, 
+.form-control-dark:-webkit-autofill:focus, 
+.form-control-dark:-webkit-autofill:active {
+    -webkit-text-fill-color: #f8fafc !important;
+    -webkit-box-shadow: 0 0 0px 1000px #1e293b inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.btn-back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 50px;
+    color: #475569;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease-in-out;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.btn-back-home:hover {
+    background-color: #e6f4ea;
+    border-color: #10b981;
+    color: #059669;
+    transform: translateX(-3px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
 
        .custom-input.is-invalid {
     border-color: #ef4444 !important;
@@ -171,9 +224,13 @@
                         <div class="text-muted small mt-1" style="font-size: 0.78rem;">Your Loan, Our Priority</div>
                     </div>
                 </div>
-                <a href="/" class="text-secondary text-decoration-none small fw-semibold">
-                    <i class="bi bi-arrow-left me-1"></i> Back to Home
-                </a>
+                <a href="{{ url('/') }}" class="btn-back-home">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+    </svg>
+    <span>Back to Home</span>
+</a>
             </div>
 
             <!-- Login Form Area -->

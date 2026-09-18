@@ -4,7 +4,8 @@
 
 @push('styles')
 <style>
-    .mfa-page-wrapper {
+    /* Fullscreen background overlay */
+    .auth-page-wrapper {
         position: fixed;
         top: 0;
         left: 0;
@@ -14,17 +15,17 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        /* Pinagsamang dark overlay at background image */
         background: linear-gradient(rgba(15, 23, 42, 0.70), rgba(15, 23, 42, 0.70)), 
                     url("{{ asset('images/mfa-bg.png') }}") no-repeat center center / cover;
     }
 
-    .mfa-container {
+    .auth-container {
         position: relative;
         z-index: 2;
         width: 100%;
     }
 
+    /* Glass Card styling */
     .auth-card {
         background: rgba(15, 23, 42, 0.85);
         backdrop-filter: blur(12px);
@@ -34,6 +35,7 @@
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     }
 
+    /* OTP Form Input */
     .otp-input {
         background-color: #1e293b !important;
         border: 1px solid #334155 !important;
@@ -49,171 +51,129 @@
         background-color: #0f172a !important;
     }
 
-    .otp-input.is-invalid {
-        border-color: #ef4444 !important;
-    }
-
+    /* Emerald Button Hover Effects */
     .btn-emerald {
         background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
         border: none;
         color: #ffffff;
         font-weight: 600;
-        transition: opacity 0.2s;
+        transition: all 0.2s ease-in-out;
     }
 
     .btn-emerald:hover {
-        opacity: 0.9;
+        opacity: 0.95;
         color: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35) !important;
     }
 
-    .no-animation {
-        animation: none !important;
-        opacity: 1 !important;
-        transform: none !important;
+    .btn-emerald:active {
+        transform: translateY(1px);
+        box-shadow: none !important;
     }
 
-    /* Hover & Active Effects para sa Verify Button */
-.btn-emerald {
-    background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
-    border: none;
-    color: #ffffff;
-    font-weight: 600;
-    transition: all 0.2s ease-in-out;
-}
-
-.btn-emerald:hover {
-    opacity: 0.95;
-    color: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35) !important;
-}
-
-.btn-emerald:active {
-    transform: translateY(1px);
-    box-shadow: none !important;
-}
-
-/* Hover & Active Effects para sa Resend Code Button */
-#resend-btn {
-    transition: all 0.2s ease-in-out;
-}
-
-#resend-btn:hover:not(:disabled) {
-    color: #34d399 !important; /* Mas maliwanag na emerald */
-    text-decoration: underline !important;
-    transform: scale(1.02);
-}
-
-#resend-btn:active:not(:disabled) {
-    transform: scale(0.98);
-}
-
-/* Hover & Active Effects para sa Back to Login Link */
-.hover-white {
-    transition: all 0.2s ease-in-out;
-    display: inline-block;
-}
-
-.hover-white:hover {
-    color: #ffffff !important; /* Magiging kulay puti pag tinutok */
-    transform: translateX(-3px); /* Kaunting galaw pabalik sa kaliwa */
-}
-
-.hover-white:active {
-    transform: translateX(-1px);
-}
-
-/* Entrance animation para sa MFA Card */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+    /* Resend Link Hover */
+    #resend-btn {
+        transition: all 0.2s ease-in-out;
+        color: #10b981;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    #resend-btn:hover:not(:disabled) {
+        color: #34d399 !important;
+        text-decoration: underline !important;
+        transform: scale(1.02);
     }
-}
 
-.animate-up {
-    animation: fadeInUp 0.5s ease-out forwards;
-}
+    /* Back Link Hover */
+    .hover-white {
+        transition: all 0.2s ease-in-out;
+        display: inline-block;
+    }
 
-/* Pinipigilan ang pag-re-animate kapag may error sa Blade validation */
-.no-animation {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-}
+    .hover-white:hover {
+        color: #ffffff !important;
+        transform: translateX(-3px);
+    }
+
+    /* Entrance Animations */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-up { animation: fadeInUp 0.5s ease-out forwards; }
+    .no-animation { animation: none !important; opacity: 1 !important; transform: none !important; }
 </style>
 @endpush
 
 @section('content')
-<div class="mfa-page-wrapper">
-    <div class="container mfa-container">
+<div class="auth-page-wrapper">
+    <div class="container auth-container">
         <div class="row justify-content-center">
             <div class="col-11 col-sm-8 col-md-5 col-lg-4 {{ $errors->any() ? 'no-animation' : 'animate-up' }}">
                 <div class="card auth-card text-white">
                     <div class="card-body p-4 p-md-5 text-center">
                         
-                        <!-- Logo Image Header -->
+                        <!-- Logo -->
                         <div class="mb-4">
                             <img src="{{ asset('images/logo.png') }}" alt="PautangPro Logo" style="height: 50px; width: auto;">
                         </div>
 
-                        <h4 class="fw-bold mb-2">Check Your Email</h4>
-                        <p class="text-secondary small mb-4">
-                            We sent a 6-digit verification code to your email address. It will expire shortly.
-                        </p>
+                        <h4 class="fw-bold mb-2">Enter Verification Code</h4>
+                        <p class="text-secondary small mb-4">We sent a 6-digit code to your email if it matches an account.</p>
 
-                        <!-- Error Alert Directive -->
-                        @error('otp_code')
-                            <div class="alert alert-danger text-start small border-0 mb-4" style="background-color: rgba(239, 68, 68, 0.15); color: #f87171;">
-                                <i class="bi bi-exclamation-circle me-1"></i>{{ $message }}
-                            </div>
-                        @enderror
+                        <!-- Error Alerts -->
+                        @if ($errors->any())
+    <div class="alert alert-danger text-start small border-0 mb-4" style="background-color: rgba(239, 68, 68, 0.15); color: #f87171;">
+        <ul class="mb-0 ps-3">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
                         <!-- OTP Form -->
-                        <form method="POST" action="{{ route('mfa.verify.submit') }}">
+                        <form method="POST" action="{{ route('password.reset.verify.submit') }}">
                             @csrf
                             <div class="mb-3">
-                                <input 
-                                    type="text" 
-                                    name="otp_code" 
-                                    class="form-control form-control-lg text-center otp-input @error('otp_code') is-invalid @enderror" 
-                                    maxlength="6" 
-                                    inputmode="numeric" 
-                                    pattern="\d{6}" 
-                                    placeholder="------" 
-                                    required 
+                                <input
+                                    type="text"
+                                    name="otp_code"
+                                    class="form-control form-control-lg text-center otp-input"
+                                    maxlength="6"
+                                    inputmode="numeric"
+                                    pattern="\d{6}"
+                                    placeholder="------"
+                                    required
                                     autofocus
                                 >
                             </div>
-
                             <button type="submit" class="btn btn-emerald btn-lg w-100 mb-3 shadow-sm">
                                 <i class="bi bi-patch-check me-2"></i>Verify
                             </button>
                         </form>
 
                         <!-- Cooldown Timer -->
-                        <div id="resend-cooldown-text" class="text-secondary small mb-2" style="{{ $resendCooldown <= 0 ? 'display:none;' : '' }}">
+                        <div id="resend-cooldown-text" class="text-secondary small mb-1" style="{{ $resendCooldown <= 0 ? 'display:none;' : '' }}">
                             Resend code in <span id="cooldown-timer" class="fw-bold text-light">{{ sprintf('%02d:%02d', intdiv($resendCooldown, 60),$resendCooldown % 60) }}</span>
                         </div>
 
-                        <!-- Resend Code Button -->
-                        <form method="POST" action="{{ route('mfa.resend') }}" class="mb-3">
+                        <!-- Resend Form -->
+                        <form method="POST" action="{{ route('password.reset.send') }}" class="mb-2">
                             @csrf
-                            <button type="submit" class="btn btn-link text-decoration-none small" style="color: #10b981;" id="resend-btn" {{ $resendCooldown > 0 ? 'disabled' : '' }}>
+                            <input type="hidden" name="email" value="{{ session('password_reset_email') }}">
+                            <button type="submit" class="btn btn-link text-decoration-none small" id="resend-btn" {{ $resendCooldown > 0 ? 'disabled' : '' }}>
                                 Resend code
                             </button>
                         </form>
 
                         <hr class="border-secondary opacity-25 my-3">
 
-                        <!-- Back to Login / Return Action -->
+                        <!-- Start Over Link -->
                         <div class="pt-1">
-                            <a href="{{ route('login') }}" class="text-secondary text-decoration-none small hover-white">
-                                <i class="bi bi-arrow-left me-1"></i>Back to Login
+                            <a href="{{ route('password.reset.request') }}" class="text-secondary text-decoration-none small hover-white">
+                                <i class="bi bi-arrow-left me-1"></i>Start over
                             </a>
                         </div>
 
