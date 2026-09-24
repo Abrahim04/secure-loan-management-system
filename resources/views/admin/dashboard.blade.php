@@ -3,126 +3,242 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
-<h3 class="mb-4">Admin Dashboard</h3>
+<!-- Custom Clean Styling (Compatible sa Light & Dark Main Layouts) -->
+<style>
+    .dash-card {
+        background-color: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+    .dash-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    .icon-box {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .glass-btn-action {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+    .glass-btn-action:hover {
+        background: #10b981;
+        border-color: #10b981;
+        color: #ffffff;
+    }
+    .activity-table td {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+        padding: 12px 8px !important;
+        background: transparent !important;
+        color: #e2e8f0 !important;
+    }
+</style>
 
 {{-- Total Portfolio Summary --}}
 <div class="row g-3 mb-1">
+    <!-- Total Released Loans -->
     <div class="col-md-6">
-        <div class="card shadow-sm border-success h-100">
-            <div class="card-body">
-                <h6 class="text-muted">Total Released Loans</h6>
-                <h2 class="text-success">₱{{ number_format($totalReleased, 2) }}</h2>
-                <p class="mb-0 small text-muted">Total disbursed capital (active + completed loans)</p>
+        <div class="dash-card h-100 p-4" style="border-left: 4px solid #10b981;">
+            <div class="d-flex align-items-center gap-3 mb-2">
+                <div class="icon-box bg-success bg-opacity-20 text-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <h6 class="text-light opacity-75 mb-0 fw-semibold">Total Released Loans</h6>
             </div>
+            <h2 class="fw-bold my-1" style="color: #34d399 !important;">₱{{ number_format($totalReleased, 2) }}</h2>
+            <p class="mb-0 small text-light opacity-50">Total disbursed capital (active + completed loans)</p>
         </div>
     </div>
+
+    <!-- Total Collected Amount -->
     <div class="col-md-6">
-        <div class="card shadow-sm border-primary h-100">
-            <div class="card-body">
-                <h6 class="text-muted">Total Collected Amount</h6>
-                <h2 class="text-primary">₱{{ number_format($totalCollected, 2) }}</h2>
-                <p class="mb-0 small text-muted">Sum of all verified payments</p>
+        <div class="dash-card h-100 p-4" style="border-left: 4px solid #38bdf8;">
+            <div class="d-flex align-items-center gap-3 mb-2">
+                <div class="icon-box bg-info bg-opacity-20 text-info">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4z"></path>
+                    </svg>
+                </div>
+                <h6 class="text-light opacity-75 mb-0 fw-semibold">Total Collected Amount</h6>
             </div>
+            <h2 class="fw-bold my-1" style="color: #38bdf8 !important;">₱{{ number_format($totalCollected, 2) }}</h2>
+            <p class="mb-0 small text-light opacity-50">Sum of all verified payments</p>
         </div>
     </div>
 </div>
 
 <div class="row g-3 mt-1">
+    <!-- Pending Loans -->
     <div class="col-md-3">
-        <a href="{{ route('admin.loans.index') }}" class="text-decoration-none text-dark">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h6 class="text-muted">Pending Loans</h6>
-                    <h3>{{ $pendingLoansCount }}</h3>
-                    <p class="mb-0 small text-muted">Review new loan applications</p>
+        <a href="{{ route('admin.loans.index') }}" class="text-decoration-none">
+            <div class="dash-card h-100 p-3">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="icon-box bg-primary bg-opacity-20 text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div>
+                        <h6 class="text-light opacity-75 mb-0 small">Pending Loans</h6>
+                        <h3 class="text-white fw-bold mb-0">{{ $pendingLoansCount }}</h3>
+                    </div>
                 </div>
+                <p class="mb-0 small text-light opacity-50">Review new loan applications</p>
             </div>
         </a>
     </div>
+
+    <!-- Pending Payments -->
     <div class="col-md-3">
-        <a href="{{ route('admin.payments.index') }}" class="text-decoration-none text-dark">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h6 class="text-muted">Pending Payments</h6>
-                    <h3>{{ $pendingPaymentsCount }}</h3>
-                    <p class="mb-0 small text-muted">Verify submitted GCash payments</p>
+        <a href="{{ route('admin.payments.index') }}" class="text-decoration-none">
+            <div class="dash-card h-100 p-3">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="icon-box bg-warning bg-opacity-20 text-warning">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line>
+                        </svg>
+                    </div>
+                    <div>
+                        <h6 class="text-light opacity-75 mb-0 small">Pending Payments</h6>
+                        <h3 class="text-white fw-bold mb-0">{{ $pendingPaymentsCount }}</h3>
+                    </div>
                 </div>
+                <p class="mb-0 small text-light opacity-50">Verify submitted GCash payments</p>
             </div>
         </a>
     </div>
+
+    <!-- Overdue Installments -->
     <div class="col-md-3">
-        <a href="{{ route('admin.reports.loans', ['status' => 'active']) }}" class="text-decoration-none text-dark">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h6 class="text-muted">Overdue Installments</h6>
-                    <h3 class="text-danger">{{ $overdueCount }}</h3>
-                    <p class="mb-0 small text-muted">Monitor overdue accounts and penalties</p>
+        <a href="{{ route('admin.reports.loans', ['status' => 'active']) }}" class="text-decoration-none">
+            <div class="dash-card h-100 p-3">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="icon-box bg-danger bg-opacity-20 text-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div>
+                        <h6 class="text-light opacity-75 mb-0 small">Overdue Installments</h6>
+                        <h3 class="text-danger fw-bold mb-0" style="color: #f87171 !important;">{{ $overdueCount }}</h3>
+                    </div>
                 </div>
+                <p class="mb-0 small text-light opacity-50">Monitor overdue accounts & penalties</p>
             </div>
         </a>
     </div>
+
+    <!-- Security Events -->
     <div class="col-md-3">
-        <a href="{{ route('admin.security-events.index') }}" class="text-decoration-none text-dark">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h6 class="text-muted">Security Events (24h)</h6>
-                    <h3>{{ $recentSecurityEventsCount }}</h3>
-                    <p class="mb-0 small text-muted">Failed logins and suspicious activity</p>
+        <a href="{{ route('admin.security-events.index') }}" class="text-decoration-none">
+            <div class="dash-card h-100 p-3">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="icon-box bg-info bg-opacity-20 text-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h6 class="text-light opacity-75 mb-0 small">Security Events (24h)</h6>
+                        <h3 class="text-white fw-bold mb-0">{{ $recentSecurityEventsCount }}</h3>
+                    </div>
                 </div>
+                <p class="mb-0 small text-light opacity-50">Failed logins and suspicious activity</p>
             </div>
         </a>
     </div>
 </div>
 
 <div class="row g-3 mt-1">
-    {{-- Recent Activity --}}
+    {{-- Recent Activity Table --}}
     <div class="col-md-7">
-        <div class="card shadow-sm h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6 class="text-muted mb-0">Recent Activity</h6>
-                    <a href="{{ route('admin.audit-logs.index') }}" class="small">View all audit logs →</a>
+        <div class="dash-card h-100 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <h6 class="text-white fw-bold mb-0">Recent Activity</h6>
                 </div>
-                @if ($recentActivity->isEmpty())
-                    <p class="text-muted small mb-0">No recent activity.</p>
-                @else
-                    <table class="table table-sm mb-0">
+                <a href="{{ route('admin.audit-logs.index') }}" class="small text-success text-decoration-none fw-semibold">View all audit logs →</a>
+            </div>
+
+            @if ($recentActivity->isEmpty())
+                <p class="text-light opacity-50 small mb-0">No recent activity.</p>
+            @else
+                <div class="table-responsive">
+                    <table class="table activity-table align-middle mb-0">
                         <tbody>
                             @foreach ($recentActivity as $log)
                                 <tr>
-                                    <td class="small">{{ $log->user->name ?? 'System' }}</td>
-                                    <td class="small">{{ $log->action }}</td>
-                                    <td class="small text-muted text-end">{{ $log->created_at->diffForHumans() }}</td>
+                                    <td class="small fw-semibold">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle bg-secondary bg-opacity-25 p-1 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                            </div>
+                                            <span>{{ $log->user->name ?? 'System' }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="small opacity-75">{{ $log->action }}</td>
+                                    <td class="small opacity-50 text-end">{{ $log->created_at->diffForHumans() }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                @endif
-            </div>
+                </div>
+            @endif
         </div>
     </div>
 
     {{-- User Management quick access --}}
     <div class="col-md-5">
-        <a href="{{ route('admin.users.index') }}" class="text-decoration-none text-dark">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h6 class="text-muted mb-3">User Management</h6>
-                    <div class="row text-center">
+        <a href="{{ route('admin.users.index') }}" class="text-decoration-none">
+            <div class="dash-card h-100 p-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <h6 class="text-white fw-bold mb-0">User Management</h6>
+                    </div>
+                    <div class="row text-center py-2 g-2">
                         <div class="col-4">
-                            <div class="fw-bold text-success fs-5">{{ $activeUsersCount }}</div>
-                            <div class="small text-muted">Active</div>
+                            <div class="p-2 rounded-3" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3);">
+                                <div class="fw-bold fs-4" style="color: #34d399;">{{ $activeUsersCount }}</div>
+                                <div class="small text-light opacity-75" style="font-size: 0.75rem;">Active</div>
+                            </div>
                         </div>
                         <div class="col-4">
-                            <div class="fw-bold text-danger fs-5">{{ $blockedUsersCount }}</div>
-                            <div class="small text-muted">Blocked</div>
+                            <div class="p-2 rounded-3" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3);">
+                                <div class="fw-bold fs-4" style="color: #f87171;">{{ $blockedUsersCount }}</div>
+                                <div class="small text-light opacity-75" style="font-size: 0.75rem;">Blocked</div>
+                            </div>
                         </div>
                         <div class="col-4">
-                            <div class="fw-bold text-warning fs-5">{{ $unverifiedUsersCount }}</div>
-                            <div class="small text-muted">Unverified</div>
+                            <div class="p-2 rounded-3" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3);">
+                                <div class="fw-bold fs-4" style="color: #fbbf24;">{{ $unverifiedUsersCount }}</div>
+                                <div class="small text-light opacity-75" style="font-size: 0.75rem;">Unverified</div>
+                            </div>
                         </div>
                     </div>
-                    <p class="mb-0 small text-muted mt-3">Manage registered borrowers →</p>
+                </div>
+                <div class="mt-3 pt-2 text-success small fw-semibold d-flex align-items-center justify-content-between">
+                    <span>Manage registered borrowers</span>
+                    <span>→</span>
                 </div>
             </div>
         </a>
@@ -130,21 +246,43 @@
 </div>
 
 <div class="row g-3 mt-1">
+    <!-- Reports -->
     <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h6 class="text-muted">Reports</h6>
-                <p class="mb-2">Loan, payment, and penalty reports with full history.</p>
-                <a href="{{ route('admin.reports.index') }}" class="btn btn-sm btn-outline-primary">Open Reports</a>
+        <div class="dash-card p-4">
+            <div class="d-flex align-items-center gap-3 mb-2">
+                <div class="icon-box bg-success bg-opacity-20 text-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </div>
+                <div>
+                    <h6 class="text-white fw-bold mb-0">Reports</h6>
+                    <p class="mb-0 small text-light opacity-50">Loan, payment, and penalty reports with full history.</p>
+                </div>
+            </div>
+            <div class="mt-3 text-end">
+                <a href="{{ route('admin.reports.index') }}" class="btn btn-sm glass-btn-action px-3 py-2">Open Reports →</a>
             </div>
         </div>
     </div>
+
+    <!-- Audit Logs -->
     <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h6 class="text-muted">Audit Logs</h6>
-                <p class="mb-2">Full history of admin and system actions.</p>
-                <a href="{{ route('admin.audit-logs.index') }}" class="btn btn-sm btn-outline-primary">Open Audit Logs</a>
+        <div class="dash-card p-4">
+            <div class="d-flex align-items-center gap-3 mb-2">
+                <div class="icon-box bg-info bg-opacity-20 text-info">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                </div>
+                <div>
+                    <h6 class="text-white fw-bold mb-0">Audit Logs</h6>
+                    <p class="mb-0 small text-light opacity-50">Full history of admin and system actions.</p>
+                </div>
+            </div>
+            <div class="mt-3 text-end">
+                <a href="{{ route('admin.audit-logs.index') }}" class="btn btn-sm glass-btn-action px-3 py-2">Open Audit Logs →</a>
             </div>
         </div>
     </div>
