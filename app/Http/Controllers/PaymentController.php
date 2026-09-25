@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuditLog;
+use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\PaymentSchedule;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -49,6 +51,18 @@ class PaymentController extends Controller
         ]);
 
         AuditLog::record(auth()->id(), 'Submitted Payment', 'Payment', $payment->id);
+
+        // Magpadala ng notification sa lahat ng Admin (Isinama ang 'type')
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            Notification::create([
+                'user_id' => $admin->id,
+                'type' => 'payment',
+                'title' => 'New Payment Submitted',
+                'message' => auth()->user()->name . ' submitted a payment of ₱' . number_format($payment->amount, 2) . ' (Ref: ' . $payment->gcash_reference_number . ').',
+                'is_read' => false,
+            ]);
+        }
 
         return redirect()->route('loans.show', $paymentSchedule->loan_id)
             ->with('status', 'Your payment has been submitted and is pending verification.');

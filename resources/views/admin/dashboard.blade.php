@@ -38,37 +38,8 @@
         color: var(--text-muted) !important;
     }
 
-    /* Improved Pill-Style Action Buttons with Icon Animation */
+    /* Unified Accent Blue Pill Action Buttons */
     .glass-btn-action {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: rgba(16, 185, 129, 0.12);
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        color: #10b981;
-        border-radius: 50px;
-        padding: 6px 14px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.25s ease;
-    }
-    .glass-btn-action:hover {
-        background: #10b981;
-        border-color: #10b981;
-        color: #ffffff;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        transform: translateY(-1px);
-    }
-    .glass-btn-action svg {
-        transition: transform 0.2s ease;
-    }
-    .glass-btn-action:hover svg {
-        transform: translateX(3px);
-    }
-
-    /* Secondary Blue Pill Button */
-    .glass-btn-secondary {
         display: inline-flex;
         align-items: center;
         gap: 6px;
@@ -82,17 +53,17 @@
         text-decoration: none;
         transition: all 0.25s ease;
     }
-    .glass-btn-secondary:hover {
+    .glass-btn-action:hover {
         background: #0284c7;
         border-color: #0284c7;
         color: #ffffff;
         box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
         transform: translateY(-1px);
     }
-    .glass-btn-secondary svg {
+    .glass-btn-action svg {
         transition: transform 0.2s ease;
     }
-    .glass-btn-secondary:hover svg {
+    .glass-btn-action:hover svg {
         transform: translateX(3px);
     }
 
@@ -112,16 +83,12 @@
 
 {{-- Total Portfolio Summary --}}
 <div class="row g-3 mb-1">
-    <!-- Total Released Loans (With Peso Sign Icon) -->
+    <!-- Total Released Loans (With Clean Peso Sign) -->
     <div class="col-md-6">
         <div class="dash-card h-100 p-4" style="border-left: 4px solid #10b981 !important;">
             <div class="d-flex align-items-center gap-3 mb-2">
                 <div class="icon-box" style="background: rgba(16, 185, 129, 0.15); color: #059669;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M6 3h12"></path>
-                        <path d="M6 8h12"></path>
-                        <path d="M6 13h8a4 4 0 0 0 0-8H6v16"></path>
-                    </svg>
+                    <span class="fw-bold fs-4" style="line-height: 1;">₱</span>
                 </div>
                 <h6 class="dash-subtext mb-0 fw-semibold">Total Released Loans</h6>
             </div>
@@ -240,7 +207,7 @@
                     </svg>
                     <h6 class="dash-title fw-bold mb-0">Recent Activity</h6>
                 </div>
-                <!-- Improved Sleek Action Button -->
+                <!-- Unified Action Button -->
                 <a href="{{ route('admin.audit-logs.index') }}" class="glass-btn-action">
                     <span>View all audit logs</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
@@ -305,9 +272,9 @@
                     </div>
                 </div>
             </div>
-            <!-- Improved Sleek Action Button -->
+            <!-- Unified Action Button -->
             <div class="mt-3 pt-2 text-end">
-                <a href="{{ route('admin.users.index') }}" class="glass-btn-secondary">
+                <a href="{{ route('admin.users.index') }}" class="glass-btn-action">
                     <span>Manage registered borrowers</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
@@ -331,7 +298,7 @@
                     <p class="mb-0 small dash-subtext">Loan, payment, and penalty reports with full history.</p>
                 </div>
             </div>
-            <!-- Improved Sleek Action Button -->
+            <!-- Unified Action Button -->
             <div class="mt-3 text-end">
                 <a href="{{ route('admin.reports.index') }}" class="glass-btn-action">
                     <span>Open Reports</span>
@@ -356,9 +323,9 @@
                     <p class="mb-0 small dash-subtext">Full history of admin and system actions.</p>
                 </div>
             </div>
-            <!-- Improved Sleek Action Button -->
+            <!-- Unified Action Button -->
             <div class="mt-3 text-end">
-                <a href="{{ route('admin.audit-logs.index') }}" class="glass-btn-secondary">
+                <a href="{{ route('admin.audit-logs.index') }}" class="glass-btn-action">
                     <span>Open Audit Logs</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>

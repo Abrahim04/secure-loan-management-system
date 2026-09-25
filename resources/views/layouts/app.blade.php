@@ -22,7 +22,7 @@
             --topbar-border: rgba(255, 255, 255, 0.1);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --dash-card-bg: rgba(30, 41, 59, 0.75);
+            --dash-card-bg: rgba(30, 41, 59, 0.95);
             --dash-card-border: rgba(255, 255, 255, 0.12);
             --dash-card-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             --table-border: rgba(255, 255, 255, 0.06);
@@ -51,6 +51,7 @@
             transition: background 0.3s ease, color 0.3s ease;
         }
 
+        /* SIDEBAR STYLES */
         .sidebar {
             position: fixed;
             top: 0; left: 0;
@@ -73,7 +74,6 @@
         .sidebar-header .brand-name { font-weight: 700; font-size: 1.15rem; color: #fff; }
         .sidebar-header .brand-tagline { font-size: .75rem; color: #94a3b8; font-weight: 500; margin-top: .25rem; }
 
-        /* Sleek & Professional Profile Badge Area */
         .sidebar-profile {
             padding: 1rem 1.25rem;
             border-bottom: 1px solid rgba(255,255,255,.08);
@@ -101,8 +101,7 @@
             border: 1px solid rgba(52, 211, 153, 0.25);
         }
         .role-badge .status-dot {
-            width: 5px;
-            height: 5px;
+            width: 5px; height: 5px;
             background-color: #34d399;
             border-radius: 50%;
             box-shadow: 0 0 6px #34d399;
@@ -142,7 +141,6 @@
             gap: 0.75rem;
         }
 
-        /* Neumorphic Switcher Styling */
         .theme-switch-container {
             display: flex;
             align-items: center;
@@ -203,6 +201,8 @@
         .sidebar-backdrop { display: none; }
         .main-content { transition: margin-left .3s ease; }
 
+        /* TOPBAR BASE STYLES */
+       /* TOPBAR BASE STYLES */
         .topbar {
             background: var(--topbar-bg);
             backdrop-filter: blur(8px);
@@ -212,6 +212,9 @@
             align-items: center;
             justify-content: space-between;
             transition: background 0.3s ease, border-color 0.3s ease;
+            /* IDINAGDAG: Pinapanatili sa itaas ang topbar at binibigyan ng mataas na layer */
+            position: relative;
+            z-index: 1030;
         }
         .topbar .hamburger-btn {
             background: none; border: none;
@@ -219,6 +222,97 @@
             color: var(--hamburger-color);
         }
 
+        /* NEW MINIMALIST TOPBAR STYLES (MATCHES REFERENCE PHOTO) */
+        .topbar-clean-icon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+            text-decoration: none;
+            padding: 4px;
+        }
+        .topbar-clean-icon:hover { color: var(--text-main); }
+        .topbar-clean-dot {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 7px;
+            height: 7px;
+            background-color: #ef4444;
+            border-radius: 50%;
+        }
+
+        .topbar-clean-profile {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none !important;
+            color: var(--text-main);
+            background: transparent;
+            padding: 2px 4px;
+            border-radius: 20px;
+            transition: opacity 0.2s ease;
+            cursor: pointer;
+        }
+        .topbar-clean-profile:hover { opacity: 0.85; }
+        .topbar-clean-profile::after { display: none !important; } /* Inaalis ang Bootstrap arrow */
+        
+        .topbar-clean-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .topbar-clean-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+        .topbar-clean-chevron {
+            color: var(--text-muted);
+            transition: transform 0.2s ease;
+        }
+        .dropdown.show .topbar-clean-chevron {
+            transform: rotate(180deg);
+        }
+
+        .topbar-dropdown-menu {
+            background: var(--dash-card-bg) !important;
+            border: 1px solid var(--topbar-border) !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+            border-radius: 12px !important;
+            /* IDINAGDAG: Mas mataas na layer para sa dropdown menu */
+            z-index: 1050 !important;
+        }
+        .topbar-dropdown-menu .dropdown-item {
+            font-size: 0.875rem;
+            color: var(--text-main);
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .topbar-dropdown-menu .dropdown-item:hover {
+            background: rgba(148, 163, 184, 0.15);
+            color: var(--text-main);
+        }
+
+        /* BELL ICON HOVER ANIMATION */
+        @keyframes bellRing {
+            0% { transform: rotate(0); }
+            15% { transform: rotate(14deg); }
+            30% { transform: rotate(-12deg); }
+            45% { transform: rotate(10deg); }
+            60% { transform: rotate(-8deg); }
+            75% { transform: rotate(4deg); }
+            85% { transform: rotate(-2deg); }
+            100% { transform: rotate(0); }
+        }
+
+        .topbar-clean-icon:hover svg {
+            animation: bellRing 0.6s ease-in-out;
+            transform-origin: top center;
+        }
+        
         @media (min-width: 992px) {
             .sidebar { transform: translateX(0); }
             .main-content { margin-left: var(--sidebar-width); }
@@ -331,7 +425,6 @@
                         <span>Penalty Management</span>
                     </a>
 
-                    <!-- Pinalitan mula 'System Settings' patungong 'Settings' -->
                     <a href="{{ route('admin.settings.system') }}" class="nav-link {{ request()->routeIs('admin.settings.system*') ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                         <span>Settings</span>
@@ -356,7 +449,6 @@
                 <form method="POST" action="{{ route('logout') }}" id="logout-form">
                     @csrf
                 </form>
-                <!-- Logout button na may icon at pinagandang styling -->
                 <button type="button" class="btn btn-logout-custom btn-sm w-100 d-flex align-items-center justify-content-center gap-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#logoutModal">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -393,6 +485,49 @@
                 <div class="d-flex align-items-center gap-3">
                     <button class="hamburger-btn" id="sidebarToggle" type="button" aria-label="Toggle sidebar">☰</button>
                     <span class="fw-semibold">@yield('title', 'PautangPro')</span>
+                </div>
+
+                <!-- TOPBAR RIGHT ACTION ITEMS (MINIMALIST DASHBOARD STYLE) -->
+                <div class="d-flex align-items-center gap-3">
+                    @php $unreadCount = auth()->user()->appNotifications()->where('is_read', false)->count(); @endphp
+                    
+                    <!-- Clean Notification Bell Icon -->
+                    <a href="{{ route('notifications.index') }}" class="topbar-clean-icon" title="Notifications">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        @if ($unreadCount > 0)
+                            <span class="topbar-clean-dot"></span>
+                        @endif
+                    </a>
+
+                    <!-- Minimalist Profile Dropdown (Avatar + Name + Chevron) -->
+                    <div class="dropdown">
+                        <a href="#" class="topbar-clean-profile" id="topbarProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" class="topbar-clean-avatar">
+                            <span class="topbar-clean-name d-none d-sm-inline">{{ auth()->user()->name }}</span>
+                            <svg class="topbar-clean-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        
+                        <ul class="dropdown-menu dropdown-menu-end topbar-dropdown-menu shadow border-0 mt-2" aria-labelledby="topbarProfileDropdown" style="min-width: 180px;">
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ route('profile.show') }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    <span>My Profile</span>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider my-1" style="border-color: var(--topbar-border);"></li>
+                            <li>
+                                <button type="button" class="dropdown-item text-danger d-flex align-items-center gap-2 py-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                    <span>Logout</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         @endauth

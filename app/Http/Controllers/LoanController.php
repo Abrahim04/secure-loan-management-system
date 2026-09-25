@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\AuditLog;
 use App\Models\Loan;
 use App\Models\LoanType;
+use App\Models\Notification;
+use App\Models\User;
 use App\Services\LoanService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -67,6 +69,18 @@ class LoanController extends Controller
         ]);
 
         AuditLog::record(auth()->id(), 'Submitted Loan Application', 'Loan', $loan->id);
+
+        // Magpadala ng notification sa lahat ng Admin (Isinama ang 'type')
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            Notification::create([
+                'user_id' => $admin->id,
+                'type' => 'loan',
+                'title' => 'New Loan Application',
+                'message' => auth()->user()->name . ' applied for a ' . $loanType->name . ' amounting to ₱' . number_format($loan->principal_amount, 2) . '.',
+                'is_read' => false,
+            ]);
+        }
 
         return redirect()->route('loans.show', $loan)
             ->with('status', 'Your loan application has been submitted and is pending review.');
