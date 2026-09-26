@@ -3,20 +3,22 @@
 @section('title', 'Loan Management')
 
 @section('content')
+<!-- Adaptive Glassmorphism & SaaS Clean Table Styling -->
 <style>
     .dash-card {
         background-color: var(--dash-card-bg) !important;
         backdrop-filter: blur(12px);
         border: 1px solid var(--dash-card-border) !important;
         border-radius: 14px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
         box-shadow: var(--dash-card-shadow);
     }
-    .dash-title {
-        color: var(--text-main) !important;
+    .dash-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     }
-    .dash-subtext {
-        color: var(--text-muted) !important;
-    }
+
+    /* Action Buttons Hover Effects */
     .glass-btn-action {
         display: inline-flex;
         align-items: center;
@@ -44,53 +46,79 @@
     .glass-btn-action:hover svg {
         transform: translateX(3px);
     }
-    .activity-table td, .activity-table th {
-        border-bottom: 1px solid var(--table-border) !important;
-        padding: 16px 12px !important;
-        background: transparent !important;
+
+    /* Shared Glass Table Styling */
+    .glass-table {
+        width: 100%;
+        margin-bottom: 0;
         color: var(--text-main) !important;
+    }
+    .glass-table th {
+        background: rgba(0, 0, 0, 0.02) !important;
+        border-bottom: 1px solid var(--table-border, rgba(0, 0, 0, 0.08)) !important;
+        color: var(--text-muted, #64748b) !important;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 12px 16px !important;
+        font-weight: 700;
+    }
+    .glass-table td {
+        border-bottom: 1px solid var(--table-border, rgba(0, 0, 0, 0.05)) !important;
+        padding: 14px 16px !important;
+        background: transparent !important;
+        font-size: 0.875rem;
+    }
+    .glass-table tr:last-child td {
+        border-bottom: none !important;
     }
 </style>
 
-<div class="mb-4">
-    <h2 class="fw-bold dash-title mb-1">Pending Loan Applications</h2>
-    <p class="dash-subtext mb-0">Review and manage submitted loan requests requiring approval.</p>
-</div>
+<div class="container-fluid px-0">
+    {{-- Title Header --}}
+    <div class="mb-4">
+        <h2 class="fw-bold text-main mb-1">Pending Loan Applications</h2>
+        <p class="text-muted small mb-0">Review and manage submitted loan requests requiring approval.</p>
+    </div>
 
-<div class="dash-card p-4">
+    {{-- Glass Table Card Container --}}
     @if($loans->isEmpty())
-        <p class="dash-subtext mb-0 text-center py-3">No pending loan applications available.</p>
+        <div class="dash-card p-4 text-center">
+            <p class="text-muted fw-semibold mb-0 py-2">No pending loan applications available.</p>
+        </div>
     @else
-        <div class="table-responsive">
-            <table class="table activity-table align-middle mb-0">
-                <thead>
-                    <tr class="dash-subtext small text-uppercase">
-                        <th>Applicant</th>
-                        <th>Loan Type</th>
-                        <th>Principal</th>
-                        <th>Term</th>
-                        <th>Applied</th>
-                        <th class="text-end">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($loans as $loan)
+        <div class="dash-card p-0 overflow-hidden mb-4">
+            <div class="table-responsive">
+                <table class="table glass-table align-middle">
+                    <thead>
                         <tr>
-                            <td class="fw-bold dash-title">{{ $loan->user->name ?? 'N/A' }}</td>
-                            <td class="fw-semibold dash-title">{{ $loan->loan_type ?? $loan->loanType->name ?? 'Personal Loan' }}</td>
-                            <td class="fw-bold text-success">₱{{ number_format($loan->amount ?? $loan->principal_amount ?? 0, 2) }}</td>
-                            <td class="dash-subtext">{{ $loan->term_months ?? $loan->term ?? 0 }} mo.</td>
-                            <td class="dash-subtext">{{ \Carbon\Carbon::parse($loan->created_at)->format('M d, Y') }}</td>
-                            <td class="text-end">
-                                <a href="{{ route('admin.loans.show', $loan->id) }}" class="glass-btn-action">
-                                    <span>Review</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                                </a>
-                            </td>
+                            <th>Applicant</th>
+                            <th>Loan Type</th>
+                            <th>Principal</th>
+                            <th>Term</th>
+                            <th>Applied</th>
+                            <th class="text-center">Action</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($loans as $loan)
+                            <tr>
+                                <td class="fw-semibold text-main">{{ $loan->user->name ?? 'N/A' }}</td>
+                                <td class="text-muted">{{ $loan->loan_type ?? $loan->loanType->name ?? 'Personal Loan' }}</td>
+                                <td class="fw-bold text-main">₱{{ number_format($loan->amount ?? $loan->principal_amount ?? 0, 2) }}</td>
+                                <td class="text-muted">{{ $loan->term_months ?? $loan->term ?? 0 }} mo.</td>
+                                <td class="text-muted">{{ \Carbon\Carbon::parse($loan->created_at)->format('M d, Y') }}</td>
+                                <td class="text-center">
+                                    <a href="{{ route('admin.loans.show', $loan->id) }}" class="glass-btn-action">
+                                        <span>Review</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     @endif
 </div>

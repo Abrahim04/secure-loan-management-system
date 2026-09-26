@@ -3,6 +3,7 @@
 @section('title', 'Review Payment')
 
 @section('content')
+<!-- Adaptive Glassmorphism & SaaS Clean Review Styling -->
 <style>
     .dash-card {
         background-color: var(--dash-card-bg) !important;
@@ -10,35 +11,31 @@
         border: 1px solid var(--dash-card-border) !important;
         border-radius: 14px;
         box-shadow: var(--dash-card-shadow);
-    }
-    .dash-title {
-        color: var(--text-main) !important;
-    }
-    .dash-subtext {
-        color: #6b7280 !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    /* EXACT BUTTON STYLE AT HOVER NG LOAN MANAGEMENT */
-    .btn-back-pill {
+    /* Modern Back Pill Button */
+    .glass-btn-back {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background-color: #dbe0e6;
-        border: 1px solid #c2c9d1;
-        color: #1e293b;
+        background: rgba(100, 116, 139, 0.1);
+        border: 1px solid rgba(100, 116, 139, 0.25);
+        color: var(--text-main, #334155);
         border-radius: 50px;
-        padding: 5px 15px;
+        padding: 6px 16px;
         font-size: 0.85rem;
-        font-weight: 500;
+        font-weight: 600;
         text-decoration: none;
-        transition: all 0.15s ease-in-out;
+        transition: all 0.2s ease;
     }
-    .btn-back-pill:hover {
-        background-color: #94a3b8;
-        border-color: #64748b;
-        color: #ffffff;
+    .glass-btn-back:hover {
+        background: rgba(100, 116, 139, 0.2);
+        color: var(--text-main, #0f172a);
+        transform: translateX(-3px);
     }
 
+    /* Receipt Pill Action Button */
     .glass-btn-receipt {
         display: inline-flex;
         align-items: center;
@@ -46,138 +43,174 @@
         background: rgba(2, 132, 199, 0.1);
         border: 1px solid rgba(2, 132, 199, 0.3);
         color: #0284c7;
-        border-radius: 8px;
-        padding: 8px 16px;
-        font-size: 0.875rem;
+        border-radius: 50px;
+        padding: 8px 18px;
+        font-size: 0.85rem;
         font-weight: 600;
         text-decoration: none;
-        transition: all 0.2s ease;
+        transition: all 0.25s ease;
     }
     .glass-btn-receipt:hover {
         background: #0284c7;
         color: #ffffff;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+        transform: translateY(-1px);
     }
-    .btn-approve-custom {
+
+    /* Modern Rounded Action Buttons */
+    .btn-approve-glass {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
         background: #10b981;
-        border: none;
+        border: 1px solid #059669;
         color: #ffffff;
         font-weight: 600;
-        padding: 12px;
-        border-radius: 8px;
+        font-size: 0.875rem;
+        padding: 9px 22px;
+        border-radius: 50px;
         transition: all 0.2s ease;
+        cursor: pointer;
     }
-    .btn-approve-custom:hover {
+    .btn-approve-glass:hover {
         background: #059669;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+        transform: translateY(-1px);
     }
-    .btn-reject-custom {
-        background: #ef4444;
-        border: none;
-        color: #ffffff;
+
+    .btn-reject-glass {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #dc2626;
         font-weight: 600;
-        padding: 12px;
-        border-radius: 8px;
+        font-size: 0.875rem;
+        padding: 9px 22px;
+        border-radius: 50px;
         transition: all 0.2s ease;
+        cursor: pointer;
     }
-    .btn-reject-custom:hover {
-        background: #dc2626;
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    .btn-reject-glass:hover {
+        background: #ef4444;
+        border-color: #ef4444;
+        color: #ffffff;
+        box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+        transform: translateY(-1px);
     }
+
+    /* Monospace Reference Text */
     .ref-no-text {
-        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-        font-size: 0.85rem;
-        font-weight: 500;
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+        font-size: 0.9rem !important;
+        font-weight: 600 !important;
+        color: var(--text-main) !important;
         letter-spacing: 0.5px;
     }
-}
 </style>
 
-<div class="mb-3">
-    <a href="{{ route('admin.payments.index') }}" class="btn-back-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        <span>Back to Collections</span>
-    </a>
-</div>
-
-<div class="mb-4">
-    <h2 class="fw-bold dash-title mb-1">Review Payment</h2>
-    <p class="dash-subtext mb-0">Evaluate payment details and proof of payment before verifying or rejecting.</p>
-</div>
-
-<div class="dash-card p-4 mb-4">
-    <div class="row g-4">
-        <div class="col-md-4">
-            <span class="dash-subtext small text-uppercase fw-semibold d-block mb-1">Payer</span>
-            <span class="dash-title fw-bold fs-6 d-block">{{ $payment->user->name }}</span>
-            <span class="dash-subtext small">{{ $payment->user->email }}</span>
-        </div>
-        <div class="col-md-4">
-            <span class="dash-subtext small text-uppercase fw-semibold d-block mb-1">Loan Target</span>
-            <span class="dash-title fw-bold fs-6">#{{ $payment->paymentSchedule->loan_id }} — Month {{ $payment->paymentSchedule->month_number }}</span>
-        </div>
-        <div class="col-md-4">
-            <span class="dash-subtext small text-uppercase fw-semibold d-block mb-1">Payment Date</span>
-            <span class="fw-bold fs-6 dash-title">{{ $payment->payment_date->format('M d, Y') }}</span>
-        </div>
-    </div>
-
-    <hr class="my-4" style="border-color: var(--dash-card-border);">
-
-    <div class="row g-4">
-        <div class="col-md-4">
-            <span class="dash-subtext small text-uppercase fw-semibold d-block mb-1">GCash Reference #</span>
-            <td><span class="ref-no-text dash-title">{{ $payment->gcash_reference_number }}</span></td>
-        </div>
-        <div class="col-md-4">
-            <span class="dash-subtext small text-uppercase fw-semibold d-block mb-1">Amount Submitted</span>
-            <span class="text-success fw-bold fs-5">₱{{ number_format($payment->amount, 2) }}</span>
-        </div>
-        <div class="col-md-4">
-            <span class="dash-subtext small text-uppercase fw-semibold d-block mb-1">Installment Total Due</span>
-            <span class="dash-title fw-bold fs-5">₱{{ number_format($payment->paymentSchedule->totalDue(), 2) }}</span>
-        </div>
-    </div>
-
-    <hr class="my-4" style="border-color: var(--dash-card-border);">
-
-    <div>
-        <span class="dash-subtext small text-uppercase fw-semibold d-block mb-2">Proof of Payment</span>
-        <a href="{{ route('payments.proof', $payment) }}" target="_blank" class="glass-btn-receipt">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-            <span>View Uploaded Receipt</span>
+<div class="container-fluid px-0">
+    {{-- Back Action Button --}}
+    <div class="mb-3">
+        <a href="{{ route('admin.payments.index') }}" class="glass-btn-back">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Collections</span>
         </a>
     </div>
-</div>
 
-<div class="row g-3">
-    <div class="col-md-6">
-        <form method="POST" action="{{ route('admin.payments.verify', $payment) }}">
-            @csrf
-            <button type="submit" class="btn-approve-custom w-100" onclick="return confirm('Mark this payment as verified?')">
-                Verify Payment
-            </button>
-        </form>
+    {{-- Title Header --}}
+    <div class="mb-4">
+        <h2 class="fw-bold text-main mb-1">Review Payment</h2>
+        <p class="text-muted small mb-0">Evaluate payment details and proof of payment before verifying or rejecting.</p>
     </div>
-    <div class="col-md-6">
-        <button type="button" class="btn-reject-custom w-100" data-bs-toggle="collapse" data-bs-target="#rejectForm">
-            Reject Payment
-        </button>
-    </div>
-</div>
 
-<div class="collapse mt-3" id="rejectForm">
-    <div class="dash-card p-4">
-        <form method="POST" action="{{ route('admin.payments.reject', $payment) }}">
-            @csrf
-            <div class="mb-3">
-                <label class="form-label dash-title fw-semibold">Rejection Reason</label>
-                <textarea name="rejection_reason" class="form-control bg-transparent text-main" rows="3" placeholder="State the reason for rejecting this receipt..." required style="border-color: var(--dash-card-border);"></textarea>
+    {{-- Information Card --}}
+    <div class="dash-card p-4 mb-4">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">Payer</span>
+                <span class="text-main fw-bold fs-6 d-block">{{ $payment->user->name }}</span>
+                <span class="text-muted small">{{ $payment->user->email }}</span>
             </div>
-            <button type="submit" class="btn-reject-custom px-4 py-2">Confirm Rejection</button>
-        </form>
+            <div class="col-md-4">
+                <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">Loan Target</span>
+                <span class="text-main fw-bold fs-6">#{{ $payment->paymentSchedule->loan_id }} — Month {{ $payment->paymentSchedule->month_number }}</span>
+            </div>
+            <div class="col-md-4">
+                <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">Payment Date</span>
+                <span class="fw-bold fs-6 text-main">{{ $payment->payment_date->format('M d, Y') }}</span>
+            </div>
+        </div>
+
+        <hr class="my-4" style="border-color: var(--dash-card-border);">
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">GCash Reference #</span>
+                <span class="ref-no-text">{{ $payment->gcash_reference_number }}</span>
+            </div>
+            <div class="col-md-4">
+                <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">Amount Submitted</span>
+                <span class="text-main fw-bold fs-5">₱{{ number_format($payment->amount, 2) }}</span>
+            </div>
+            <div class="col-md-4">
+                <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">Installment Total Due</span>
+                <span class="text-main fw-bold fs-5">₱{{ number_format($payment->paymentSchedule->totalDue(), 2) }}</span>
+            </div>
+        </div>
+
+        <hr class="my-4" style="border-color: var(--dash-card-border);">
+
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+                <span class="text-muted small text-uppercase fw-bold d-block mb-2" style="font-size: 0.75rem; letter-spacing: 0.5px;">Proof of Payment</span>
+                <a href="{{ route('payments.proof', $payment) }}" target="_blank" class="glass-btn-receipt">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>View Uploaded Receipt</span>
+                </a>
+            </div>
+
+            {{-- Action Buttons Container --}}
+            <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
+                <button type="button" class="btn-reject-glass" data-bs-toggle="collapse" data-bs-target="#rejectForm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                    <span>Reject Payment</span>
+                </button>
+
+                <form method="POST" action="{{ route('admin.payments.verify', $payment) }}" class="m-0">
+                    @csrf
+                    <button type="submit" class="btn-approve-glass" onclick="return confirm('Mark this payment as verified?')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Verify Payment</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Collapsible Rejection Form --}}
+    <div class="collapse mb-4" id="rejectForm">
+        <div class="dash-card p-4">
+            <h6 class="fw-bold text-main mb-2">Rejection Form</h6>
+            <form method="POST" action="{{ route('admin.payments.reject', $payment) }}">
+                @csrf
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-semibold">Rejection Reason</label>
+                    <textarea name="rejection_reason" class="form-control bg-transparent text-main" rows="3" placeholder="State the reason for rejecting this receipt..." required style="border-color: var(--dash-card-border); border-radius: 10px;"></textarea>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn-reject-glass">
+                        <span>Confirm Rejection</span>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @endsection
