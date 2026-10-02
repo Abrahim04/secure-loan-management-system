@@ -38,16 +38,15 @@
         color: var(--text-muted) !important;
     }
 
-    /* Unified Accent Blue Pill Action Buttons */
+    /* Unified Accent Blue Pill Action Buttons (Inalisan ng arrow hover transition) */
     .glass-btn-action {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
         background: rgba(2, 132, 199, 0.12);
         border: 1px solid rgba(2, 132, 199, 0.3);
         color: #0284c7;
         border-radius: 50px;
-        padding: 6px 14px;
+        padding: 6px 16px;
         font-size: 0.8rem;
         font-weight: 600;
         text-decoration: none;
@@ -59,12 +58,6 @@
         color: #ffffff;
         box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
         transform: translateY(-1px);
-    }
-    .glass-btn-action svg {
-        transition: transform 0.2s ease;
-    }
-    .glass-btn-action:hover svg {
-        transform: translateX(3px);
     }
 
     .activity-table td {
@@ -207,10 +200,9 @@
                     </svg>
                     <h6 class="dash-title fw-bold mb-0">Recent Activity</h6>
                 </div>
-                <!-- Unified Action Button -->
+                <!-- Action Button (Inalisan ng SVG arrow) -->
                 <a href="{{ route('admin.audit-logs.index') }}" class="glass-btn-action">
                     <span>View all audit logs</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
             </div>
 
@@ -272,11 +264,10 @@
                     </div>
                 </div>
             </div>
-            <!-- Unified Action Button -->
+            <!-- Action Button (Inalisan ng SVG arrow) -->
             <div class="mt-3 pt-2 text-end">
                 <a href="{{ route('admin.users.index') }}" class="glass-btn-action">
                     <span>Manage registered borrowers</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
             </div>
         </div>
@@ -298,11 +289,10 @@
                     <p class="mb-0 small dash-subtext">Loan, payment, and penalty reports with full history.</p>
                 </div>
             </div>
-            <!-- Unified Action Button -->
+            <!-- Action Button (Inalisan ng SVG arrow) -->
             <div class="mt-3 text-end">
                 <a href="{{ route('admin.reports.index') }}" class="glass-btn-action">
                     <span>Open Reports</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
             </div>
         </div>
@@ -323,11 +313,10 @@
                     <p class="mb-0 small dash-subtext">Full history of admin and system actions.</p>
                 </div>
             </div>
-            <!-- Unified Action Button -->
+            <!-- Action Button (Inalisan ng SVG arrow) -->
             <div class="mt-3 text-end">
                 <a href="{{ route('admin.audit-logs.index') }}" class="glass-btn-action">
                     <span>Open Audit Logs</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
             </div>
         </div>

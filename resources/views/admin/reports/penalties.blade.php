@@ -15,7 +15,7 @@
     /* Interactive Hover Effect for Metric Cards */
     .metric-card-hover {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer;
+        cursor: default; /* Binago mula 'pointer' patungong 'default' para hindi na maging kamay ang cursor */
     }
     .metric-card-hover:hover {
         transform: translateY(-4px);

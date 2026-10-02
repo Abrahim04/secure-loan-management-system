@@ -36,26 +36,30 @@ class ReportController extends Controller
         $loans = Loan::with(['user', 'loanType'])
             ->when($status !== 'all', fn ($q) => $q->where('status', $status))
             ->latest('applied_at')
-            ->paginate(25)
+            ->paginate(25) // Binago mula 25 ginawang 10 para magpakita ang pagination controls
             ->withQueryString();
 
         return view('admin.reports.loans', compact('loans', 'status'));
     }
 
-    public function payments(): View
+    public function payments(Request $request): View
     {
-        $payments = Payment::with(['user', 'paymentSchedule.loan'])
-            ->latest('payment_date')
-            ->paginate(25);
+        $status = $request->input('status', 'all');
 
-        return view('admin.reports.payments', compact('payments'));
+        $payments = Payment::with(['user', 'paymentSchedule.loan'])
+            ->when($status !== 'all', fn ($q) => $q->where('status', $status))
+            ->latest('payment_date')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('admin.reports.payments', compact('payments', 'status'));
     }
 
     public function penalties(): View
     {
         $penalties = Penalty::with('paymentSchedule.loan.user')
             ->latest('applied_at')
-            ->paginate(25);
+            ->paginate(10);
 
         return view('admin.reports.penalties', compact('penalties'));
     }

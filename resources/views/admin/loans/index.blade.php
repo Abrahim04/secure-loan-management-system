@@ -72,9 +72,53 @@
     .glass-table tr:last-child td {
         border-bottom: none !important;
     }
+
+    /* Auto-Dismissing Custom Glass Alerts */
+    .glass-alert {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .glass-alert-success {
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #10b981;
+    }
+    .glass-alert-danger {
+        background: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+    }
+    .glass-alert.fade-out {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 </style>
 
 <div class="container-fluid px-0">
+    {{-- Dynamic Flash Alert Banner --}}
+    @if (session('success') || session('status'))
+        @php
+            $isDanger = session('status') && (str_contains(strtolower(session('status')), 'reject') || str_contains(strtolower(session('status')), 'cancel'));
+            $message = session('success') ?? session('status');
+        @endphp
+        <div id="autoDismissAlert" class="glass-alert {{ $isDanger ? 'glass-alert-danger' : 'glass-alert-success' }} mb-4">
+            @if ($isDanger)
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+            @else
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            @endif
+            <span>{{ $message }}</span>
+        </div>
+    @endif
+
     {{-- Title Header --}}
     <div class="mb-4">
         <h2 class="fw-bold text-main mb-1">Pending Loan Applications</h2>
@@ -122,4 +166,19 @@
         </div>
     @endif
 </div>
+
+{{-- JavaScript Script to Auto-Dismiss Alert after 5 Seconds --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const alertBox = document.getElementById('autoDismissAlert');
+    if (alertBox) {
+        setTimeout(function() {
+            alertBox.classList.add('fade-out');
+            setTimeout(function() {
+                alertBox.remove();
+            }, 500); // Hihintayin matapos ang 0.5s fade-out animation bago ganap na burahin
+        }, 5000); // Tatagal ng eksaktong 5 seconds bago mag-fade out
+    }
+});
+</script>
 @endsection

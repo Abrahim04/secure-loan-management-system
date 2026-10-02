@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'PautangPro')</title>
+    <!-- Bootstrap Icons CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
@@ -202,7 +204,6 @@
         .main-content { transition: margin-left .3s ease; }
 
         /* TOPBAR BASE STYLES */
-       /* TOPBAR BASE STYLES */
         .topbar {
             background: var(--topbar-bg);
             backdrop-filter: blur(8px);
@@ -212,7 +213,6 @@
             align-items: center;
             justify-content: space-between;
             transition: background 0.3s ease, border-color 0.3s ease;
-            /* IDINAGDAG: Pinapanatili sa itaas ang topbar at binibigyan ng mataas na layer */
             position: relative;
             z-index: 1030;
         }
@@ -222,7 +222,6 @@
             color: var(--hamburger-color);
         }
 
-        /* NEW MINIMALIST TOPBAR STYLES (MATCHES REFERENCE PHOTO) */
         .topbar-clean-icon {
             position: relative;
             display: inline-flex;
@@ -257,7 +256,7 @@
             cursor: pointer;
         }
         .topbar-clean-profile:hover { opacity: 0.85; }
-        .topbar-clean-profile::after { display: none !important; } /* Inaalis ang Bootstrap arrow */
+        .topbar-clean-profile::after { display: none !important; }
         
         .topbar-clean-avatar {
             width: 34px;
@@ -283,7 +282,6 @@
             border: 1px solid var(--topbar-border) !important;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
             border-radius: 12px !important;
-            /* IDINAGDAG: Mas mataas na layer para sa dropdown menu */
             z-index: 1050 !important;
         }
         .topbar-dropdown-menu .dropdown-item {
@@ -296,7 +294,6 @@
             color: var(--text-main);
         }
 
-        /* BELL ICON HOVER ANIMATION */
         @keyframes bellRing {
             0% { transform: rotate(0); }
             15% { transform: rotate(14deg); }
@@ -312,7 +309,61 @@
             animation: bellRing 0.6s ease-in-out;
             transform-origin: top center;
         }
-        
+
+        /* CUSTOM LOGOUT MODAL STYLES */
+        .logout-modal .modal-content {
+            background-color: var(--dash-card-bg) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--dash-card-border) !important;
+            border-radius: 20px !important;
+            box-shadow: var(--dash-card-shadow) !important;
+            overflow: hidden;
+        }
+
+        .logout-icon-box {
+            width: 56px;
+            height: 56px;
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px auto;
+        }
+
+        .btn-logout-cancel {
+            background: rgba(100, 116, 139, 0.1) !important;
+            border: 1px solid var(--dash-card-border, rgba(100, 116, 139, 0.2)) !important;
+            color: var(--text-main) !important;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 9px 20px;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+        .btn-logout-cancel:hover {
+            background: rgba(100, 116, 139, 0.2) !important;
+        }
+
+        .btn-logout-confirm {
+            background: #ef4444 !important;
+            border: 1px solid #dc2626 !important;
+            color: #ffffff !important;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 9px 20px;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+        }
+        .btn-logout-confirm:hover {
+            background: #dc2626 !important;
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+            transform: translateY(-1px);
+        }
+
         @media (min-width: 992px) {
             .sidebar { transform: translateX(0); }
             .main-content { margin-left: var(--sidebar-width); }
@@ -361,11 +412,18 @@
                     <span>Dashboard</span>
                 </a>
 
-                @if (auth()->user()->isAdmin())
-                    <a href="{{ route('admin.loans.index') }}" class="nav-link {{ request()->routeIs('admin.loans.*') ? 'active' : '' }}">
+                    @if (auth()->user()->isAdmin())
+                    <a href="{{ route('admin.loans.index') }}" class="nav-link {{ request()->routeIs('admin.loans.index') || request()->routeIs('admin.loans.show') ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                        <span>Loan Management</span>
+                        <span>Pending Loans</span>
                     </a>
+
+                    {{-- BAGONG LINK FOR LOAN HISTORY / RECORDS --}}
+                    <a href="{{ route('admin.loans.history') }}" class="nav-link {{ request()->routeIs('admin.loans.history') ? 'active' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                        <span>Loan History</span>
+                    </a>
+
                     <a href="{{ route('admin.payments.index') }}" class="nav-link {{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                         <span>Collections</span>
@@ -446,9 +504,6 @@
                     </div>
                 </div>
 
-                <form method="POST" action="{{ route('logout') }}" id="logout-form">
-                    @csrf
-                </form>
                 <button type="button" class="btn btn-logout-custom btn-sm w-100 d-flex align-items-center justify-content-center gap-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#logoutModal">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -460,19 +515,31 @@
             </div>
         </nav>
 
-        <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Confirm Logout</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to log out of your account?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" form="logout-form" class="btn btn-danger">Logout</button>
+        <!-- UPDATED MODERN LOGOUT CONFIRMATION MODAL -->
+        <div class="modal fade logout-modal" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+                <div class="modal-content text-center p-4">
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                    <div class="modal-body p-0">
+                        <div class="logout-icon-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                        </div>
+
+                        <h5 class="fw-bold mb-2">Confirm Logout</h5>
+                        <p class="text-muted small mb-4">Are you sure you want to log out of your account? You will need to sign in again to access the dashboard.</p>
+
+                        <form method="POST" action="{{ route('logout') }}" class="d-flex align-items-center justify-content-center gap-2">
+                            @csrf
+                            <button type="button" class="btn btn-logout-cancel w-100" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-logout-confirm w-100 d-inline-flex align-items-center justify-content-center gap-2">
+                                <span>Logout</span>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -533,9 +600,6 @@
         @endauth
 
         <main class="container-fluid py-4 px-4">
-            @if (session('status'))
-                <div class="alert alert-success">{{ session('status') }}</div>
-            @endif
 
             @yield('content')
         </main>

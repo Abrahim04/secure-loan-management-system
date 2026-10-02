@@ -59,4 +59,16 @@ class PaymentSchedule extends Model
     {
         return $this->status !== 'paid' && $this->due_date->isPast();
     }
+
+    // Isama ito sa app/Models/PaymentSchedule.php
+
+    public function pendingPayment()
+    {
+        return $this->hasOne(Payment::class)->where('status', 'pending');
+    }
+
+    public function hasPendingPayment(): bool
+    {
+        return $this->payments()->where('status', 'pending')->exists();
+    }
 }
