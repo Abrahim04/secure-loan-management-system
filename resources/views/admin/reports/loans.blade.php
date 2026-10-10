@@ -3,15 +3,25 @@
 @section('title', 'Loan Report')
 
 @section('content')
-<!-- Adaptive Glassmorphism & SaaS Clean Styling -->
+<!-- Adaptive Glassmorphism & SaaS Clean UI Styling (100% Matched with Audit Logs & Security Events) -->
 <style>
+    /* Dash Card & Container Theme - Translucent Dark Slate Blue */
     .dash-card {
-        background-color: var(--dash-card-bg) !important;
+        background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
-        border: 1px solid var(--dash-card-border) !important;
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
         border-radius: 14px;
+        box-shadow: var(--dash-card-shadow, 0 8px 32px 0 rgba(0, 0, 0, 0.25));
         transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
-        box-shadow: var(--dash-card-shadow);
+    }
+
+    /* Dark Mode Theme Override - Ensures smooth consistent Dark Slate Blue */
+    html[data-bs-theme="dark"] .dash-card,
+    body.dark-mode .dash-card,
+    .dark .dash-card {
+        background: rgba(30, 41, 59, 0.55) !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
     /* Modern Back Button */
@@ -19,9 +29,9 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: rgba(100, 116, 139, 0.1);
-        border: 1px solid var(--dash-card-border);
-        color: var(--text-main, #334155);
+        background: rgba(100, 116, 139, 0.05);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12));
+        color: var(--text-main, #f8fafc);
         border-radius: 50px;
         padding: 6px 16px;
         font-size: 0.85rem;
@@ -30,21 +40,20 @@
         transition: all 0.2s ease;
     }
     .glass-btn-back:hover {
-        background: rgba(100, 116, 139, 0.2);
-        color: var(--text-main, #0f172a);
+        background: rgba(100, 116, 139, 0.15);
+        color: var(--text-main, #f8fafc);
         transform: translateX(-3px);
     }
 
     /* Custom Glassmorphism Dropdown Button */
     .glass-dropdown-toggle {
-        background-color: var(--dash-card-bg) !important;
-        color: var(--text-main) !important;
-        border: 1px solid var(--dash-card-border) !important;
+        background-color: rgba(100, 116, 139, 0.05) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
         border-radius: 10px;
         padding: 8px 16px;
         font-size: 0.875rem;
         font-weight: 600;
-        box-shadow: var(--dash-card-shadow);
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -58,18 +67,18 @@
 
     /* Custom Glassmorphism Dropdown Menu */
     .glass-dropdown-menu {
-        background-color: var(--dash-card-bg) !important;
+        background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
-        border: 1px solid var(--dash-card-border) !important;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
         border-radius: 12px;
-        box-shadow: var(--dash-card-shadow), 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+        box-shadow: var(--dash-card-shadow, 0 10px 25px -5px rgba(0, 0, 0, 0.3));
         padding: 6px;
         margin-top: 6px !important;
         min-width: 170px;
     }
     .glass-dropdown-item {
-        color: var(--text-main) !important;
+        color: var(--text-main, #f8fafc) !important;
         font-size: 0.85rem;
         font-weight: 500;
         padding: 8px 12px;
@@ -80,7 +89,7 @@
         justify-content: space-between;
     }
     .glass-dropdown-item:hover {
-        background-color: rgba(2, 132, 199, 0.1) !important;
+        background-color: rgba(2, 132, 199, 0.15) !important;
         color: #0284c7 !important;
     }
     .glass-dropdown-item.active {
@@ -88,33 +97,43 @@
         color: #ffffff !important;
     }
 
-    /* Modern Glass Table Styling */
+    /* Modern Glass Table Styling - Translucent & Smooth */
     .glass-table {
         width: 100%;
         margin-bottom: 0;
-        color: var(--text-main) !important;
+        color: var(--text-main, #f8fafc) !important;
+        background: transparent !important;
+        --bs-table-bg: transparent !important;
+        --bs-table-color: var(--text-main, #f8fafc) !important;
     }
     .glass-table th {
-        background: rgba(100, 116, 139, 0.06) !important;
-        border-bottom: 1px solid var(--dash-card-border) !important;
-        color: var(--text-muted, #64748b) !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
+        color: var(--text-muted, #94a3b8) !important;
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.6px;
         padding: 12px 16px !important;
         font-weight: 700;
+        vertical-align: middle;
     }
     .glass-table td {
-        border-bottom: 1px solid var(--dash-card-border) !important;
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.05)) !important;
         padding: 14px 16px !important;
         background: transparent !important;
         font-size: 0.875rem;
+        color: var(--text-main, #f8fafc) !important;
+        vertical-align: middle;
+    }
+    .glass-table tr {
+        transition: background-color 0.15s ease;
+        background: transparent !important;
     }
     .glass-table tr:hover {
-        background-color: rgba(100, 116, 139, 0.04) !important;
+        background-color: rgba(255, 255, 255, 0.03) !important;
     }
 
-    /* Clean Status Plain Text (No Background, Centered) */
+    /* Clean Status Plain Text (No Background Box, Color Coded) */
     .badge-status {
         font-size: 0.85rem;
         font-weight: 600;
@@ -123,10 +142,10 @@
         border: none !important;
         display: inline-block;
     }
-    .badge-pending { color: #f59e0b; }
-    .badge-active { color: #0284c7; }
-    .badge-completed { color: #10b981; }
-    .badge-rejected { color: #ef4444; }
+    .badge-pending { color: #f59e0b !important; }
+    .badge-active { color: #0284c7 !important; }
+    .badge-completed { color: #10b981 !important; }
+    .badge-rejected { color: #ef4444 !important; }
 
     /* Custom Bootstrap Pagination Styling */
     .pagination {
@@ -134,9 +153,9 @@
         gap: 4px;
     }
     .pagination .page-item .page-link {
-        background-color: rgba(100, 116, 139, 0.05) !important;
-        border: 1px solid var(--dash-card-border) !important;
-        color: var(--text-main) !important;
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        color: var(--text-main, #f8fafc) !important;
         border-radius: 8px !important;
         padding: 6px 12px;
         font-size: 0.85rem;
@@ -150,14 +169,14 @@
         box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
     }
     .pagination .page-item .page-link:hover {
-        background-color: rgba(2, 132, 199, 0.1) !important;
+        background-color: rgba(2, 132, 199, 0.15) !important;
         border-color: #0284c7 !important;
         color: #0284c7 !important;
     }
     .pagination .page-item.disabled .page-link {
         opacity: 0.5;
         background-color: transparent !important;
-        color: var(--text-muted) !important;
+        color: var(--text-muted, #94a3b8) !important;
     }
 </style>
 

@@ -3,31 +3,41 @@
 @section('title', 'Payment Verification')
 
 @section('content')
-<!-- Adaptive Glassmorphism & SaaS Clean Table Styling -->
+<!-- Adaptive Glassmorphism & SaaS Clean Table Styling (100% Matched with Audit Logs) -->
 <style>
+    /* Translucent Glass Dash Card Container - Matched with Audit Logs & Security Events */
     .dash-card {
-        background-color: var(--dash-card-bg) !important;
+        background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
-        border: 1px solid var(--dash-card-border) !important;
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
         border-radius: 14px;
+        box-shadow: var(--dash-card-shadow, 0 8px 32px 0 rgba(0, 0, 0, 0.25));
         transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
-        box-shadow: var(--dash-card-shadow);
     }
     .dash-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     }
 
-    /* Action Buttons Hover Effects */
+    /* Dark Mode Theme Override - Ensures smooth consistent Dark Slate Blue */
+    html[data-bs-theme="dark"] .dash-card,
+    body.dark-mode .dash-card,
+    .dark .dash-card {
+        background: rgba(30, 41, 59, 0.55) !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    /* Action Buttons Hover Effects (Wala nang arrow icon) */
     .glass-btn-action {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        justify-content: center;
         background: rgba(2, 132, 199, 0.12);
         border: 1px solid rgba(2, 132, 199, 0.3);
         color: #0284c7;
         border-radius: 50px;
-        padding: 5px 14px;
+        padding: 5px 18px;
         font-size: 0.8rem;
         font-weight: 600;
         text-decoration: none;
@@ -40,46 +50,82 @@
         box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
         transform: translateY(-1px);
     }
-    .glass-btn-action svg {
-        transition: transform 0.2s ease;
-    }
-    .glass-btn-action:hover svg {
-        transform: translateX(3px);
-    }
 
     /* Shared Glass Table Styling */
     .glass-table {
         width: 100%;
         margin-bottom: 0;
-        color: var(--text-main) !important;
+        color: var(--text-main, #f8fafc) !important;
+        background: transparent !important;
+        --bs-table-bg: transparent !important;
+        --bs-table-color: var(--text-main, #f8fafc) !important;
     }
     .glass-table th {
-        background: rgba(0, 0, 0, 0.02) !important;
-        border-bottom: 1px solid var(--table-border, rgba(0, 0, 0, 0.08)) !important;
-        color: var(--text-muted, #64748b) !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
+        color: var(--text-muted, #94a3b8) !important;
         font-size: 0.78rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         padding: 12px 16px !important;
         font-weight: 700;
+        vertical-align: middle;
     }
     .glass-table td {
-        border-bottom: 1px solid var(--table-border, rgba(0, 0, 0, 0.05)) !important;
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.05)) !important;
         padding: 14px 16px !important;
         background: transparent !important;
         font-size: 0.875rem;
+        color: var(--text-main, #f8fafc) !important;
+        vertical-align: middle;
     }
-    .glass-table tr:last-child td {
-        border-bottom: none !important;
+    .glass-table tr {
+        transition: background-color 0.15s ease;
+        background: transparent !important;
+    }
+    .glass-table tr:hover {
+        background-color: rgba(255, 255, 255, 0.03) !important;
     }
 
-    /* DIRECT OVERRIDE PARA SA REF NUMBER */
+    /* Reference Number Font Styling */
     .ref-no-text {
         font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
-        font-size: 0.875rem !important;
+        font-size: 0.85rem !important;
         font-weight: 600 !important;
-        color: var(--text-main) !important;
+        color: var(--text-main, #f8fafc) !important;
         letter-spacing: 0.5px;
+    }
+
+    /* Custom Bootstrap Pagination Styling */
+    .pagination {
+        margin-bottom: 0;
+        gap: 4px;
+    }
+    .pagination .page-item .page-link {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border-radius: 8px !important;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.15s ease;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #0284c7 !important;
+        border-color: #0284c7 !important;
+        color: #ffffff !important;
+        box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+    }
+    .pagination .page-item .page-link:hover {
+        background-color: rgba(2, 132, 199, 0.15) !important;
+        border-color: #0284c7 !important;
+        color: #0284c7 !important;
+    }
+    .pagination .page-item.disabled .page-link {
+        opacity: 0.5;
+        background-color: transparent !important;
+        color: var(--text-muted, #94a3b8) !important;
     }
 </style>
 
@@ -101,7 +147,7 @@
                 <table class="table glass-table align-middle">
                     <thead>
                         <tr>
-                            <th>Payer</th>
+                            <th class="ps-4">Payer</th>
                             <th>Loan</th>
                             <th>Reference #</th>
                             <th>Amount</th>
@@ -112,7 +158,7 @@
                     <tbody>
                         @foreach ($payments as $payment)
                             <tr>
-                                <td class="fw-semibold text-main">{{ $payment->user->name }}</td>
+                                <td class="ps-4 fw-semibold text-main">{{ $payment->user->name }}</td>
                                 <td class="fw-semibold text-main">
                                     #{{ $payment->paymentSchedule->loan_id }} 
                                     <span class="text-muted small">(Month {{ $payment->paymentSchedule->month_number }})</span>
@@ -123,7 +169,6 @@
                                 <td class="text-center">
                                     <a href="{{ route('admin.payments.show', $payment) }}" class="glass-btn-action">
                                         <span>Review</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                                     </a>
                                 </td>
                             </tr>
@@ -134,8 +179,8 @@
         </div>
 
         @if($payments->hasPages())
-            <div class="d-flex justify-content-end">
-                {{ $payments->links() }}
+            <div class="dash-card p-3 d-flex justify-content-end mb-4">
+                {{ $payments->links('pagination::bootstrap-5') }}
             </div>
         @endif
     @endif

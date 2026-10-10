@@ -3,15 +3,25 @@
 @section('title', 'Audit Logs')
 
 @section('content')
-<!-- Adaptive Glassmorphism & SaaS Clean UI Styling -->
+<!-- Adaptive Glassmorphism & SaaS Clean UI Styling (100% Matched with Payment Report) -->
 <style>
+    /* Dash Card & Container Theme - Matched with Payment & Loan Reports */
     .dash-card {
-        background-color: var(--dash-card-bg) !important;
+        background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
-        border: 1px solid var(--dash-card-border) !important;
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
         border-radius: 14px;
-        box-shadow: var(--dash-card-shadow);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: var(--dash-card-shadow, 0 8px 32px 0 rgba(0, 0, 0, 0.25));
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+    }
+
+    /* Dark Mode Theme Override - Ensures consistent Dark Slate Blue, never solid black */
+    html[data-bs-theme="dark"] .dash-card,
+    body.dark-mode .dash-card,
+    .dark .dash-card {
+        background: rgba(30, 41, 59, 0.55) !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
     /* Input Icon Wrapper Container */
@@ -31,8 +41,8 @@
     /* Custom Form Control Styling with Icon Padding */
     .glass-input {
         background: rgba(100, 116, 139, 0.05) !important;
-        border: 1px solid var(--dash-card-border) !important;
-        color: var(--text-main) !important;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        color: var(--text-main, #f8fafc) !important;
         border-radius: 10px;
         padding: 9px 14px;
         font-size: 0.875rem;
@@ -52,7 +62,7 @@
         color: #0284c7;
     }
     .glass-input::placeholder {
-        color: var(--text-muted);
+        color: var(--text-muted, #94a3b8);
         opacity: 0.7;
     }
 
@@ -78,32 +88,40 @@
         transform: translateY(-1px);
     }
 
-    /* Table Styling */
+    /* Modern Glass Table Styling - Exactly Matched with Payment Report */
     .custom-table {
-        color: var(--text-main);
-        vertical-align: middle;
+        width: 100%;
         margin-bottom: 0;
+        color: var(--text-main, #f8fafc) !important;
+        background: transparent !important;
+        --bs-table-bg: transparent !important;
+        --bs-table-color: var(--text-main, #f8fafc) !important;
     }
     .custom-table thead th {
-        background: rgba(100, 116, 139, 0.06);
-        color: var(--text-muted);
+        background: rgba(255, 255, 255, 0.03) !important;
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
+        color: var(--text-muted, #94a3b8) !important;
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.6px;
         font-weight: 700;
-        border-bottom: 1px solid var(--dash-card-border);
-        padding: 12px 16px;
+        padding: 12px 16px !important;
+        vertical-align: middle;
     }
     .custom-table tbody tr {
-        border-bottom: 1px solid var(--dash-card-border);
         transition: background-color 0.15s ease;
+        background: transparent !important;
     }
     .custom-table tbody tr:hover {
-        background-color: rgba(100, 116, 139, 0.04);
+        background-color: rgba(255, 255, 255, 0.03) !important;
     }
     .custom-table tbody td {
-        padding: 13px 16px;
+        padding: 14px 16px !important;
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.05)) !important;
+        color: var(--text-main, #f8fafc) !important;
         font-size: 0.875rem;
+        background: transparent !important;
+        vertical-align: middle;
     }
 
     /* Monospace Tech Text */
@@ -114,19 +132,20 @@
         letter-spacing: 0.3px;
     }
 
-    /* Action Badge Soft Styles */
-    .badge-soft {
-        font-size: 0.75rem;
+    /* Clean Text Status Badges (No Background, Colored Text Only) */
+    .action-text {
+        font-size: 0.85rem;
         font-weight: 600;
-        padding: 4px 10px;
-        border-radius: 50px;
         display: inline-block;
+        background: transparent !important;
+        padding: 0;
+        border: none !important;
     }
-    .badge-soft-primary { background: rgba(2, 132, 199, 0.12); color: #0284c7; }
-    .badge-soft-success { background: rgba(16, 185, 129, 0.12); color: #10b981; }
-    .badge-soft-warning { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
-    .badge-soft-danger  { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
-    .badge-soft-secondary { background: rgba(100, 116, 139, 0.12); color: #64748b; }
+    .action-success { color: #10b981 !important; }
+    .action-primary { color: #0284c7 !important; }
+    .action-warning { color: #f59e0b !important; }
+    .action-danger  { color: #ef4444 !important; }
+    .action-secondary { color: #94a3b8 !important; }
 
     /* Custom Bootstrap Pagination Styling */
     .pagination {
@@ -134,9 +153,9 @@
         gap: 4px;
     }
     .pagination .page-item .page-link {
-        background-color: rgba(100, 116, 139, 0.05) !important;
-        border: 1px solid var(--dash-card-border) !important;
-        color: var(--text-main) !important;
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        color: var(--text-main, #f8fafc) !important;
         border-radius: 8px !important;
         padding: 6px 12px;
         font-size: 0.85rem;
@@ -150,14 +169,14 @@
         box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
     }
     .pagination .page-item .page-link:hover {
-        background-color: rgba(2, 132, 199, 0.1) !important;
+        background-color: rgba(2, 132, 199, 0.15) !important;
         border-color: #0284c7 !important;
         color: #0284c7 !important;
     }
     .pagination .page-item.disabled .page-link {
         opacity: 0.5;
         background-color: transparent !important;
-        color: var(--text-muted) !important;
+        color: var(--text-muted, #94a3b8) !important;
     }
 </style>
 
@@ -199,7 +218,7 @@
     </div>
 
     {{-- Audit Log Data Table Card --}}
-    <div class="dash-card overflow-hidden mb-4">
+    <div class="dash-card p-0 overflow-hidden mb-4">
         @if ($logs->isEmpty())
             <div class="p-5 text-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted mb-3 opacity-50"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
@@ -222,18 +241,17 @@
                     <tbody>
                         @foreach ($logs as $log)
                             @php
-                                // Dynamic Soft Badge Color Picker based on Action Name
                                 $actionLower = strtolower($log->action);
-                                $badgeClass = 'badge-soft-secondary';
+                                $actionClass = 'action-secondary';
 
                                 if (str_contains($actionLower, 'approved') || str_contains($actionLower, 'restored')) {
-                                    $badgeClass = 'badge-soft-success';
+                                    $actionClass = 'action-success';
                                 } elseif (str_contains($actionLower, 'submitted') || str_contains($actionLower, 'registered') || str_contains($actionLower, 'created')) {
-                                    $badgeClass = 'badge-soft-primary';
+                                    $actionClass = 'action-primary';
                                 } elseif (str_contains($actionLower, 'updated') || str_contains($actionLower, 'changed') || str_contains($actionLower, 'reset')) {
-                                    $badgeClass = 'badge-soft-warning';
+                                    $actionClass = 'action-warning';
                                 } elseif (str_contains($actionLower, 'deleted') || str_contains($actionLower, 'rejected')) {
-                                    $badgeClass = 'badge-soft-danger';
+                                    $actionClass = 'action-danger';
                                 }
                             @endphp
                             <tr>
@@ -245,7 +263,7 @@
                                     <span class="fw-semibold text-main d-block">{{ $log->user->name ?? 'System' }}</span>
                                 </td>
                                 <td>
-                                    <span class="badge-soft {{ $badgeClass }}">{{ $log->action }}</span>
+                                    <span class="action-text {{ $actionClass }}">{{ $log->action }}</span>
                                 </td>
                                 <td>
                                     @if ($log->related_type)
@@ -260,9 +278,9 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <code class="px-2 py-1 rounded text-main" style="font-size: 0.8rem; background: rgba(100, 116, 139, 0.1);">
+                                    <span class="text-main mono-text" style="font-size: 0.85rem;">
                                         {{ $log->ip_address ?? '—' }}
-                                    </code>
+                                    </span>
                                 </td>
                             </tr>
                         @endforeach

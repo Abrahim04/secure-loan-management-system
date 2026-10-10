@@ -3,45 +3,66 @@
 @section('title', 'Loan History')
 
 @section('content')
-<!-- Adaptive Glassmorphism & SaaS Clean Table Styling -->
+<!-- Adaptive Glassmorphism & SaaS Clean Table Styling (100% Matched with Audit Logs) -->
 <style>
+    /* Translucent Glass Dash Card Container - Matched with Audit Logs & Security Events */
     .dash-card {
-        background-color: var(--dash-card-bg) !important;
+        background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
-        border: 1px solid var(--dash-card-border) !important;
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
         border-radius: 14px;
+        box-shadow: var(--dash-card-shadow, 0 8px 32px 0 rgba(0, 0, 0, 0.25));
         transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
-        box-shadow: var(--dash-card-shadow);
     }
 
+    /* Dark Mode Theme Override */
+    html[data-bs-theme="dark"] .dash-card,
+    body.dark-mode .dash-card,
+    .dark .dash-card {
+        background: rgba(30, 41, 59, 0.55) !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    /* Modern Translucent Glass Table Styling */
     .glass-table {
         width: 100%;
         margin-bottom: 0;
-        color: var(--text-main) !important;
+        color: var(--text-main, #f8fafc) !important;
+        background: transparent !important;
+        --bs-table-bg: transparent !important;
+        --bs-table-color: var(--text-main, #f8fafc) !important;
     }
     .glass-table th {
-        background: rgba(0, 0, 0, 0.02) !important;
-        border-bottom: 1px solid var(--table-border, rgba(0, 0, 0, 0.08)) !important;
-        color: var(--text-muted, #64748b) !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
+        color: var(--text-muted, #94a3b8) !important;
         font-size: 0.78rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         padding: 12px 16px !important;
         font-weight: 700;
+        vertical-align: middle;
     }
     .glass-table td {
-        border-bottom: 1px solid var(--table-border, rgba(0, 0, 0, 0.05)) !important;
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.05)) !important;
         padding: 14px 16px !important;
         background: transparent !important;
         font-size: 0.875rem;
+        color: var(--text-main, #f8fafc) !important;
+        vertical-align: middle;
+    }
+    .glass-table tr {
+        transition: background-color 0.15s ease;
+        background: transparent !important;
+    }
+    .glass-table tr:hover {
+        background-color: rgba(255, 255, 255, 0.03) !important;
     }
 
-    /* Clean Text Status Badges (No Background & Centered) */
+    /* Clean Text Status Badges (No Background, Colored Text Only) */
     .status-badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
+        display: inline-block;
         padding: 0;
         background: transparent !important;
         border: none !important;
@@ -50,10 +71,42 @@
         text-transform: capitalize;
     }
     .status-badge.approved {
-        color: #10b981;
+        color: #10b981 !important;
     }
     .status-badge.rejected {
-        color: #ef4444;
+        color: #ef4444 !important;
+    }
+
+    /* Custom Bootstrap Pagination Styling */
+    .pagination {
+        margin-bottom: 0;
+        gap: 4px;
+    }
+    .pagination .page-item .page-link {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border-radius: 8px !important;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.15s ease;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #0284c7 !important;
+        border-color: #0284c7 !important;
+        color: #ffffff !important;
+        box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+    }
+    .pagination .page-item .page-link:hover {
+        background-color: rgba(2, 132, 199, 0.15) !important;
+        border-color: #0284c7 !important;
+        color: #0284c7 !important;
+    }
+    .pagination .page-item.disabled .page-link {
+        opacity: 0.5;
+        background-color: transparent !important;
+        color: var(--text-muted, #94a3b8) !important;
     }
 </style>
 
@@ -75,7 +128,7 @@
                 <table class="table glass-table align-middle">
                     <thead>
                         <tr>
-                            <th>Applicant</th>
+                            <th class="ps-4">Applicant</th>
                             <th>Loan Type</th>
                             <th>Principal</th>
                             <th class="text-center">Status</th>
@@ -87,18 +140,16 @@
                     <tbody>
                         @foreach($loans as $loan)
                             <tr>
-                                <td class="fw-semibold text-main">{{ $loan->user->name ?? 'N/A' }}</td>
+                                <td class="ps-4 fw-semibold text-main">{{ $loan->user->name ?? 'N/A' }}</td>
                                 <td class="text-muted">{{ $loan->loan_type ?? $loan->loanType->name ?? 'Personal Loan' }}</td>
                                 <td class="fw-bold text-main">₱{{ number_format($loan->principal_amount ?? $loan->amount ?? 0, 2) }}</td>
                                 <td class="text-center">
                                     @if(in_array($loan->status, ['active', 'approved', 'completed', 'paid']))
                                         <span class="status-badge approved">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                             Approved
                                         </span>
                                     @else
                                         <span class="status-badge rejected">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                             Rejected
                                         </span>
                                     @endif

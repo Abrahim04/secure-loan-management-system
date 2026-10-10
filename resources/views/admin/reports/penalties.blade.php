@@ -4,37 +4,34 @@
 
 @section('content')
 <style>
+    /* Dash Card & Container Theme - Matched with Loan & Payment Reports */
     .dash-card {
-        background-color: var(--dash-card-bg) !important;
+        background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
-        border: 1px solid var(--dash-card-border) !important;
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
         border-radius: 16px;
-        box-shadow: var(--dash-card-shadow);
+        box-shadow: var(--dash-card-shadow, 0 8px 32px 0 rgba(0, 0, 0, 0.25));
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+    }
+
+    /* Dark Mode Theme Override - Ensures consistent Dark Slate Blue, never solid black */
+    html[data-bs-theme="dark"] .dash-card,
+    body.dark-mode .dash-card,
+    .dark .dash-card {
+        background: rgba(30, 41, 59, 0.55) !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
     /* Interactive Hover Effect for Metric Cards */
     .metric-card-hover {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: default; /* Binago mula 'pointer' patungong 'default' para hindi na maging kamay ang cursor */
+        cursor: default;
     }
     .metric-card-hover:hover {
         transform: translateY(-4px);
-        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15);
         border-color: rgba(239, 68, 68, 0.3) !important;
-    }
-    .metric-card-hover:hover .metric-icon-box {
-        transform: scale(1.08);
-    }
-
-    /* Metric Icon Cards */
-    .metric-icon-box {
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     /* Back Pill Button */
@@ -43,8 +40,8 @@
         align-items: center;
         gap: 6px;
         background: rgba(100, 116, 139, 0.1);
-        border: 1px solid rgba(100, 116, 139, 0.25);
-        color: var(--text-main, #334155);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12));
+        color: var(--text-main, #f8fafc);
         border-radius: 50px;
         padding: 6px 16px;
         font-size: 0.85rem;
@@ -54,32 +51,50 @@
     }
     .glass-btn-back:hover {
         background: rgba(100, 116, 139, 0.2);
-        color: var(--text-main, #0f172a);
+        color: var(--text-main, #ffffff);
         transform: translateX(-3px);
     }
 
-    /* Table Styling */
+    /* Table Styling - Matched with Loan Report */
+    .glass-table {
+        width: 100%;
+        margin-bottom: 0;
+        color: var(--text-main, #f8fafc) !important;
+        background: transparent !important;
+    }
     .glass-table th {
-        background: rgba(0, 0, 0, 0.02);
-        color: var(--text-muted, #64748b);
+        background: rgba(255, 255, 255, 0.03) !important;
+        color: var(--text-muted, #94a3b8);
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.6px;
         font-weight: 700;
-        border-bottom: 1px solid var(--dash-card-border) !important;
-        padding: 12px 16px;
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
+        padding: 12px 16px !important;
     }
     .glass-table td {
-        padding: 14px 16px;
-        border-bottom: 1px solid var(--dash-card-border);
-        color: var(--text-main);
+        padding: 14px 16px !important;
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.05)) !important;
+        color: var(--text-main, #f8fafc);
         font-size: 0.875rem;
+        background: transparent !important;
     }
     .glass-table tbody tr {
-        transition: background-color 0.2s ease;
+        transition: background-color 0.15s ease;
+        background: transparent !important;
     }
     .glass-table tbody tr:hover {
-        background-color: rgba(239, 68, 68, 0.03);
+        background-color: rgba(255, 255, 255, 0.03) !important;
+    }
+
+    /* Clean Days Overdue Plain Text (No Red Background, Centered) */
+    .days-overdue-text {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #ef4444 !important;
+        background: transparent !important;
+        border: none !important;
+        display: inline-block;
     }
 </style>
 
@@ -103,41 +118,26 @@
         </div>
     </div>
 
-    {{-- Summary Metric Cards with Hover Animations --}}
+    {{-- Summary Metric Cards (Clean & Minimalist without Icons) --}}
     <div class="row g-3 mb-4">
         <div class="col-6 col-lg-4">
-            <div class="dash-card metric-card-hover p-3 d-flex align-items-center gap-3">
-                <div class="metric-icon-box" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                </div>
-                <div>
-                    <span class="text-muted small d-block fw-medium">Total Penalties</span>
-                    <h5 class="fw-bold text-main mb-0">{{ $penalties->count() }}</h5>
-                </div>
+            <div class="dash-card metric-card-hover p-3">
+                <span class="text-muted small d-block fw-medium mb-1">Total Penalties</span>
+                <h5 class="fw-bold text-main mb-0">{{ $penalties->count() }}</h5>
             </div>
         </div>
 
         <div class="col-6 col-lg-4">
-            <div class="dash-card metric-card-hover p-3 d-flex align-items-center gap-3">
-                <div class="metric-icon-box" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                </div>
-                <div>
-                    <span class="text-muted small d-block fw-medium">Total Penalty Amount</span>
-                    <h5 class="fw-bold text-main mb-0">₱{{ number_format($penalties->sum('amount'), 2) }}</h5>
-                </div>
+            <div class="dash-card metric-card-hover p-3">
+                <span class="text-muted small d-block fw-medium mb-1">Total Penalty Amount</span>
+                <h5 class="fw-bold text-main mb-0">₱{{ number_format($penalties->sum('amount'), 2) }}</h5>
             </div>
         </div>
 
         <div class="col-6 col-lg-4">
-            <div class="dash-card metric-card-hover p-3 d-flex align-items-center gap-3">
-                <div class="metric-icon-box" style="background: rgba(2, 132, 199, 0.1); color: #0284c7;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                </div>
-                <div>
-                    <span class="text-muted small d-block fw-medium">Avg. Days Overdue</span>
-                    <h5 class="fw-bold text-main mb-0">{{ $penalties->count() > 0 ? round($penalties->avg('days_overdue'), 1) : 0 }} Days</h5>
-                </div>
+            <div class="dash-card metric-card-hover p-3">
+                <span class="text-muted small d-block fw-medium mb-1">Avg. Days Overdue</span>
+                <h5 class="fw-bold text-main mb-0">{{ $penalties->count() > 0 ? round($penalties->avg('days_overdue'), 1) : 0 }} Days</h5>
             </div>
         </div>
     </div>
@@ -177,7 +177,7 @@
                                     <span class="text-muted small d-block" style="font-size: 0.78rem;">(Month {{ $penalty->paymentSchedule->month_number }})</span>
                                 </td>
                                 <td class="text-center">
-                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1 fw-bold" style="font-size: 0.78rem;">
+                                    <span class="days-overdue-text">
                                         {{ $penalty->days_overdue }} days
                                     </span>
                                 </td>

@@ -3,38 +3,36 @@
 @section('title', 'Payment Report')
 
 @section('content')
-<!-- Adaptive Glassmorphism & SaaS Clean Styling -->
+<!-- Adaptive Glassmorphism & SaaS Clean Styling (100% Matched with Loan Report) -->
 <style>
+    /* Dash Card & Container Theme - Matched with Loan Report */
     .dash-card {
-        background-color: var(--dash-card-bg) !important;
+        background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
-        border: 1px solid var(--dash-card-border) !important;
-        border-radius: 16px;
-        box-shadow: var(--dash-card-shadow);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
+        border-radius: 14px;
+        box-shadow: var(--dash-card-shadow, 0 8px 32px 0 rgba(0, 0, 0, 0.25));
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+    }
+
+    /* Dark Mode Theme Override - Ensures consistent Dark Slate Blue, never solid black */
+    html[data-bs-theme="dark"] .dash-card,
+    body.dark-mode .dash-card,
+    .dark .dash-card {
+        background: rgba(30, 41, 59, 0.55) !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
     /* Interactive Hover Effect for Metric Cards */
     .metric-card-hover {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: default; /* Pinalitan mula 'pointer' para maging normal na arrow cursor */
+        cursor: default;
     }
     .metric-card-hover:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
-        border-color: rgba(16, 185, 129, 0.3) !important;
-    }
-    .metric-card-hover:hover .metric-icon-box {
-        transform: scale(1.08);
-    }
-    /* Metric Icon Cards */
-    .metric-icon-box {
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15);
+        border-color: rgba(2, 132, 199, 0.3) !important;
     }
 
     /* Back Pill Button */
@@ -43,8 +41,8 @@
         align-items: center;
         gap: 6px;
         background: rgba(100, 116, 139, 0.1);
-        border: 1px solid var(--dash-card-border);
-        color: var(--text-main, #334155);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12));
+        color: var(--text-main, #f8fafc);
         border-radius: 50px;
         padding: 6px 16px;
         font-size: 0.85rem;
@@ -54,15 +52,15 @@
     }
     .glass-btn-back:hover {
         background: rgba(100, 116, 139, 0.2);
-        color: var(--text-main, #0f172a);
+        color: var(--text-main, #ffffff);
         transform: translateX(-3px);
     }
 
     /* Custom Glassmorphism Dropdown Button */
     .glass-dropdown-toggle {
-        background-color: var(--dash-card-bg) !important;
-        color: var(--text-main) !important;
-        border: 1px solid var(--dash-card-border) !important;
+        background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
         border-radius: 10px;
         padding: 8px 16px;
         font-size: 0.875rem;
@@ -81,18 +79,19 @@
 
     /* Custom Glassmorphism Dropdown Menu */
     .glass-dropdown-menu {
-        background-color: var(--dash-card-bg) !important;
+        background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
-        border: 1px solid var(--dash-card-border) !important;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
         border-radius: 12px;
-        box-shadow: var(--dash-card-shadow), 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
         padding: 6px;
         margin-top: 6px !important;
         min-width: 170px;
+        z-index: 1050;
     }
     .glass-dropdown-item {
-        color: var(--text-main) !important;
+        color: var(--text-main, #f8fafc) !important;
         font-size: 0.85rem;
         font-weight: 500;
         padding: 8px 12px;
@@ -103,7 +102,7 @@
         justify-content: space-between;
     }
     .glass-dropdown-item:hover {
-        background-color: rgba(2, 132, 199, 0.1) !important;
+        background-color: rgba(2, 132, 199, 0.15) !important;
         color: #0284c7 !important;
     }
     .glass-dropdown-item.active {
@@ -119,46 +118,50 @@
         letter-spacing: 0.5px;
     }
 
-    /* Table Styling */
+    /* Modern Glass Table Styling - Exactly Matched with Loan Report */
     .glass-table {
         width: 100%;
         margin-bottom: 0;
-        color: var(--text-main) !important;
+        color: var(--text-main, #f8fafc) !important;
+        background: transparent !important;
     }
     .glass-table th {
-        background: rgba(100, 116, 139, 0.06) !important;
-        border-bottom: 1px solid var(--dash-card-border) !important;
-        color: var(--text-muted, #64748b) !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
+        color: var(--text-muted, #94a3b8) !important;
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.6px;
         font-weight: 700;
-        padding: 12px 16px;
+        padding: 12px 16px !important;
     }
     .glass-table td {
-        padding: 14px 16px;
-        border-bottom: 1px solid var(--dash-card-border);
-        color: var(--text-main);
+        padding: 14px 16px !important;
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.05)) !important;
+        color: var(--text-main, #f8fafc);
         font-size: 0.875rem;
+        background: transparent !important;
     }
     .glass-table tbody tr {
-        transition: background-color 0.2s ease;
+        transition: background-color 0.15s ease;
+        background: transparent !important;
     }
     .glass-table tbody tr:hover {
-        background-color: rgba(100, 116, 139, 0.04);
+        background-color: rgba(255, 255, 255, 0.03) !important;
     }
 
-    /* Soft Badge Colors */
+    /* Clean Status Plain Text (No Background, Centered - Matches Loan Report) */
     .badge-status {
-        padding: 5px 12px;
-        border-radius: 50px;
-        font-size: 0.75rem;
+        font-size: 0.85rem;
         font-weight: 600;
+        padding: 0;
+        background: transparent !important;
+        border: none !important;
         display: inline-block;
     }
-    .badge-pending { background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.25); }
-    .badge-verified { background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.25); }
-    .badge-rejected { background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); }
+    .badge-pending  { color: #f59e0b !important; }
+    .badge-verified { color: #10b981 !important; }
+    .badge-rejected { color: #ef4444 !important; }
 
     /* Custom Bootstrap Pagination Styling */
     .pagination {
@@ -166,9 +169,9 @@
         gap: 4px;
     }
     .pagination .page-item .page-link {
-        background-color: rgba(100, 116, 139, 0.05) !important;
-        border: 1px solid var(--dash-card-border) !important;
-        color: var(--text-main) !important;
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        color: var(--text-main, #f8fafc) !important;
         border-radius: 8px !important;
         padding: 6px 12px;
         font-size: 0.85rem;
@@ -182,14 +185,14 @@
         box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
     }
     .pagination .page-item .page-link:hover {
-        background-color: rgba(2, 132, 199, 0.1) !important;
+        background-color: rgba(2, 132, 199, 0.15) !important;
         border-color: #0284c7 !important;
         color: #0284c7 !important;
     }
     .pagination .page-item.disabled .page-link {
         opacity: 0.5;
         background-color: transparent !important;
-        color: var(--text-muted) !important;
+        color: var(--text-muted, #94a3b8) !important;
     }
 </style>
 
@@ -242,53 +245,33 @@
         <p class="text-muted small mb-0">Track all received payment submissions, verification status, and transaction histories.</p>
     </div>
 
-    {{-- Summary Metric Cards with Hover Animations --}}
+    {{-- Summary Metric Cards (Clean & Minimalist without Icons) --}}
     <div class="row g-3 mb-4">
         <div class="col-6 col-lg-3">
-            <div class="dash-card metric-card-hover p-3 d-flex align-items-center gap-3">
-                <div class="metric-icon-box" style="background: rgba(2, 132, 199, 0.1); color: #0284c7;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-                </div>
-                <div>
-                    <span class="text-muted small d-block fw-medium">Total Entries</span>
-                    <h5 class="fw-bold text-main mb-0">{{ $payments->count() }}</h5>
-                </div>
+            <div class="dash-card metric-card-hover p-3">
+                <span class="text-muted small d-block fw-medium mb-1">Total Entries</span>
+                <h5 class="fw-bold text-main mb-0">{{ $payments->count() }}</h5>
             </div>
         </div>
 
         <div class="col-6 col-lg-3">
-            <div class="dash-card metric-card-hover p-3 d-flex align-items-center gap-3">
-                <div class="metric-icon-box" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                </div>
-                <div>
-                    <span class="text-muted small d-block fw-medium">Verified Collections</span>
-                    <h5 class="fw-bold text-main mb-0">₱{{ number_format($payments->where('status', 'verified')->sum('amount'), 2) }}</h5>
-                </div>
+            <div class="dash-card metric-card-hover p-3">
+                <span class="text-muted small d-block fw-medium mb-1">Verified Collections</span>
+                <h5 class="fw-bold text-main mb-0">₱{{ number_format($payments->where('status', 'verified')->sum('amount'), 2) }}</h5>
             </div>
         </div>
 
         <div class="col-6 col-lg-3">
-            <div class="dash-card metric-card-hover p-3 d-flex align-items-center gap-3">
-                <div class="metric-icon-box" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                </div>
-                <div>
-                    <span class="text-muted small d-block fw-medium">Pending Review</span>
-                    <h5 class="fw-bold text-main mb-0">{{ $payments->where('status', 'pending')->count() }}</h5>
-                </div>
+            <div class="dash-card metric-card-hover p-3">
+                <span class="text-muted small d-block fw-medium mb-1">Pending Review</span>
+                <h5 class="fw-bold text-main mb-0">{{ $payments->where('status', 'pending')->count() }}</h5>
             </div>
         </div>
 
         <div class="col-6 col-lg-3">
-            <div class="dash-card metric-card-hover p-3 d-flex align-items-center gap-3">
-                <div class="metric-icon-box" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
-                </div>
-                <div>
-                    <span class="text-muted small d-block fw-medium">Rejected Receipts</span>
-                    <h5 class="fw-bold text-main mb-0">{{ $payments->where('status', 'rejected')->count() }}</h5>
-                </div>
+            <div class="dash-card metric-card-hover p-3">
+                <span class="text-muted small d-block fw-medium mb-1">Rejected Receipts</span>
+                <h5 class="fw-bold text-main mb-0">{{ $payments->where('status', 'rejected')->count() }}</h5>
             </div>
         </div>
     </div>

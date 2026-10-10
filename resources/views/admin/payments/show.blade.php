@@ -5,13 +5,23 @@
 @section('content')
 <!-- Adaptive Glassmorphism & SaaS Clean Review Styling -->
 <style>
+    /* Translucent Glass Dash Card Container - Matched with Audit Logs & Security Events */
     .dash-card {
-        background-color: var(--dash-card-bg) !important;
+        background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
-        border: 1px solid var(--dash-card-border) !important;
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
         border-radius: 14px;
-        box-shadow: var(--dash-card-shadow);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: var(--dash-card-shadow, 0 8px 32px 0 rgba(0, 0, 0, 0.25));
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+    }
+
+    /* Dark Mode Theme Override - Ensures smooth consistent Dark Slate Blue */
+    html[data-bs-theme="dark"] .dash-card,
+    body.dark-mode .dash-card,
+    .dark .dash-card {
+        background: rgba(30, 41, 59, 0.55) !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
     /* Modern Back Pill Button */
@@ -19,9 +29,9 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: rgba(100, 116, 139, 0.1);
-        border: 1px solid rgba(100, 116, 139, 0.25);
-        color: var(--text-main, #334155);
+        background: rgba(100, 116, 139, 0.05);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12));
+        color: var(--text-main, #f8fafc);
         border-radius: 50px;
         padding: 6px 16px;
         font-size: 0.85rem;
@@ -30,21 +40,20 @@
         transition: all 0.2s ease;
     }
     .glass-btn-back:hover {
-        background: rgba(100, 116, 139, 0.2);
-        color: var(--text-main, #0f172a);
+        background: rgba(100, 116, 139, 0.15);
+        color: var(--text-main, #f8fafc);
         transform: translateX(-3px);
     }
 
-    /* Receipt Pill Action Button */
+    /* Receipt Pill Action Button (Wala nang icon) */
     .glass-btn-receipt {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        background: rgba(2, 132, 199, 0.1);
+        background: rgba(2, 132, 199, 0.12);
         border: 1px solid rgba(2, 132, 199, 0.3);
         color: #0284c7;
         border-radius: 50px;
-        padding: 8px 18px;
+        padding: 8px 20px;
         font-size: 0.85rem;
         font-weight: 600;
         text-decoration: none;
@@ -57,18 +66,17 @@
         transform: translateY(-1px);
     }
 
-    /* Modern Rounded Action Buttons */
+    /* Modern Rounded Action Buttons (Wala nang check at X icons) */
     .btn-approve-glass {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
         background: #10b981;
         border: 1px solid #059669;
         color: #ffffff;
         font-weight: 600;
         font-size: 0.875rem;
-        padding: 9px 22px;
+        padding: 9px 24px;
         border-radius: 50px;
         transition: all 0.2s ease;
         cursor: pointer;
@@ -83,13 +91,12 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
         background: rgba(239, 68, 68, 0.12);
         border: 1px solid rgba(239, 68, 68, 0.3);
-        color: #dc2626;
+        color: #ef4444;
         font-weight: 600;
         font-size: 0.875rem;
-        padding: 9px 22px;
+        padding: 9px 24px;
         border-radius: 50px;
         transition: all 0.2s ease;
         cursor: pointer;
@@ -107,7 +114,7 @@
         font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
         font-size: 0.9rem !important;
         font-weight: 600 !important;
-        color: var(--text-main) !important;
+        color: var(--text-main, #f8fafc) !important;
         letter-spacing: 0.5px;
     }
 </style>
@@ -148,7 +155,7 @@
             </div>
         </div>
 
-        <hr class="my-4" style="border-color: var(--dash-card-border);">
+        <hr class="my-4" style="border-color: var(--dash-card-border, rgba(255, 255, 255, 0.08));">
 
         <div class="row g-4">
             <div class="col-md-4">
@@ -165,13 +172,12 @@
             </div>
         </div>
 
-        <hr class="my-4" style="border-color: var(--dash-card-border);">
+        <hr class="my-4" style="border-color: var(--dash-card-border, rgba(255, 255, 255, 0.08));">
 
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
             <div>
                 <span class="text-muted small text-uppercase fw-bold d-block mb-2" style="font-size: 0.75rem; letter-spacing: 0.5px;">Proof of Payment</span>
                 <a href="{{ route('payments.proof', $payment) }}" target="_blank" class="glass-btn-receipt">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                     <span>View Uploaded Receipt</span>
                 </a>
             </div>
@@ -179,14 +185,12 @@
             {{-- Action Buttons Container --}}
             <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
                 <button type="button" class="btn-reject-glass" data-bs-toggle="collapse" data-bs-target="#rejectForm">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
                     <span>Reject Payment</span>
                 </button>
 
                 <form method="POST" action="{{ route('admin.payments.verify', $payment) }}" class="m-0">
                     @csrf
                     <button type="submit" class="btn-approve-glass" onclick="return confirm('Mark this payment as verified?')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                         <span>Verify Payment</span>
                     </button>
                 </form>
@@ -202,7 +206,7 @@
                 @csrf
                 <div class="mb-3">
                     <label class="form-label text-muted small fw-semibold">Rejection Reason</label>
-                    <textarea name="rejection_reason" class="form-control bg-transparent text-main" rows="3" placeholder="State the reason for rejecting this receipt..." required style="border-color: var(--dash-card-border); border-radius: 10px;"></textarea>
+                    <textarea name="rejection_reason" class="form-control bg-transparent text-main" rows="3" placeholder="State the reason for rejecting this receipt..." required style="border-color: var(--dash-card-border, rgba(255, 255, 255, 0.12)); border-radius: 10px;"></textarea>
                 </div>
                 <div class="d-flex justify-content-end">
                     <button type="submit" class="btn-reject-glass">

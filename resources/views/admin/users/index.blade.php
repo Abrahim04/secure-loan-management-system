@@ -3,9 +3,9 @@
 @section('title', $showingTrash ? 'Archived Borrowers' : 'Borrower Management')
 
 @section('content')
-<!-- Adaptive Glassmorphism & SaaS Clean UI Styling -->
+<!-- Adaptive Glassmorphism & SaaS Clean UI Styling (100% Matched with Audit Logs) -->
 <style>
-    /* Dash Card Container */
+    /* Translucent Glass Dash Card Container - Matched with Audit Logs */
     .dash-card {
         background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
@@ -16,7 +16,7 @@
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    /* Filters Container - Higher z-index to allow dropdown overlay */
+    /* Filters Container - Translucent Glass */
     .filter-card {
         background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
@@ -27,9 +27,20 @@
         z-index: 1050 !important;
     }
 
+    /* Dark Mode Theme Override */
+    html[data-bs-theme="dark"] .dash-card,
+    html[data-bs-theme="dark"] .filter-card,
+    body.dark-mode .dash-card,
+    body.dark-mode .filter-card,
+    .dark .dash-card,
+    .dark .filter-card {
+        background: rgba(30, 41, 59, 0.55) !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
     /* Custom Form Control Styling */
     .glass-input {
-        background: rgba(255, 255, 255, 0.05) !important;
+        background: rgba(100, 116, 139, 0.05) !important;
         border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
         color: var(--text-main, #f8fafc) !important;
         border-radius: 10px;
@@ -39,7 +50,7 @@
     }
 
     .glass-input:focus {
-        background-color: rgba(255, 255, 255, 0.08) !important;
+        background-color: transparent !important;
         border-color: #0284c7 !important;
         box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
         outline: none;
@@ -49,10 +60,10 @@
         opacity: 0.7;
     }
 
-    /* Custom Select Button and Dropdown Menu Fixes */
+    /* Custom Select Button and Dropdown Menu */
     .custom-select-btn {
         width: 100%;
-        background-color: rgba(255, 255, 255, 0.05) !important;
+        background-color: rgba(100, 116, 139, 0.05) !important;
         color: var(--text-main, #f8fafc) !important;
         border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
         border-radius: 10px;
@@ -73,7 +84,7 @@
 
     .custom-select-menu {
         width: 100% !important;
-        background-color: var(--dash-card-bg, #1e293b) !important;
+        background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.15)) !important;
@@ -110,8 +121,8 @@
         color: #ffffff !important;
         font-weight: 600;
         font-size: 0.875rem;
-        padding: 9px 18px;
-        border-radius: 10px;
+        padding: 9px 20px;
+        border-radius: 50px;
         text-decoration: none !important;
         transition: all 0.2s ease;
     }
@@ -127,28 +138,28 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(100, 116, 139, 0.05);
         border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12));
         color: var(--text-main, #f8fafc) !important;
         font-weight: 600;
         font-size: 0.875rem;
-        padding: 9px 16px;
-        border-radius: 10px;
+        padding: 9px 18px;
+        border-radius: 50px;
         text-decoration: none !important;
         transition: all 0.2s ease;
     }
     .btn-action-secondary:hover {
-        background: rgba(255, 255, 255, 0.12);
+        background: rgba(100, 116, 139, 0.15);
         color: var(--text-main, #ffffff) !important;
         transform: translateY(-1px);
     }
 
-    /* Action Table Buttons */
+    /* Action Table Buttons - Clean Pill Style */
     .btn-tbl-action {
         font-size: 0.785rem;
         font-weight: 600;
-        padding: 5px 12px;
-        border-radius: 8px;
+        padding: 5px 14px;
+        border-radius: 50px;
         text-decoration: none !important;
         display: inline-flex;
         align-items: center;
@@ -204,34 +215,40 @@
         box-shadow: 0 3px 8px rgba(239, 68, 68, 0.3);
     }
 
-    /* Table Styling Header & Rows */
+    /* Shared Glass Table Styling */
     .custom-table {
-        color: var(--text-main, #f8fafc);
-        vertical-align: middle;
+        width: 100%;
         margin-bottom: 0;
+        color: var(--text-main, #f8fafc) !important;
         background: transparent !important;
+        --bs-table-bg: transparent !important;
+        --bs-table-color: var(--text-main, #f8fafc) !important;
     }
     .custom-table thead th {
         background: rgba(255, 255, 255, 0.03) !important;
-        color: var(--text-muted, #94a3b8);
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
+        color: var(--text-muted, #94a3b8) !important;
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.6px;
         font-weight: 700;
-        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08));
-        padding: 12px 16px;
+        padding: 12px 16px !important;
+        vertical-align: middle;
     }
     .custom-table tbody tr {
-        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.05));
         transition: background-color 0.15s ease;
+        background: transparent !important;
     }
     .custom-table tbody tr:hover {
         background-color: rgba(255, 255, 255, 0.03) !important;
     }
     .custom-table tbody td {
-        padding: 13px 16px;
+        padding: 13px 16px !important;
+        border-bottom: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.05)) !important;
+        color: var(--text-main, #f8fafc) !important;
         font-size: 0.875rem;
         background: transparent !important;
+        vertical-align: middle;
     }
 
     /* Text Badges */
@@ -243,9 +260,9 @@
         border: none !important;
         display: inline-block;
     }
-    .badge-soft-success { color: #34d399; }
-    .badge-soft-danger  { color: #f87171; }
-    .badge-soft-warning { color: #fbbf24; }
+    .badge-soft-success { color: #34d399 !important; }
+    .badge-soft-danger  { color: #f87171 !important; }
+    .badge-soft-warning { color: #fbbf24 !important; }
 
     /* User Avatar Circle */
     .user-avatar {
@@ -300,6 +317,38 @@
         box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
     }
 
+    /* Custom Bootstrap Pagination Styling */
+    .pagination {
+        margin-bottom: 0;
+        gap: 4px;
+    }
+    .pagination .page-item .page-link {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border-radius: 8px !important;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.15s ease;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #0284c7 !important;
+        border-color: #0284c7 !important;
+        color: #ffffff !important;
+        box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+    }
+    .pagination .page-item .page-link:hover {
+        background-color: rgba(2, 132, 199, 0.15) !important;
+        border-color: #0284c7 !important;
+        color: #0284c7 !important;
+    }
+    .pagination .page-item.disabled .page-link {
+        opacity: 0.5;
+        background-color: transparent !important;
+        color: var(--text-muted, #94a3b8) !important;
+    }
+
     /* SweetAlert Glassmorphism Integration */
     .swal2-glass-modal {
         border-radius: 18px !important;
@@ -328,7 +377,7 @@
         font-weight: 600 !important;
         font-size: 0.875rem !important;
         padding: 9px 20px !important;
-        border-radius: 10px !important;
+        border-radius: 50px !important;
         border: none !important;
         transition: all 0.2s ease !important;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -345,7 +394,7 @@
         font-weight: 600 !important;
         font-size: 0.875rem !important;
         padding: 9px 20px !important;
-        border-radius: 10px !important;
+        border-radius: 50px !important;
         transition: all 0.2s ease !important;
     }
     .swal2-btn-cancel:hover {
@@ -365,18 +414,11 @@
         </div>
         <div class="d-flex align-items-center gap-2">
             <a href="{{ route('admin.users.index', $showingTrash ? [] : ['trashed' => 1]) }}" class="btn-action-secondary">
-                @if ($showingTrash)
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                    <span>View Active Borrowers</span>
-                @else
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    <span>View Trash / Archived</span>
-                @endif
+                <span>{{ $showingTrash ? 'View Active Borrowers' : 'View Trash / Archived' }}</span>
             </a>
             @unless ($showingTrash)
                 <button type="button" class="btn-action-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    <span>Add Borrower</span>
+                    <span>+ Add Borrower</span>
                 </button>
             @endunless
         </div>
@@ -450,8 +492,8 @@
         </div>
     @endunless
 
-    {{-- Borrower Table Card (Tinanggal ang overflow-hidden dito) --}}
-    <div class="dash-card mb-4">
+    {{-- Borrower Table Card --}}
+    <div class="dash-card p-0 overflow-hidden mb-4">
         @if ($users->isEmpty())
             <div class="p-5 text-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted mb-3 opacity-50"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
@@ -459,7 +501,7 @@
                 <p class="text-muted small mb-0">Try adjusting your filter search criteria or add a new borrower.</p>
             </div>
         @else
-            <div class="table-responsive" style="overflow-x: auto; overflow-y: visible;">
+            <div class="table-responsive">
                 <table class="table custom-table align-middle">
                     <thead>
                         <tr>
@@ -569,8 +611,15 @@
 
     {{-- Pagination Links Container --}}
     @if (!$users->isEmpty())
-        <div class="d-flex justify-content-end">
-            {{ $users->links() }}
+        <div class="dash-card p-3 d-flex justify-content-between align-items-center mb-4">
+            <div class="text-muted small">
+                Showing <span class="fw-semibold text-main">{{ $users->firstItem() }}</span> 
+                to <span class="fw-semibold text-main">{{ $users->lastItem() }}</span> 
+                of <span class="fw-semibold text-main">{{ $users->total() }}</span> results
+            </div>
+            <div>
+                {{ $users->links('pagination::bootstrap-5') }}
+            </div>
         </div>
     @endif
 </div>
@@ -586,7 +635,7 @@
                         @method('PUT')
                         <div class="modal-header border-bottom-0 pb-0">
                             <h5 class="modal-title fw-bold text-main">Edit Borrower Details</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body py-3">
                             <div class="mb-3">
@@ -666,7 +715,7 @@
                 @csrf
                 <div class="modal-header border-bottom-0 pb-0">
                     <h5 class="modal-title fw-bold text-main">Add New Borrower</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-3">
                     @if ($errors->any())
@@ -758,7 +807,6 @@
         event.preventDefault();
         const form = event.target.closest('form');
 
-        // Deteksyunan kung Dark o Light Mode batay sa root element o CSS variable
         const isDark = document.documentElement.classList.contains('dark') || 
                        document.body.classList.contains('dark') || 
                        document.body.classList.contains('dark-theme') || 
@@ -776,12 +824,12 @@
             background: isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)',
             color: isDark ? '#f8fafc' : '#0f172a',
             customClass: {
-                popup: 'swal2-glass-modal',
-                title: 'swal2-glass-title',
-                htmlContainer: 'swal2-glass-text',
+                popup: 'swal2-glassmodal',
+                title: 'swal2-glasstitle',
+                htmlContainer: 'swal2-glasstext',
                 confirmButton: 'swal2-btn-confirm',
                 cancelButton: 'swal2-btn-cancel',
-                actions: 'swal2-glass-actions'
+                actions: 'swal2-glassactions'
             },
             willOpen: (el) => {
                 el.style.border = isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.1)';
