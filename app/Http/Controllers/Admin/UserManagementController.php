@@ -133,7 +133,6 @@ class UserManagementController extends Controller
     {
         $user = User::onlyTrashed()->findOrFail($id);
 
-        // Refuse to cascade-delete a borrower's financial history through a UI click.
         if ($user->loans()->exists()) {
             return back()->with('error', "Cannot permanently delete \"{$user->name}\" because financial loan records exist for this borrower. Restore the account instead if it needs to remain reachable, or handle the loan records first.");
         }
@@ -142,7 +141,6 @@ class UserManagementController extends Controller
         $email = $user->email;
         $user->forceDelete();
 
-        // Record against the acting admin, not the now-deleted borrower.
         AuditLog::record(auth()->id(), 'Permanently Deleted Borrower', 'User', null, "Permanently deleted {$name} ({$email})");
 
         return back()->with('status', "Borrower \"{$name}\" permanently deleted.");

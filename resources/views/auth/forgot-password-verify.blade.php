@@ -35,20 +35,41 @@
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     }
 
-    /* OTP Form Input */
-    .otp-input {
-        background-color: #1e293b !important;
-        border: 1px solid #334155 !important;
-        color: #10b981 !important;
-        font-weight: 700;
-        letter-spacing: 12px;
-        transition: all 0.2s ease-in-out;
+    /* OTP Masked Container Box */
+    .otp-wrapper {
+        position: relative;
+        width: 100%;
     }
 
-    .otp-input:focus {
-        border-color: #10b981 !important;
-        box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
-        background-color: #0f172a !important;
+    .otp-input-real {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        z-index: 5;
+        cursor: pointer;
+    }
+
+    .otp-display-box {
+        background-color: #1e293b;
+        border: 1px solid #334155;
+        color: #10b981;
+        font-weight: 700;
+        font-size: 1.25rem;
+        letter-spacing: 12px;
+        border-radius: 0.375rem;
+        padding: 0.5rem 1rem;
+        text-align: center;
+        transition: all 0.2s ease-in-out;
+        user-select: none;
+    }
+
+    .otp-input-real:focus + .otp-display-box {
+        border-color: #10b981;
+        box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25);
+        background-color: #0f172a;
     }
 
     /* Emerald Button Hover Effects */
@@ -72,15 +93,16 @@
         box-shadow: none !important;
     }
 
-    /* Resend Link Hover */
+    /* Resend Link Hover (WALANG UNDERLINE) */
     #resend-btn {
         transition: all 0.2s ease-in-out;
         color: #10b981;
+        text-decoration: none !important;
     }
 
     #resend-btn:hover:not(:disabled) {
         color: #34d399 !important;
-        text-decoration: underline !important;
+        text-decoration: none !important;
         transform: scale(1.02);
     }
 
@@ -114,9 +136,9 @@
                 <div class="card auth-card text-white">
                     <div class="card-body p-4 p-md-5 text-center">
                         
-                        <!-- Logo -->
+                        <!-- Logo Only Header (Option A) -->
                         <div class="mb-4">
-                            <img src="{{ asset('images/logo.png') }}" alt="PautangPro Logo" style="height: 50px; width: auto;">
+                            <img src="{{ asset('images/logo.png') }}" alt="PautangPro Logo" style="height: 52px; width: auto;">
                         </div>
 
                         <h4 class="fw-bold mb-2">Enter Verification Code</h4>
@@ -124,39 +146,45 @@
 
                         <!-- Error Alerts -->
                         @if ($errors->any())
-    <div class="alert alert-danger text-start small border-0 mb-4" style="background-color: rgba(239, 68, 68, 0.15); color: #f87171;">
-        <ul class="mb-0 ps-3">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+                            <div class="alert alert-danger text-start small border-0 mb-4" style="background-color: rgba(239, 68, 68, 0.15); color: #f87171;">
+                                <ul class="mb-0 ps-3">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}[cite: 20]</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
 
                         <!-- OTP Form -->
                         <form method="POST" action="{{ route('password.reset.verify.submit') }}">
                             @csrf
                             <div class="mb-3">
-                                <input
-                                    type="text"
-                                    name="otp_code"
-                                    class="form-control form-control-lg text-center otp-input"
-                                    maxlength="6"
-                                    inputmode="numeric"
-                                    pattern="\d{6}"
-                                    placeholder="------"
-                                    required
-                                    autofocus
-                                >
+                                <div class="otp-wrapper">
+                                    <input
+                                        type="text"
+                                        name="otp_code"
+                                        id="otp_code_real_reset"
+                                        class="otp-input-real"
+                                        maxlength="6"
+                                        inputmode="numeric"
+                                        pattern="\d{6}"
+                                        required
+                                        autocomplete="one-time-code"
+                                        autofocus
+                                    >
+                                    <div class="otp-display-box" id="otp_display_box_reset">
+                                        - - - - - -
+                                    </div>
+                                </div>
                             </div>
                             <button type="submit" class="btn btn-emerald btn-lg w-100 mb-3 shadow-sm">
-                                <i class="bi bi-patch-check me-2"></i>Verify
+                                Verify
                             </button>
                         </form>
 
                         <!-- Cooldown Timer -->
                         <div id="resend-cooldown-text" class="text-secondary small mb-1" style="{{ $resendCooldown <= 0 ? 'display:none;' : '' }}">
-                            Resend code in <span id="cooldown-timer" class="fw-bold text-light">{{ sprintf('%02d:%02d', intdiv($resendCooldown, 60),$resendCooldown % 60) }}</span>
+                            Resend code in <span id="cooldown-timer" class="fw-bold text-light">{{ sprintf('%02d:%02d', intdiv($resendCooldown, 60),$resendCooldown % 60) }}</span>[cite: 20]
                         </div>
 
                         <!-- Resend Form -->
@@ -173,7 +201,7 @@
                         <!-- Start Over Link -->
                         <div class="pt-1">
                             <a href="{{ route('password.reset.request') }}" class="text-secondary text-decoration-none small hover-white">
-                                <i class="bi bi-arrow-left me-1"></i>Start over
+                                Start over
                             </a>
                         </div>
 
@@ -187,6 +215,28 @@
 
 @push('scripts')
 <script>
+    // Per-character Digit Masking Logic for Password Reset
+    const realInputReset = document.getElementById('otp_code_real_reset');
+    const displayBoxReset = document.getElementById('otp_display_box_reset');
+
+    function updateOtpDisplayReset() {
+        if (!realInputReset || !displayBoxReset) return;
+        let val = realInputReset.value.replace(/\D/g, '').substring(0, 6);
+        realInputReset.value = val;
+
+        let placeholders = ['-', '-', '-', '-', '-', '-'];
+        for (let i = 0; i < val.length; i++) {
+            placeholders[i] = val[i];
+        }
+        displayBoxReset.textContent = placeholders.join(' ');
+    }
+
+    if (realInputReset) {
+        realInputReset.addEventListener('input', updateOtpDisplayReset);
+        realInputReset.addEventListener('keyup', updateOtpDisplayReset);
+        realInputReset.addEventListener('paste', () => setTimeout(updateOtpDisplayReset, 10));
+    }
+
     let remaining = {{ $resendCooldown }};
     const resendBtn = document.getElementById('resend-btn');
     const cooldownText = document.getElementById('resend-cooldown-text');

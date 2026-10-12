@@ -80,25 +80,27 @@ class PaymentVerificationController extends Controller
         abort_unless($payment->status === 'pending', 400, 'Only pending payments can be rejected.');
 
         $validated = $request->validate([
-            'rejection_reason' => ['required', 'string', 'max:1000'],
+            'rejection_reason' => ['nullable', 'string', 'max:1000'],
         ]);
 
         DB::transaction(function () use ($payment, $validated) {
+            $reason = $validated['rejection_reason'] ?? 'No specific reason provided.';
+
             $payment->update([
                 'status' => 'rejected',
                 'verified_by' => auth()->id(),
                 'verified_at' => now(),
-                'rejection_reason' => $validated['rejection_reason'],
+                'rejection_reason' => $reason,
             ]);
 
             Notification::create([
                 'user_id' => $payment->user_id,
                 'type' => 'payment_rejected',
                 'title' => 'Payment Rejected',
-                'message' => "Your payment (Ref: {$payment->gcash_reference_number}) was rejected. Reason: {$validated['rejection_reason']}",
+                'message' => "Your payment (Ref: {$payment->gcash_reference_number}) was rejected. Reason: {$reason}",
             ]);
 
-            AuditLog::record(auth()->id(), 'Rejected Payment', 'Payment', $payment->id, $validated['rejection_reason']);
+            AuditLog::record(auth()->id(), 'Rejected Payment', 'Payment', $payment->id, $reason);
         });
 
         return redirect()->route('admin.payments.index')->with('status', 'Payment rejected.');

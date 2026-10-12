@@ -87,22 +87,28 @@
         outline: none;
     }
 
-    .btn-pill-primary {
-        background: #0284c7;
-        border: 1px solid #0369a1;
-        color: #ffffff;
+    /* Glass Primary Action Button (Pareho sa View Uploaded Receipt) */
+    .btn-glass-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(2, 132, 199, 0.12);
+        border: 1px solid rgba(2, 132, 199, 0.3);
+        color: #0284c7;
         font-weight: 600;
         font-size: 0.875rem;
         padding: 9px 24px;
         border-radius: 50px;
-        transition: all 0.2s ease;
+        transition: all 0.25s ease;
         cursor: pointer;
+        text-decoration: none;
     }
 
-    .btn-pill-primary:hover {
-        background: #0369a1;
-        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+    .btn-glass-primary:hover {
+        background: #0284c7;
+        border-color: #0284c7;
         color: #ffffff;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
         transform: translateY(-1px);
     }
 
@@ -161,6 +167,126 @@
     .glass-table tbody tr:hover {
         background-color: rgba(255, 255, 255, 0.03) !important;
     }
+
+    /* Custom Glassmorphism Dropdown */
+    .glass-dropdown-toggle {
+        background-color: rgba(100, 116, 139, 0.05) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        border-radius: 10px;
+        padding: 10px 16px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .glass-dropdown-toggle:hover, .glass-dropdown-toggle:focus {
+        border-color: #0284c7 !important;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .glass-dropdown-menu {
+        background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        border-radius: 12px;
+        box-shadow: var(--dash-card-shadow, 0 10px 25px -5px rgba(0, 0, 0, 0.3));
+        padding: 6px;
+        margin-top: 6px !important;
+        width: 100%;
+    }
+    .glass-dropdown-item {
+        color: var(--text-main, #f8fafc) !important;
+        font-size: 0.85rem;
+        font-weight: 500;
+        padding: 10px 14px;
+        border-radius: 8px;
+        transition: all 0.15s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+    }
+    .glass-dropdown-item:hover {
+        background-color: rgba(2, 132, 199, 0.15) !important;
+        color: #0284c7 !important;
+    }
+    .glass-dropdown-item.active {
+        background-color: #0284c7 !important;
+        color: #ffffff !important;
+    }
+
+    /* Modern Glassmorphism Confirmation Modals */
+    .glass-modal .modal-content {
+        background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        border-radius: 20px;
+        box-shadow: var(--dash-card-shadow, 0 20px 40px rgba(0, 0, 0, 0.4));
+        color: var(--text-main, #f8fafc);
+    }
+    .glass-modal .modal-header, 
+    .glass-modal .modal-footer {
+        border-color: var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
+    }
+    .modal-icon-badge {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 12px;
+    }
+    .modal-icon-badge.warning {
+        background: rgba(245, 158, 11, 0.15);
+        color: #f59e0b;
+    }
+    .btn-modal-cancel {
+        background: rgba(100, 116, 139, 0.12) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border: 1px solid rgba(100, 116, 139, 0.3) !important;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 8px 20px;
+        border-radius: 50px;
+        transition: all 0.2s ease;
+    }
+    .btn-modal-cancel:hover {
+        background: rgba(100, 116, 139, 0.3) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border-color: rgba(100, 116, 139, 0.5) !important;
+        transform: translateY(-1px);
+    }
+
+    /* Auto-Dismissing Custom Glass Alerts */
+    .glass-alert {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .glass-alert-success {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #10b981;
+    }
+    .glass-alert.fade-out {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 </style>
 
 <div class="container-fluid px-0">
@@ -169,13 +295,11 @@
         <p class="text-muted small mb-0">Select a category from the menu to manage preferences and configurations.</p>
     </div>
 
+    {{-- Auto-Dismissing Flash Alert --}}
     @if (session('status'))
-        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
-            <div class="d-flex align-items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-success"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                <span>{{ session('status') }}</span>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div id="autoDismissAlert" class="glass-alert glass-alert-success mb-4" role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span>{{ session('status') }}</span>
         </div>
     @endif
 
@@ -249,7 +373,7 @@
                             </div>
                         </div>
                         <div class="mt-4 text-end">
-                            <button type="submit" class="btn-pill-primary">Save Personal Details</button>
+                            <button type="submit" class="btn-glass-primary">Save Personal Details</button>
                         </div>
                     </form>
                 </div>
@@ -319,7 +443,7 @@
                         </div>
 
                         <div class="text-end">
-                            <button type="submit" class="btn-pill-primary">Save OTP Settings</button>
+                            <button type="submit" class="btn-glass-primary">Save OTP Settings</button>
                         </div>
                     </form>
                 </div>
@@ -331,7 +455,7 @@
                     <h5 class="fw-bold text-main mb-1">System Operational State</h5>
                     <p class="text-muted small mb-4">Control system access, schedule maintenance, or execute an emergency system shutdown for borrowers.</p>
 
-                    <form method="POST" action="{{ route('admin.settings.system.update') }}">
+                    <form method="POST" action="{{ route('admin.settings.system.update') }}" id="systemStateForm">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="otp_expiry_minutes" value="{{ $settings['otp_expiry_minutes'] }}">
@@ -341,14 +465,40 @@
                         @if($settings['admin_notify_loan_application'] == '1') <input type="hidden" name="admin_notify_loan_application" value="1"> @endif
                         @if($settings['admin_notify_large_repayment'] == '1') <input type="hidden" name="admin_notify_large_repayment" value="1"> @endif
 
+                        {{-- Hidden Input for form submission --}}
+                        <input type="hidden" name="maintenance_mode" id="selected_maintenance_mode" value="{{ $settings['maintenance_mode'] }}">
+
+                        @php
+                            $stateLabels = [
+                                '0' => '🟢 0 - Operational (Normal Operation)',
+                                '1' => '🟡 1 - Under Maintenance (App Closed for Borrowers)',
+                                '2' => '🔴 2 - Emergency Shutdown / System Offline (Service Halted)'
+                            ];
+                            $currentStateVal = (string) $settings['maintenance_mode'];
+                            $currentStateLabel = $stateLabels[$currentStateVal] ?? $stateLabels['0'];
+                        @endphp
+
                         <div class="mb-4">
                             <label class="form-label fw-semibold small text-muted mb-2">Select Operational State</label>
-                            <select name="maintenance_mode" class="form-control form-control-glass">
-                                <option value="0" {{ $settings['maintenance_mode'] == '0' ? 'selected' : '' }}>🟢 0 - Operational (Normal Operation)</option>
-                                <option value="1" {{ $settings['maintenance_mode'] == '1' ? 'selected' : '' }}>🟡 1 - Under Maintenance (App Closed for Borrowers)</option>
-                                <option value="2" {{ $settings['maintenance_mode'] == '2' ? 'selected' : '' }}>🔴 2 - Emergency Shutdown / System Offline (Service Halted)</option>
-                            </select>
-                            <div class="form-text text-muted small mt-2">
+                            
+                            {{-- Custom Glass Dropdown --}}
+                            <div class="dropdown">
+                                <button class="glass-dropdown-toggle dropdown-toggle" type="button" id="operationalStateDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span id="selectedStateLabel">{{ $currentStateLabel }}</span>
+                                </button>
+                                <ul class="dropdown-menu glass-dropdown-menu" aria-labelledby="operationalStateDropdown">
+                                    @foreach ($stateLabels as $val => $lbl)
+                                        <li>
+                                            <a class="dropdown-item glass-dropdown-item state-option {{ $currentStateVal === (string)$val ? 'active' : '' }}" data-value="{{ $val }}" data-label="{{ $lbl }}">
+                                                <span>{{ $lbl }}</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="check-icon {{ $currentStateVal === (string)$val ? '' : 'd-none' }}"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+
+                            <div class="form-text text-muted small mt-3">
                                 <strong>Operational:</strong> Fully accessible to everyone.<br>
                                 <strong>Maintenance:</strong> Borrowers are temporarily restricted with a maintenance notice.<br>
                                 <strong>Shutdown:</strong> Complete offline state for borrowers (Flowchart End state) until the admin restarts/switches it back.
@@ -356,7 +506,10 @@
                         </div>
 
                         <div class="text-end">
-                            <button type="submit" class="btn-pill-primary">Save Operational State</button>
+                            {{-- Triggers Confirmation Modal --}}
+                            <button type="button" class="btn-glass-primary" data-bs-toggle="modal" data-bs-target="#confirmStateModal">
+                                Save Operational State
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -409,7 +562,7 @@
                         </div>
 
                         <div class="text-end">
-                            <button type="submit" class="btn-pill-primary">Save Loan Type Configurations</button>
+                            <button type="submit" class="btn-glass-primary">Save Loan Type Configurations</button>
                         </div>
                     </form>
                 </div>
@@ -447,7 +600,7 @@
                         </div>
 
                         <div class="text-end">
-                            <button type="submit" class="btn-pill-primary">Save Alert Preferences</button>
+                            <button type="submit" class="btn-glass-primary">Save Alert Preferences</button>
                         </div>
                     </form>
                 </div>
@@ -483,10 +636,33 @@
                         </div>
 
                         <div class="text-end">
-                            <button type="submit" class="btn-pill-primary">Save Penalty Policy</button>
+                            <button type="submit" class="btn-glass-primary">Save Penalty Policy</button>
                         </div>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- CONFIRMATION MODAL PARA SA SYSTEM OPERATIONAL STATE --}}
+<div class="modal fade glass-modal" id="confirmStateModal" tabindex="-1" aria-labelledby="confirmStateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-3">
+            <div class="modal-body pt-4">
+                <div class="modal-icon-badge warning mx-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </div>
+                <h4 class="fw-bold text-main mb-2">Change Operational State?</h4>
+                <p class="text-muted small mb-0 px-3">
+                    Are you sure you want to update the system operational state? This will immediately affect access for all active borrowers.
+                </p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-3 gap-2">
+                <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn-glass-primary" id="confirmStateSubmitBtn">
+                    Yes, Update State
+                </button>
             </div>
         </div>
     </div>
@@ -499,5 +675,46 @@
         document.getElementById(catId).style.display = 'block';
         btn.classList.add('active');
     }
+
+    // Auto-Dismiss Alert Script
+    document.addEventListener('DOMContentLoaded', function() {
+        const alertBox = document.getElementById('autoDismissAlert');
+        if (alertBox) {
+            setTimeout(function() {
+                alertBox.classList.add('fade-out');
+                setTimeout(function() {
+                    alertBox.remove();
+                }, 500);
+            }, 3500);
+        }
+
+        // Custom Dropdown Item Click Handler
+        document.querySelectorAll('.state-option').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const val = this.getAttribute('data-value');
+                const label = this.getAttribute('data-label');
+
+                document.getElementById('selected_maintenance_mode').value = val;
+                document.getElementById('selectedStateLabel').innerText = label;
+
+                document.querySelectorAll('.state-option').forEach(opt => {
+                    opt.classList.remove('active');
+                    opt.querySelector('.check-icon').classList.add('d-none');
+                });
+
+                this.classList.add('active');
+                this.querySelector('.check-icon').classList.remove('d-none');
+            });
+        });
+
+        // Submit form upon confirming modal button click
+        const confirmBtn = document.getElementById('confirmStateSubmitBtn');
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', function() {
+                document.getElementById('systemStateForm').submit();
+            });
+        }
+    });
 </script>
 @endsection

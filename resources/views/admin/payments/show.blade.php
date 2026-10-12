@@ -45,7 +45,7 @@
         transform: translateX(-3px);
     }
 
-    /* Receipt Pill Action Button (Wala nang icon) */
+    /* Receipt Pill Action Button */
     .glass-btn-receipt {
         display: inline-flex;
         align-items: center;
@@ -66,14 +66,14 @@
         transform: translateY(-1px);
     }
 
-    /* Modern Rounded Action Buttons (Wala nang check at X icons) */
+    /* Verify Payment Button: Transparent na may banayad na kulay sa simula, magiging solid green pag hinover */
     .btn-approve-glass {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background: #10b981;
-        border: 1px solid #059669;
-        color: #ffffff;
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #10b981;
         font-weight: 600;
         font-size: 0.875rem;
         padding: 9px 24px;
@@ -82,11 +82,14 @@
         cursor: pointer;
     }
     .btn-approve-glass:hover {
-        background: #059669;
+        background: #10b981;
+        color: #ffffff;
+        border-color: #10b981;
         box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
         transform: translateY(-1px);
     }
 
+    /* Reject Payment Button: Transparent na may banayad na kulay sa simula, magiging solid red pag hinover */
     .btn-reject-glass {
         display: inline-flex;
         align-items: center;
@@ -107,6 +110,59 @@
         color: #ffffff;
         box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
         transform: translateY(-1px);
+    }
+
+    /* Modal Cancel Button */
+    .btn-modal-cancel {
+        background: rgba(100, 116, 139, 0.12) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border: 1px solid rgba(100, 116, 139, 0.3) !important;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 8px 20px;
+        border-radius: 50px;
+        transition: all 0.2s ease;
+    }
+    .btn-modal-cancel:hover {
+        background: rgba(100, 116, 139, 0.3) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border-color: rgba(100, 116, 139, 0.5) !important;
+        transform: translateY(-1px);
+    }
+
+    /* Modern Glassmorphism Confirmation Modals */
+    .glass-modal .modal-content {
+        background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        border-radius: 20px;
+        box-shadow: var(--dash-card-shadow, 0 20px 40px rgba(0, 0, 0, 0.4));
+        color: var(--text-main, #f8fafc);
+    }
+    .glass-modal .modal-header, 
+    .glass-modal .modal-footer {
+        border-color: var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
+    }
+    .glass-modal .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+    .modal-icon-badge {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 12px;
+    }
+    .modal-icon-badge.success {
+        background: rgba(16, 185, 129, 0.15);
+        color: #10b981;
+    }
+    .modal-icon-badge.danger {
+        background: rgba(239, 68, 68, 0.15);
+        color: #ef4444;
     }
 
     /* Monospace Reference Text */
@@ -182,35 +238,70 @@
                 </a>
             </div>
 
-            {{-- Action Buttons Container --}}
+            {{-- Action Buttons Container (Triggers Modals) --}}
             <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
-                <button type="button" class="btn-reject-glass" data-bs-toggle="collapse" data-bs-target="#rejectForm">
+                <button type="button" class="btn-reject-glass" data-bs-toggle="modal" data-bs-target="#rejectPaymentModal">
                     <span>Reject Payment</span>
                 </button>
 
-                <form method="POST" action="{{ route('admin.payments.verify', $payment) }}" class="m-0">
+                <button type="button" class="btn-approve-glass" data-bs-toggle="modal" data-bs-target="#verifyPaymentModal">
+                    <span>Verify Payment</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- VERIFY PAYMENT MODAL --}}
+<div class="modal fade glass-modal" id="verifyPaymentModal" tabindex="-1" aria-labelledby="verifyPaymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-3">
+            <div class="modal-body pt-4">
+                <div class="modal-icon-badge success mx-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <h4 class="fw-bold text-main mb-2">Verify Payment?</h4>
+                <p class="text-muted small mb-0 px-3">
+                    Are you sure you want to verify this payment amounting to <strong>₱{{ number_format($payment->amount, 2) }}</strong> from <strong>{{ $payment->user->name }}</strong>?
+                </p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-3 gap-2">
+                <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ route('admin.payments.verify', $payment) }}" method="POST" class="m-0">
                     @csrf
-                    <button type="submit" class="btn-approve-glass" onclick="return confirm('Mark this payment as verified?')">
-                        <span>Verify Payment</span>
+                    <button type="submit" class="btn-approve-glass">
+                        Yes, Verify Payment
                     </button>
                 </form>
             </div>
         </div>
     </div>
+</div>
 
-    {{-- Collapsible Rejection Form --}}
-    <div class="collapse mb-4" id="rejectForm">
-        <div class="dash-card p-4">
-            <h6 class="fw-bold text-main mb-2">Rejection Form</h6>
-            <form method="POST" action="{{ route('admin.payments.reject', $payment) }}">
+{{-- REJECT PAYMENT MODAL --}}
+<div class="modal fade glass-modal" id="rejectPaymentModal" tabindex="-1" aria-labelledby="rejectPaymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3">
+            <form action="{{ route('admin.payments.reject', $payment) }}" method="POST" class="m-0">
                 @csrf
-                <div class="mb-3">
-                    <label class="form-label text-muted small fw-semibold">Rejection Reason</label>
-                    <textarea name="rejection_reason" class="form-control bg-transparent text-main" rows="3" placeholder="State the reason for rejecting this receipt..." required style="border-color: var(--dash-card-border, rgba(255, 255, 255, 0.12)); border-radius: 10px;"></textarea>
+                <div class="modal-body pt-4 text-center">
+                    <div class="modal-icon-badge danger mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                    </div>
+                    <h4 class="fw-bold text-main mb-2">Reject Payment?</h4>
+                    <p class="text-muted small mb-3 px-3">
+                        Are you sure you want to reject this payment receipt?
+                    </p>
+
+                    <div class="text-start mb-3">
+                        <label for="rejection_reason" class="form-label small fw-semibold text-muted mb-1">Rejection Reason (Optional):</label>
+                        <textarea class="form-control bg-transparent text-main" id="rejection_reason" name="rejection_reason" rows="3" placeholder="Provide a reason for the applicant..." style="border-color: var(--dash-card-border, rgba(255, 255, 255, 0.12)); font-size: 0.875rem; border-radius: 12px;"></textarea>
+                    </div>
                 </div>
-                <div class="d-flex justify-content-end">
+                <div class="modal-footer border-0 justify-content-center pb-3 gap-2">
+                    <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn-reject-glass">
-                        <span>Confirm Rejection</span>
+                        Yes, Reject Payment
                     </button>
                 </div>
             </form>

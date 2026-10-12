@@ -41,8 +41,13 @@
         border: 1px solid #334155 !important;
         color: #f8fafc !important;
         transition: all 0.2s ease-in-out;
-        background-image: none !important; /* Alis ang default Bootstrap validation check icons */
+        background-image: none !important;
         padding-right: 2.75rem !important;
+    }
+
+    /* Tamang laki ng letra sa loob ng password input boxes */
+    .password-input-custom {
+        font-size: 0.925rem !important;
     }
 
     /* Override Autofill Background at Text Color */
@@ -110,31 +115,15 @@
         box-shadow: none !important;
     }
 
-    /* Professional Back to Login Button Styling */
-    .btn-outline-glass {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: #94a3b8 !important;
-        font-size: 0.875rem;
-        font-weight: 500;
-        border-radius: 10px;
-        transition: all 0.25s ease-in-out;
-        text-decoration: none;
+    /* Back Link Hover (Walang Box, Walang Arrow - Tulad sa Forgot Password) */
+    .hover-white {
+        transition: all 0.2s ease-in-out;
+        display: inline-block;
     }
 
-    .btn-outline-glass:hover {
-        background: rgba(16, 185, 129, 0.08);
-        border-color: rgba(16, 185, 129, 0.4);
-        color: #10b981 !important;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
-    }
-
-    .btn-outline-glass .back-icon {
-        transition: transform 0.25s ease-in-out;
-    }
-
-    .btn-outline-glass:hover .back-icon {
-        transform: translateX(-4px);
+    .hover-white:hover {
+        color: #ffffff !important;
+        transform: translateX(-3px);
     }
 
     /* Checklist Item Colors */
@@ -186,7 +175,7 @@
                             <div class="alert alert-danger text-start small border-0 mb-4" style="background-color: rgba(239, 68, 68, 0.15); color: #f87171;">
                                 <ul class="mb-0 ps-3">
                                     @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
+                                        <li>{{ $error }}[cite: 25]</li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -199,7 +188,7 @@
                             <div class="mb-3">
                                 <label class="form-label text-secondary small fw-semibold">New Password</label>
                                 <div class="position-relative">
-                                    <input type="password" name="password" id="reset-password" class="form-control form-control-lg form-control-dark" placeholder="Enter new password" required autofocus autocomplete="new-password">
+                                    <input type="password" name="password" id="reset-password" class="form-control form-control-lg form-control-dark password-input-custom" placeholder="Enter new password" required autofocus autocomplete="new-password">
                                     <button type="button" class="password-toggle-btn position-absolute top-50 end-0 translate-middle-y me-3 p-0 border-0 bg-transparent text-secondary" data-target="reset-password" aria-label="Show password"></button>
                                 </div>
 
@@ -219,24 +208,22 @@
                             <div class="mb-4">
                                 <label class="form-label text-secondary small fw-semibold">Confirm New Password</label>
                                 <div class="position-relative">
-                                    <input type="password" name="password_confirmation" id="reset-password-confirm" class="form-control form-control-lg form-control-dark" placeholder="Confirm new password" required autocomplete="new-password">
+                                    <input type="password" name="password_confirmation" id="reset-password-confirm" class="form-control form-control-lg form-control-dark password-input-custom" placeholder="Confirm new password" required autocomplete="new-password">
                                     <button type="button" class="password-toggle-btn position-absolute top-50 end-0 translate-middle-y me-3 p-0 border-0 bg-transparent text-secondary" data-target="reset-password-confirm" aria-label="Show password"></button>
                                 </div>
                             </div>
 
                             <!-- Submit Button -->
-                            <button type="submit" class="btn btn-emerald btn-lg w-100 shadow-sm">
+                            <button type="submit" class="btn btn-emerald btn-lg w-100 shadow-sm mb-3">
                                 Update Password
                             </button>
 
-                            <!-- Professional Back to Login Button -->
-                            <div class="text-center mt-3">
-                                <a href="{{ route('login') }}" class="btn btn-outline-glass w-100 d-inline-flex align-items-center justify-content-center gap-2 py-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="back-icon">
-                                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                                        <polyline points="12 19 5 12 12 5"></polyline>
-                                    </svg>
-                                    <span>Back to Login</span>
+                            <hr class="border-secondary opacity-25 my-3">
+
+                            <!-- Simple Back to Login Link (Walang Box, Walang Arrow) -->
+                            <div class="text-center pt-1">
+                                <a href="{{ route('login') }}" class="text-secondary text-decoration-none small hover-white">
+                                    Back to login
                                 </a>
                             </div>
 
@@ -297,7 +284,6 @@
                 li.querySelector('.rule-icon').textContent = valid ? '✓' : '○';
             });
 
-            // Mag-e-green LAMANG kung pasok sa LAHAT ng 5 rules
             if (value.length > 0) {
                 if (allValid) {
                     passInput.classList.add('input-valid');
@@ -319,7 +305,6 @@
             const passVal = passInput.value;
 
             if (confirmVal.length > 0) {
-                // Mag-e-green LAMANG kung katugma ng password AT valid ang main password
                 if (confirmVal === passVal && isMainPassValid) {
                     confirmInput.classList.add('input-valid');
                     confirmInput.classList.remove('input-invalid');

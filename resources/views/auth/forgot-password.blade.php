@@ -34,12 +34,32 @@
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     }
 
-    /* Form Inputs */
+    /* Form Inputs Base Style */
     .form-control-dark {
         background-color: #1e293b !important;
         border: 1px solid #334155 !important;
         color: #f8fafc !important;
         transition: all 0.2s ease-in-out;
+    }
+
+    /* Custom font size para sa email input box */
+    .email-input-custom {
+        font-size: 0.925rem !important;
+    }
+
+    /* STRICT Autofill Override: Pinapanatili ang orihinal na kulay (#1e293b / #0f172a) */
+    .form-control-dark:-webkit-autofill,
+    .form-control-dark:-webkit-autofill:hover, 
+    .form-control-dark:-webkit-autofill:focus,
+    .form-control-dark:-webkit-autofill:active {
+        -webkit-text-fill-color: #f8fafc !important;
+        -webkit-box-shadow: 0 0 0px 1000px #1e293b inset !important;
+        caret-color: #f8fafc !important;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    .form-control-dark:focus:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px #0f172a inset !important;
     }
 
     .form-control-dark:focus {
@@ -99,7 +119,7 @@
                 <div class="card auth-card text-white">
                     <div class="card-body p-4 p-md-5">
                         
-                        <!-- Logo -->
+                        <!-- Logo (Logo Only) -->
                         <div class="text-center mb-4">
                             <img src="{{ asset('images/logo.png') }}" alt="PautangPro Logo" style="height: 50px; width: auto;">
                         </div>
@@ -112,7 +132,7 @@
                             <div class="alert alert-danger text-start small border-0 mb-4" style="background-color: rgba(239, 68, 68, 0.15); color: #f87171;">
                                 <ul class="mb-0 ps-3">
                                     @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
+                                        <li>{{ $error }}[cite: 30]</li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -126,16 +146,16 @@
                                 <input 
                                     type="email" 
                                     name="email" 
-                                    class="form-control form-control-lg form-control-dark"
-                                    value="{{ old('email', session('password_reset_email')) }}" 
-                                    placeholder="name@example.com"
+                                    class="form-control form-control-lg form-control-dark email-input-custom"
+                                    value="" 
                                     required 
                                     autofocus
+                                    autocomplete="off"
                                 >
                             </div>
 
                             <button type="submit" class="btn btn-emerald btn-lg w-100 mb-2 shadow-sm" id="send-code-btn" {{ $resendCooldown > 0 ? 'disabled' : '' }}>
-                                <i class="bi bi-send me-2"></i>Send Verification Code
+                                Send Verification Code
                             </button>
 
                             <div id="resend-cooldown-text" class="text-secondary small mt-2 text-center" style="{{ $resendCooldown <= 0 ? 'display:none;' : '' }}">
@@ -145,10 +165,10 @@
 
                         <hr class="border-secondary opacity-25 my-4">
 
-                        <!-- Back to Login -->
+                        <!-- Back to Login (Walang Arrow) -->
                         <div class="text-center">
                             <a href="{{ route('login') }}" class="text-secondary text-decoration-none small hover-white">
-                                <i class="bi bi-arrow-left me-1"></i>Back to login
+                                Back to login
                             </a>
                         </div>
 

@@ -56,9 +56,9 @@
         top: 0;
         left: 0;
         width: 100%;
-        z-index: 1000; /* Sinisiguradong nasa ibabaw ito ng lahat ng content */
-        background: rgba(15, 23, 42, 0.75) !important; /* Glassmorphism background */
-        backdrop-filter: blur(12px) !important; /* Glass blur effect */
+        z-index: 1000;
+        background: rgba(15, 23, 42, 0.75) !important;
+        backdrop-filter: blur(12px) !important;
         -webkit-backdrop-filter: blur(12px) !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
@@ -159,17 +159,17 @@
     align-items: center;
     position: relative;
     overflow: hidden;
-    background-color: #0d131f; /* Ito ang gagamiting kulay para hindi puti kung sakaling magkaroon man ng lag */
+    background-color: #0d131f;
 }
 
 .hero-slate-bg {
     background-image: 
         linear-gradient(90deg, rgba(15, 23, 42, .55) 0%, rgba(15, 23, 42, .18) 60%, rgba(15, 23, 42, .05) 100%), 
         url('{{ asset('images/landing-hero.png') }}');
-    background-size: cover !important; /* Tatakpan nito ang 100% ng screen nang walang puwang */
+    background-size: cover !important;
     background-position: center center !important;
     background-repeat: no-repeat !important;
-    background-attachment: scroll !important; /* Iniiwasan nito ang white gaps sa mobile at browser resize */
+    background-attachment: scroll !important;
 }
 
     /* --- About feature cards --- */
@@ -262,7 +262,7 @@
     min-height: 100vh;
     background-image: 
         linear-gradient(90deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.5) 50%, rgba(15, 23, 42, 0.2) 100%),
-        url('{{ asset('images/about.png') }}'); /* Siguraduhing na-copy ang about.png sa public/images/ */
+        url('{{ asset('images/about.png') }}');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -383,26 +383,6 @@
     box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
-/* Circle Action Arrow Button */
-.service-arrow-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #10b981;
-    transition: all 0.3s ease;
-    margin-top: 20px;
-}
-
-.service-glass-card:hover .service-arrow-btn {
-    background: #10b981;
-    color: #ffffff;
-    border-color: #10b981;
-}
-
 /* Contact Section Background */
 #contact {
     min-height: 100vh;
@@ -458,7 +438,7 @@
         <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
         <img src="{{ asset('images/logo.png') }}" alt="PautangPro" height="44" class="me-2">
             <span>
-                <span class="d-block" style="font-size:1.4rem; font-weight:800; line-height:1; background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 45%, #34d399 75%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                <span class="d-block" style="font-size:1.4rem; font-weight:800; line-height:1; background: linear-gradient(135deg, #ffffff 30%, #34d399 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                     PautangPro
                 </span>
                     <span class="d-block" style="font-size:.7rem; color:#9aa1b5;">Your Loan, Our Priority</span>
@@ -514,7 +494,6 @@
 
             <!-- Kaliwang Bahagi: Text & Headlines -->
             <div class="col-lg-6" data-aos="fade-right" data-aos-duration="800">
-                <span class="about-badge" data-aos="fade-down" data-aos-delay="100">ABOUT US</span>
 
                 <h1 class="display-4 fw-bold mb-2" data-aos="fade-up" data-aos-delay="200">
                     About <span style="background: linear-gradient(135deg, #ffffff 40%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">PautangPro</span>
@@ -610,7 +589,6 @@
 
         <!-- Header -->
         <div class="text-center mb-5">
-            <span class="services-badge mb-3" data-aos="fade-down" data-aos-duration="600">OUR SERVICES</span>
             <h1 class="display-4 fw-bold text-white mb-3" data-aos="fade-up" data-aos-delay="100">
                 What You <span style="background: linear-gradient(135deg, #10b981, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Can Do</span>
             </h1>
@@ -636,11 +614,6 @@
                             Choose a loan type, request the amount and term you need, and see your estimated monthly payment before you apply.
                         </p>
                     </div>
-                    <div class="service-arrow-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-                        </svg>
-                    </div>
                 </div>
             </div>
 
@@ -660,11 +633,6 @@
                             Submit your reference number and receipt after paying, and get notified the moment your payment is verified.
                         </p>
                     </div>
-                    <div class="service-arrow-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-                        </svg>
-                    </div>
                 </div>
             </div>
 
@@ -682,11 +650,6 @@
                             Follow your outstanding balance, upcoming due dates, and full payment history in one dashboard.
                         </p>
                     </div>
-                    <div class="service-arrow-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-                        </svg>
-                    </div>
                 </div>
             </div>
 
@@ -700,7 +663,7 @@
 
         <!-- Section Header -->
         <div class="text-center mb-5">
-            <span class="services-badge mb-3" data-aos="fade-down" data-aos-duration="600">GET IN TOUCH</span>
+            
             <h1 class="display-4 fw-bold text-white mb-3" data-aos="fade-up" data-aos-delay="100">
                 We're Here to <span style="background: linear-gradient(135deg, #10b981, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Help</span>
             </h1>
@@ -796,13 +759,13 @@
     });
 </script>
 <script>
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.navbar-landing .nav-link[href^="#"]');
+    let sections = document.querySelectorAll('section[id]');
+    let navLinks = document.querySelectorAll('.navbar-landing .nav-link[href^="#"]');
 
-    const observer = new IntersectionObserver(function (entries) {
+    let observer = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
             if (entry.isIntersecting) {
-                const id = entry.target.getAttribute('id');
+                let id = entry.target.getAttribute('id');
                 navLinks.forEach(function (link) {
                     link.classList.toggle('active', link.getAttribute('href') === '#' + id);
                 });

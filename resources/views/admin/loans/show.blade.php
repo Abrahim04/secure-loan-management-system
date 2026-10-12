@@ -3,9 +3,8 @@
 @section('title', 'Review Loan Application')
 
 @section('content')
-<!-- Adaptive Glassmorphism & SaaS Clean Review Styling (100% Matched with Audit Logs) -->
+<!-- Adaptive Glassmorphism & SaaS Clean Review Styling -->
 <style>
-    /* Translucent Glass Dash Card Container - Matched with Audit Logs & Security Events */
     .dash-card {
         background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
@@ -16,7 +15,6 @@
         transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
     }
 
-    /* Dark Mode Theme Override - Ensures smooth consistent Dark Slate Blue */
     html[data-bs-theme="dark"] .dash-card,
     body.dark-mode .dash-card,
     .dark .dash-card {
@@ -24,7 +22,6 @@
         border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
-    /* Modern Back Pill Button */
     .glass-btn-back {
         display: inline-flex;
         align-items: center;
@@ -45,14 +42,14 @@
         transform: translateX(-3px);
     }
 
-    /* Modern Rounded Action Buttons (Wala nang check at X icons) */
+    /* Approve Button: Transparent na may banayad na kulay sa simula, magiging solid green pag hinover */
     .btn-approve-glass {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background: #10b981;
-        border: 1px solid #059669;
-        color: #ffffff;
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #10b981;
         font-weight: 600;
         font-size: 0.875rem;
         padding: 9px 24px;
@@ -61,11 +58,14 @@
         cursor: pointer;
     }
     .btn-approve-glass:hover {
-        background: #059669;
+        background: #10b981;
+        color: #ffffff;
+        border-color: #10b981;
         box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
         transform: translateY(-1px);
     }
 
+    /* Reject Button: Transparent na may banayad na kulay sa simula, magiging solid red pag hinover */
     .btn-reject-glass {
         display: inline-flex;
         align-items: center;
@@ -88,7 +88,24 @@
         transform: translateY(-1px);
     }
 
-    /* Modern Glassmorphism Confirmation Modals */
+    /* Modal Cancel Button: Katulad ng ginamit sa My Profile cropping modal */
+    .btn-modal-cancel {
+        background: rgba(100, 116, 139, 0.12) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border: 1px solid rgba(100, 116, 139, 0.3) !important;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 8px 20px;
+        border-radius: 50px;
+        transition: all 0.2s ease;
+    }
+    .btn-modal-cancel:hover {
+        background: rgba(100, 116, 139, 0.3) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border-color: rgba(100, 116, 139, 0.5) !important;
+        transform: translateY(-1px);
+    }
+
     .glass-modal .modal-content {
         background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
         backdrop-filter: blur(16px);
@@ -169,15 +186,15 @@
             </div>
             <div class="col-md-3">
                 <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">Interest</span>
-                <span class="fw-bold fs-5 text-main">₱{{ number_format($loan->interest_amount ?? 0, 2) }}[cite: 25]</span>
+                <span class="fw-bold fs-5 text-main">₱{{ number_format($loan->interest_amount ?? 0, 2) }}</span>
             </div>
             <div class="col-md-3">
                 <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">Total Payable</span>
-                <span class="fw-bold fs-5" style="color: #0284c7 !important;">₱{{ number_format($loan->total_payable ?? 0, 2) }}[cite: 25]</span>
+                <span class="fw-bold fs-5" style="color: #0284c7 !important;">₱{{ number_format($loan->total_payable ?? 0, 2) }}</span>
             </div>
             <div class="col-md-3">
                 <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">Monthly Payment</span>
-                <span class="fw-bold fs-5 text-main">₱{{ number_format($loan->monthly_payment ?? 0, 2) }}[cite: 25]</span>
+                <span class="fw-bold fs-5 text-main">₱{{ number_format($loan->monthly_payment ?? 0, 2) }}</span>
             </div>
         </div>
 
@@ -206,11 +223,11 @@
                 </div>
                 <h4 class="fw-bold text-main mb-2">Approve Application?</h4>
                 <p class="text-muted small mb-0 px-3">
-                    Are you sure you want to approve this loan application for <strong>{{ $loan->user->name ?? 'this applicant' }}[cite: 25]</strong> amounting to <strong>₱{{ number_format($loan->total_payable ?? 0, 2) }}[cite: 25]</strong>?
+                    Are you sure you want to approve this loan application for <strong>{{ $loan->user->name ?? 'this applicant' }}</strong> amounting to <strong>₱{{ number_format($loan->total_payable ?? 0, 2) }}</strong>?
                 </p>
             </div>
             <div class="modal-footer border-0 justify-content-center pb-3 gap-2">
-                <button type="button" class="btn btn-secondary rounded-pill px-4 fw-semibold bg-opacity-25" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
                 <form action="{{ route('admin.loans.approve', $loan->id) }}" method="POST" class="m-0">
                     @csrf
                     <button type="submit" class="btn-approve-glass">
@@ -244,8 +261,8 @@
                 </form>
             </div>
             <div class="modal-footer border-0 justify-content-center pb-3 gap-2">
-                <button type="button" class="btn btn-secondary rounded-pill px-4 fw-semibold bg-opacity-25" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" form="rejectForm" class="btn-reject-glass" style="background: #ef4444; color: #ffffff;">
+                <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="rejectForm" class="btn-reject-glass">
                     Yes, Reject Loan
                 </button>
             </div>

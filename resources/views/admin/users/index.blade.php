@@ -5,7 +5,6 @@
 @section('content')
 <!-- Adaptive Glassmorphism & SaaS Clean UI Styling (100% Matched with Audit Logs) -->
 <style>
-    /* Translucent Glass Dash Card Container - Matched with Audit Logs */
     .dash-card {
         background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
@@ -16,7 +15,6 @@
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    /* Filters Container - Translucent Glass */
     .filter-card {
         background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
@@ -27,7 +25,6 @@
         z-index: 1050 !important;
     }
 
-    /* Dark Mode Theme Override */
     html[data-bs-theme="dark"] .dash-card,
     html[data-bs-theme="dark"] .filter-card,
     body.dark-mode .dash-card,
@@ -38,7 +35,6 @@
         border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
-    /* Custom Form Control Styling */
     .glass-input {
         background: rgba(100, 116, 139, 0.05) !important;
         border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
@@ -60,7 +56,6 @@
         opacity: 0.7;
     }
 
-    /* Custom Select Button and Dropdown Menu */
     .custom-select-btn {
         width: 100%;
         background-color: rgba(100, 116, 139, 0.05) !important;
@@ -110,7 +105,6 @@
         color: #ffffff !important;
     }
 
-    /* Action Buttons Header */
     .btn-action-primary {
         display: inline-flex;
         align-items: center;
@@ -154,7 +148,6 @@
         transform: translateY(-1px);
     }
 
-    /* Action Table Buttons - Clean Pill Style */
     .btn-tbl-action {
         font-size: 0.785rem;
         font-weight: 600;
@@ -215,7 +208,6 @@
         box-shadow: 0 3px 8px rgba(239, 68, 68, 0.3);
     }
 
-    /* Shared Glass Table Styling */
     .custom-table {
         width: 100%;
         margin-bottom: 0;
@@ -251,7 +243,6 @@
         vertical-align: middle;
     }
 
-    /* Text Badges */
     .badge-soft {
         font-size: 0.85rem;
         font-weight: 600;
@@ -264,7 +255,7 @@
     .badge-soft-danger  { color: #f87171 !important; }
     .badge-soft-warning { color: #fbbf24 !important; }
 
-    /* User Avatar Circle */
+    /* User Avatar Circle with Streamed Image Support */
     .user-avatar {
         width: 38px;
         height: 38px;
@@ -276,9 +267,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
+    }
+    .user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
-    /* Modal Responsive Styles */
     .theme-modal .modal-content {
         background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
         color: var(--text-main, #f8fafc) !important;
@@ -317,7 +313,6 @@
         box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
     }
 
-    /* Custom Bootstrap Pagination Styling */
     .pagination {
         margin-bottom: 0;
         gap: 4px;
@@ -349,7 +344,6 @@
         color: var(--text-muted, #94a3b8) !important;
     }
 
-    /* SweetAlert Glassmorphism Integration */
     .swal2-glass-modal {
         border-radius: 18px !important;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4) !important;
@@ -458,7 +452,6 @@
                     </div>
                 </div>
 
-                {{-- Custom Filter Dropdown --}}
                 <div class="col-md-4">
                     <input type="hidden" name="status" id="filter_status_input" value="{{ request('status') }}">
                     <div class="dropdown position-relative">
@@ -523,8 +516,13 @@
                             <tr>
                                 <td class="ps-4">
                                     <div class="d-flex align-items-center gap-3">
+                                        {{-- Na-update upang ipakita ang profile photo gamit ang AvatarController route --}}
                                         <div class="user-avatar flex-shrink-0">
-                                            {{ strtoupper(substr($user->name, 0, 1)) }}
+                                            @if ($user->avatar_path)
+                                                <img src="{{ route('avatar.show', $user) }}" alt="{{ $user->name }}">
+                                            @else
+                                                {{ strtoupper(substr($user->name, 0, 1)) }}
+                                            @endif
                                         </div>
                                         <div>
                                             <div class="fw-semibold text-main">{{ $user->name }}</div>
@@ -647,7 +645,6 @@
                                 <input type="email" name="email" class="form-control" value="{{ $user->email }}" required>
                             </div>
 
-                            <!-- Adaptive Custom Role Dropdown -->
                             <div class="mb-3">
                                 <label class="form-label">Role</label>
                                 <input type="hidden" name="role" id="role_input_{{ $user->id }}" value="{{ $user->role }}">
@@ -663,7 +660,6 @@
                                 </div>
                             </div>
 
-                            <!-- Adaptive Custom Account Status Dropdown -->
                             <div class="mb-3">
                                 <label class="form-label">Account Status</label>
                                 <input type="hidden" name="status" id="status_input_{{ $user->id }}" value="{{ $user->is_active ? 'active' : 'blocked' }}">
@@ -679,7 +675,6 @@
                                 </div>
                             </div>
 
-                            <!-- Adaptive Custom Verification Status Dropdown -->
                             <div class="mb-3">
                                 <label class="form-label">Verification Status</label>
                                 <input type="hidden" name="verification_status" id="verif_input_{{ $user->id }}" value="{{ $user->email_verified_at ? 'verified' : 'unverified' }}">
@@ -744,7 +739,6 @@
                         <input type="password" name="password_confirmation" class="form-control" required>
                     </div>
                     
-                    <!-- Adaptive Custom Add Role Dropdown -->
                     <div class="mb-3">
                         <label class="form-label">Role</label>
                         <input type="hidden" name="role" id="add_role_input" value="user">
@@ -760,7 +754,6 @@
                         </div>
                     </div>
 
-                    <!-- Adaptive Custom Add Verification Dropdown -->
                     <div class="mb-3">
                         <label class="form-label">Initial Verification Status</label>
                         <input type="hidden" name="verification_status" id="add_verif_input" value="unverified">
@@ -787,7 +780,6 @@
 </div>
 
 @push('scripts')
-<!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
@@ -802,7 +794,6 @@
         });
     @endif
 
-    // Reusable Custom SweetAlert Confirmation Function (Adaptive Theme-Matched)
     function confirmAction(event, title, text, confirmButtonText, confirmButtonColor) {
         event.preventDefault();
         const form = event.target.closest('form');

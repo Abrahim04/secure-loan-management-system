@@ -89,6 +89,11 @@
             box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
         }
 
+        .custom-input.is-invalid {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+
         .eye-toggle {
             position: absolute;
             right: 14px;
@@ -144,16 +149,6 @@
             margin-bottom: 0.75rem;
         }
 
-        .validation-box {
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            border-radius: 8px;
-            padding: 0.6rem 0.8rem;
-            font-size: 0.78rem;
-            color: #166534;
-        }
-
-        /* Back to Home Button Style */
         .btn-back-home {
             display: inline-flex;
             align-items: center;
@@ -177,7 +172,6 @@
             transform: translateX(-3px);
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
         }
-
     </style>
 </head>
 <body>
@@ -221,8 +215,13 @@
                         <label class="form-label small fw-semibold text-secondary mb-1">Full Name *</label>
                         <div class="form-input-container">
                             <i class="bi bi-person input-icon"></i>
-                            <input type="text" name="name" class="form-control custom-input" placeholder="Enter your full name" required autofocus>
+                            <input type="text" name="name" value="{{ old('name') }}" class="form-control custom-input @error('name') is-invalid @enderror" placeholder="Enter your full name" required autofocus>
                         </div>
+                        @error('name')
+                            <div class="text-danger small mt-1" style="font-size: 0.8rem;">
+                                <i class="bi bi-exclamation-circle me-1"></i>{{ $message }}
+                            </div>
+                        @enderror
                     </div>
 
                     <!-- Email Field -->
@@ -230,8 +229,13 @@
                         <label class="form-label small fw-semibold text-secondary mb-1">Email *</label>
                         <div class="form-input-container">
                             <i class="bi bi-envelope input-icon"></i>
-                            <input type="email" name="email" class="form-control custom-input" placeholder="Enter your email address" required>
+                            <input type="email" name="email" value="{{ old('email') }}" class="form-control custom-input @error('email') is-invalid @enderror" placeholder="Enter your email address" required>
                         </div>
+                        @error('email')
+                            <div class="text-danger small mt-1" style="font-size: 0.8rem;">
+                                <i class="bi bi-exclamation-circle me-1"></i>{{ $message }}
+                            </div>
+                        @enderror
                     </div>
 
                     <!-- Password Field -->
@@ -239,41 +243,43 @@
                         <label class="form-label small fw-semibold text-secondary mb-1">Password *</label>
                         <div class="form-input-container">
                             <i class="bi bi-lock input-icon"></i>
-                            <input type="password" name="password" id="regPassword" class="form-control custom-input" placeholder="Create a strong password" required>
+                            <input type="password" name="password" id="regPassword" class="form-control custom-input @error('password') is-invalid @enderror" placeholder="Create a strong password" required>
                             <button type="button" class="eye-toggle" onclick="togglePassword('regPassword', this)">
                                 <i class="bi bi-eye"></i>
                             </button>
                         </div>
+                        @error('password')
+                            <div class="text-danger small mt-1" style="font-size: 0.8rem;">
+                                <i class="bi bi-exclamation-circle me-1"></i>{{ $message }}
+                            </div>
+                        @enderror
                     </div>
 
                     <!-- Password Requirements Box -->
-<!-- Password Requirements Box -->
-<div class="p-3 mb-3 rounded-3" id="reqBox" style="background-color: #f0fdf4; border: 1px solid #dcfce7;">
-    <!-- Header with Shield Icon -->
-    <div class="d-flex align-items-center gap-2 mb-2 text-secondary fw-semibold" style="font-size: 0.82rem;">
-        <i class="bi bi-shield-check text-success" style="font-size: 1rem;"></i>
-        <span>Password Requirements:</span>
-    </div>
+                    <div class="p-3 mb-3 rounded-3 transition-all" id="reqBox" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+                        <div class="d-flex align-items-center gap-2 mb-2 text-secondary fw-semibold" style="font-size: 0.82rem;">
+                            <i class="bi bi-shield text-secondary" id="shieldHeaderIcon" style="font-size: 1rem;"></i>
+                            <span id="shieldHeaderText">Password Requirements:</span>
+                        </div>
 
-    <!-- Requirements List -->
-    <div class="d-flex flex-column gap-1" style="font-size: 0.82rem;">
-        <div id="ruleLength" class="text-secondary transition-all d-flex align-items-center gap-2">
-            <i class="bi bi-circle" id="iconLength" style="font-size: 0.75rem;"></i> At least 8 characters
-        </div>
-        <div id="ruleUpper" class="text-secondary transition-all d-flex align-items-center gap-2">
-            <i class="bi bi-circle" id="iconUpper" style="font-size: 0.75rem;"></i> One uppercase letter (A-Z)
-        </div>
-        <div id="ruleLower" class="text-secondary transition-all d-flex align-items-center gap-2">
-            <i class="bi bi-circle" id="iconLower" style="font-size: 0.75rem;"></i> One lowercase letter (a-z)
-        </div>
-        <div id="ruleNumber" class="text-secondary transition-all d-flex align-items-center gap-2">
-            <i class="bi bi-circle" id="iconNumber" style="font-size: 0.75rem;"></i> One number (0-9)
-        </div>
-        <div id="ruleSpecial" class="text-secondary transition-all d-flex align-items-center gap-2">
-            <i class="bi bi-circle" id="iconSpecial" style="font-size: 0.75rem;"></i> One special character (!@#$%^&*)
-        </div>
-    </div>
-</div>
+                        <div class="d-flex flex-column gap-1" style="font-size: 0.82rem;">
+                            <div id="ruleLength" class="text-secondary transition-all d-flex align-items-center gap-2">
+                                <i class="bi bi-circle" id="iconLength" style="font-size: 0.75rem;"></i> At least 8 characters
+                            </div>
+                            <div id="ruleUpper" class="text-secondary transition-all d-flex align-items-center gap-2">
+                                <i class="bi bi-circle" id="iconUpper" style="font-size: 0.75rem;"></i> One uppercase letter (A-Z)
+                            </div>
+                            <div id="ruleLower" class="text-secondary transition-all d-flex align-items-center gap-2">
+                                <i class="bi bi-circle" id="iconLower" style="font-size: 0.75rem;"></i> One lowercase letter (a-z)
+                            </div>
+                            <div id="ruleNumber" class="text-secondary transition-all d-flex align-items-center gap-2">
+                                <i class="bi bi-circle" id="iconNumber" style="font-size: 0.75rem;"></i> One number (0-9)
+                            </div>
+                            <div id="ruleSpecial" class="text-secondary transition-all d-flex align-items-center gap-2">
+                                <i class="bi bi-circle" id="iconSpecial" style="font-size: 0.75rem;"></i> One special character (!@#$%^&*)
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Confirm Password Field -->
                     <div class="mb-3">
@@ -342,7 +348,6 @@
 </div>
 
 <script>
-    // Function para sa Password Eye Toggle
     function togglePassword(inputId, btn) {
         const input = document.getElementById(inputId);
         const icon = btn.querySelector('i');
@@ -355,35 +360,48 @@
         }
     }
 
-    // Real-time Dynamic Password Validation
     document.getElementById('regPassword').addEventListener('input', function () {
-    const val = this.value;
+        const val = this.value;
 
-    function updateRule(ruleId, iconId, isValid) {
-        const ruleEl = document.getElementById(ruleId);
-        const iconEl = document.getElementById(iconId);
+        function updateRule(ruleId, iconId, isValid) {
+            const ruleEl = document.getElementById(ruleId);
+            const iconEl = document.getElementById(iconId);
 
-        if (isValid) {
-            ruleEl.className = 'text-success fw-medium transition-all d-flex align-items-center gap-2';
-            iconEl.className = 'bi bi-check-circle-fill text-success';
-        } else {
-            ruleEl.className = 'text-secondary transition-all d-flex align-items-center gap-2';
-            iconEl.className = 'bi bi-circle text-secondary';
+            if (isValid) {
+                ruleEl.className = 'text-success fw-medium transition-all d-flex align-items-center gap-2';
+                iconEl.className = 'bi bi-check-circle-fill text-success';
+            } else {
+                ruleEl.className = 'text-secondary transition-all d-flex align-items-center gap-2';
+                iconEl.className = 'bi bi-circle text-secondary';
+            }
         }
-    }
 
-    const hasLength  = val.length >= 8;
-    const hasUpper   = /[A-Z]/.test(val);
-    const hasLower   = /[a-z]/.test(val);
-    const hasNumber  = /[0-9]/.test(val);
-    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(val);
+        const hasLength  = val.length >= 8;
+        const hasUpper   = /[A-Z]/.test(val);
+        const hasLower   = /[a-z]/.test(val);
+        const hasNumber  = /[0-9]/.test(val);
+        const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(val);
 
-    updateRule('ruleLength',  'iconLength',  hasLength);
-    updateRule('ruleUpper',   'iconUpper',   hasUpper);
-    updateRule('ruleLower',   'iconLower',   hasLower);
-    updateRule('ruleNumber',  'iconNumber',  hasNumber);
-    updateRule('ruleSpecial', 'iconSpecial', hasSpecial);
-});
+        updateRule('ruleLength',  'iconLength',  hasLength);
+        updateRule('ruleUpper',   'iconUpper',   hasUpper);
+        updateRule('ruleLower',   'iconLower',   hasLower);
+        updateRule('ruleNumber',  'iconNumber',  hasNumber);
+        updateRule('ruleSpecial', 'iconSpecial', hasSpecial);
+
+        const allValid = hasLength && hasUpper && hasLower && hasNumber && hasSpecial;
+        const reqBox = document.getElementById('reqBox');
+        const shieldIcon = document.getElementById('shieldHeaderIcon');
+
+        if (allValid) {
+            reqBox.style.backgroundColor = '#f0fdf4';
+            reqBox.style.borderColor = '#dcfce7';
+            shieldIcon.className = 'bi bi-shield-check text-success';
+        } else {
+            reqBox.style.backgroundColor = '#f8fafc';
+            reqBox.style.borderColor = '#e2e8f0';
+            shieldIcon.className = 'bi bi-shield text-secondary';
+        }
+    });
 </script>
 </body>
 </html>

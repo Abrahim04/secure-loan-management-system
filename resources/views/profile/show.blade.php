@@ -3,7 +3,11 @@
 @section('title', 'My Profile')
 
 @section('content')
-<!-- Adaptive Glassmorphism & SaaS Clean Styling -->
+<!-- Cropper.js CSS & JS CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+<!-- Adaptive Glassmorphism & Professional IT Styling -->
 <style>
     .dash-card {
         background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
@@ -13,13 +17,6 @@
         border-radius: 16px;
         box-shadow: var(--dash-card-shadow, 0 8px 32px 0 rgba(0, 0, 0, 0.25));
         transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
-    }
-
-    html[data-bs-theme="dark"] .dash-card,
-    body.dark-mode .dash-card,
-    .dark .dash-card {
-        background: rgba(30, 41, 59, 0.55) !important;
-        border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
     .glass-file-input {
@@ -48,10 +45,77 @@
         border-radius: 50px;
         transition: all 0.2s ease;
         text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
     }
     .btn-pill-outline:hover {
         background: #0284c7;
         color: #ffffff;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+        transform: translateY(-1px);
+    }
+
+    /* Strict Circle Crop Styling */
+    .cropper-view-box,
+    .cropper-face {
+        border-radius: 50%;
+    }
+
+    /* Professional IT Theme-Aware Modal Styling */
+    .theme-crop-modal .modal-content {
+        background-color: var(--dash-card-bg) !important;
+        color: var(--text-main) !important;
+        border: 1px solid var(--dash-card-border) !important;
+        border-radius: 16px !important;
+        box-shadow: var(--dash-card-shadow) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+    }
+    .theme-crop-modal .modal-header,
+    .theme-crop-modal .modal-footer {
+        border-color: var(--topbar-border, rgba(100, 116, 139, 0.2)) !important;
+    }
+    .theme-crop-modal .btn-close {
+        filter: var(--btn-close-filter, none);
+    }
+    [data-bs-theme="dark"] .theme-crop-modal .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+
+    /* Cancel Button na may banayad na kulay sa loob at magiging solid kapag hinover */
+    .btn-crop-cancel {
+        background: rgba(100, 116, 139, 0.12) !important;
+        color: var(--text-main) !important;
+        border: 1px solid rgba(100, 116, 139, 0.3) !important;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 8px 20px;
+        border-radius: 50px;
+        transition: all 0.2s ease;
+    }
+    .btn-crop-cancel:hover {
+        background: rgba(100, 116, 139, 0.3) !important;
+        color: var(--text-main) !important;
+        border-color: rgba(100, 116, 139, 0.5) !important;
+        transform: translateY(-1px);
+    }
+
+    /* Crop & Upload Button na may banayad na kulay sa loob at magiging solid blue pag hinover */
+    .btn-crop-save {
+        background: rgba(2, 132, 199, 0.12) !important;
+        color: #0284c7 !important;
+        border: 1px solid rgba(2, 132, 199, 0.3) !important;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 8px 22px;
+        border-radius: 50px;
+        transition: all 0.2s ease;
+    }
+    .btn-crop-save:hover {
+        background: #0284c7 !important;
+        color: #ffffff !important;
+        border-color: #0284c7 !important;
         box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
         transform: translateY(-1px);
     }
@@ -98,15 +162,13 @@
 
                     <hr class="my-3" style="border-color: var(--dash-card-border, rgba(255, 255, 255, 0.08));">
 
-                    <form method="POST" action="{{ route('profile.avatar') }}" enctype="multipart/form-data" class="text-start mt-3">
+                    <form id="avatarUploadForm" method="POST" action="{{ route('profile.avatar') }}" enctype="multipart/form-data" class="text-start mt-3">
                         @csrf
                         <label class="form-label fw-semibold small text-muted mb-2">Change Profile Picture</label>
                         <div class="mb-3">
-                            <input type="file" name="avatar" class="form-control glass-file-input form-control-sm @error('avatar') is-invalid @enderror" accept=".jpg,.jpeg,.png" required>
+                            <input type="file" id="tempImageInput" class="form-control glass-file-input form-control-sm" accept=".jpg,.jpeg,.png">
+                            <input type="file" name="avatar" id="realAvatarInput" class="d-none">
                         </div>
-                        <button type="submit" class="btn-pill-outline w-100 d-flex align-items-center justify-content-center">
-                            <span>Upload New Photo</span>
-                        </button>
                     </form>
                 </div>
             </div>
@@ -155,4 +217,87 @@
         </div>
     </div>
 </div>
+
+<!-- Interactive Cropping Modal Popup -->
+<div class="modal fade theme-crop-modal" id="cropModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title fw-bold">Crop Profile Picture</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center p-3">
+                <div style="max-height: 350px; width: 100%; overflow: hidden;">
+                    <img id="imageToCrop" style="max-width: 100%; display: block;">
+                </div>
+            </div>
+            <div class="modal-footer border-top">
+                <button type="button" class="btn btn-crop-cancel" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-crop-save" id="btnCropAndUpload">Crop & Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let cropperInstance = null;
+        const tempImageInput = document.getElementById('tempImageInput');
+        const cropModalEl = document.getElementById('cropModal');
+        const cropModal = new bootstrap.Modal(cropModalEl);
+        const imageToCrop = document.getElementById('imageToCrop');
+        const btnCropAndUpload = document.getElementById('btnCropAndUpload');
+
+        tempImageInput.addEventListener('change', function (e) {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    imageToCrop.src = event.target.result;
+                    cropModal.show();
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        });
+
+        cropModalEl.addEventListener('shown.bs.modal', function () {
+            if (cropperInstance) {
+                cropperInstance.destroy();
+            }
+            cropperInstance = new Cropper(imageToCrop, {
+                aspectRatio: 1,
+                viewMode: 1,
+                autoCropArea: 0.9,
+                responsive: true,
+            });
+        });
+
+        cropModalEl.addEventListener('hidden.bs.modal', function () {
+            if (cropperInstance) {
+                cropperInstance.destroy();
+                cropperInstance = null;
+            }
+            tempImageInput.value = '';
+        });
+
+        btnCropAndUpload.addEventListener('click', function () {
+            if (!cropperInstance) return;
+
+            const canvas = cropperInstance.getCroppedCanvas({
+                width: 300,
+                height: 300,
+            });
+
+            canvas.toBlob(function (blob) {
+                const croppedFile = new File([blob], 'avatar.jpg', { type: 'image/jpeg' });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(croppedFile);
+
+                document.getElementById('realAvatarInput').files = dataTransfer.files;
+                cropModal.hide();
+                document.getElementById('avatarUploadForm').submit();
+            }, 'image/jpeg', 0.9);
+        });
+    });
+</script>
 @endsection

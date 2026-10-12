@@ -130,6 +130,16 @@
 </style>
 
 <div class="container-fluid px-0">
+    {{-- Flash Session Status Notification Alert (Walang Close X Button, Auto-dismiss) --}}
+    @if (session('status'))
+        <div id="autoDismissAlert" class="alert alert-success fade show border-0 shadow-sm rounded-4 mb-4" role="alert" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3) !important;">
+            <div class="d-flex align-items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <span class="fw-semibold">{{ session('status') }}</span>
+            </div>
+        </div>
+    @endif
+
     {{-- Title Header --}}
     <div class="mb-4">
         <h2 class="fw-bold text-main mb-1">Pending Payments</h2>
@@ -185,4 +195,20 @@
         @endif
     @endif
 </div>
+
+{{-- Script para kusa/automatically mag-fade out ang notification alert pagkatapos ng 3.5 seconds --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const alertEl = document.getElementById('autoDismissAlert');
+        if (alertEl) {
+            setTimeout(function () {
+                alertEl.style.transition = "opacity 0.5s ease";
+                alertEl.style.opacity = "0";
+                setTimeout(function() {
+                    alertEl.remove();
+                }, 500);
+            }, 3500); // 3.5 seconds delay
+        }
+    });
+</script>
 @endsection

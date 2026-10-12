@@ -219,7 +219,7 @@
                     <img src="{{ asset('images/logo.png') }}" alt="PautangPro Logo" class="brand-logo-img">
                     <div>
                         <div class="fw-bold fs-4 lh-1 text-dark">
-                            Pautang<span style="color: var(--primary-emerald);">Pro</span>
+                            Pautang<span style="background: linear-gradient(135deg, #0284c7 0%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Pro</span>
                         </div>
                         <div class="text-muted small mt-1" style="font-size: 0.78rem;">Your Loan, Our Priority</div>
                     </div>

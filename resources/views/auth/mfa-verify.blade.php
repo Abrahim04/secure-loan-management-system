@@ -14,7 +14,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        /* Pinagsamang dark overlay at background image */
         background: linear-gradient(rgba(15, 23, 42, 0.70), rgba(15, 23, 42, 0.70)), 
                     url("{{ asset('images/mfa-bg.png') }}") no-repeat center center / cover;
     }
@@ -34,117 +33,108 @@
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     }
 
-    .otp-input {
-        background-color: #1e293b !important;
-        border: 1px solid #334155 !important;
-        color: #10b981 !important;
+    /* OTP Masked Container Box */
+    .otp-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .otp-input-real {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        z-index: 5;
+        cursor: pointer;
+    }
+
+    .otp-display-box {
+        background-color: #1e293b;
+        border: 1px solid #334155;
+        color: #10b981;
         font-weight: 700;
-        letter-spacing: 12px;
+        font-size: 1.25rem;
+        letter-spacing: 12px; /* Ibinalik sa orihinal na 12px */
+        border-radius: 0.375rem;
+        padding: 0.5rem 1rem;
+        text-align: center;
         transition: all 0.2s ease-in-out;
+        user-select: none;
     }
 
-    .otp-input:focus {
-        border-color: #10b981 !important;
-        box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
-        background-color: #0f172a !important;
+    .otp-input-real:focus + .otp-display-box {
+        border-color: #10b981;
+        box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25);
+        background-color: #0f172a;
     }
 
-    .otp-input.is-invalid {
-        border-color: #ef4444 !important;
+    .otp-wrapper.is-invalid .otp-display-box {
+        border-color: #ef4444;
     }
 
+    /* Emerald Button Hover Effects */
     .btn-emerald {
         background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
         border: none;
         color: #ffffff;
         font-weight: 600;
-        transition: opacity 0.2s;
+        transition: all 0.2s ease-in-out;
     }
 
     .btn-emerald:hover {
-        opacity: 0.9;
+        opacity: 0.95;
         color: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35) !important;
     }
 
-    .no-animation {
-        animation: none !important;
-        opacity: 1 !important;
-        transform: none !important;
+    .btn-emerald:active {
+        transform: translateY(1px);
+        box-shadow: none !important;
     }
 
-    /* Hover & Active Effects para sa Verify Button */
-.btn-emerald {
-    background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
-    border: none;
-    color: #ffffff;
-    font-weight: 600;
-    transition: all 0.2s ease-in-out;
-}
-
-.btn-emerald:hover {
-    opacity: 0.95;
-    color: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35) !important;
-}
-
-.btn-emerald:active {
-    transform: translateY(1px);
-    box-shadow: none !important;
-}
-
-/* Hover & Active Effects para sa Resend Code Button */
-#resend-btn {
-    transition: all 0.2s ease-in-out;
-}
-
-#resend-btn:hover:not(:disabled) {
-    color: #34d399 !important; /* Mas maliwanag na emerald */
-    text-decoration: underline !important;
-    transform: scale(1.02);
-}
-
-#resend-btn:active:not(:disabled) {
-    transform: scale(0.98);
-}
-
-/* Hover & Active Effects para sa Back to Login Link */
-.hover-white {
-    transition: all 0.2s ease-in-out;
-    display: inline-block;
-}
-
-.hover-white:hover {
-    color: #ffffff !important; /* Magiging kulay puti pag tinutok */
-    transform: translateX(-3px); /* Kaunting galaw pabalik sa kaliwa */
-}
-
-.hover-white:active {
-    transform: translateX(-1px);
-}
-
-/* Entrance animation para sa MFA Card */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+    /* Resend Code Button (WALANG UNDERLINE) */
+    #resend-btn {
+        transition: all 0.2s ease-in-out;
+        color: #10b981;
+        text-decoration: none !important;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    #resend-btn:hover:not(:disabled) {
+        color: #34d399 !important;
+        text-decoration: none !important;
+        transform: scale(1.02);
     }
-}
 
-.animate-up {
-    animation: fadeInUp 0.5s ease-out forwards;
-}
+    #resend-btn:active:not(:disabled) {
+        transform: scale(0.98);
+    }
 
-/* Pinipigilan ang pag-re-animate kapag may error sa Blade validation */
-.no-animation {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-}
+    /* Back to Login Link Hover */
+    .hover-white {
+        transition: all 0.2s ease-in-out;
+        display: inline-block;
+    }
+
+    .hover-white:hover {
+        color: #ffffff !important;
+        transform: translateX(-3px);
+    }
+
+    .hover-white:active {
+        transform: translateX(-1px);
+    }
+
+    /* Entrance Animations */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-up { animation: fadeInUp 0.5s ease-out forwards; }
+    .no-animation { animation: none !important; opacity: 1 !important; transform: none !important; }
 </style>
 @endpush
 
@@ -156,9 +146,9 @@
                 <div class="card auth-card text-white">
                     <div class="card-body p-4 p-md-5 text-center">
                         
-                        <!-- Logo Image Header -->
+                        <!-- Logo Header (Option A: Logo Only) -->
                         <div class="mb-4">
-                            <img src="{{ asset('images/logo.png') }}" alt="PautangPro Logo" style="height: 50px; width: auto;">
+                            <img src="{{ asset('images/logo.png') }}" alt="PautangPro Logo" style="height: 52px; width: auto;">
                         </div>
 
                         <h4 class="fw-bold mb-2">Check Your Email</h4>
@@ -177,21 +167,27 @@
                         <form method="POST" action="{{ route('mfa.verify.submit') }}">
                             @csrf
                             <div class="mb-3">
-                                <input 
-                                    type="text" 
-                                    name="otp_code" 
-                                    class="form-control form-control-lg text-center otp-input @error('otp_code') is-invalid @enderror" 
-                                    maxlength="6" 
-                                    inputmode="numeric" 
-                                    pattern="\d{6}" 
-                                    placeholder="------" 
-                                    required 
-                                    autofocus
-                                >
+                                <div class="otp-wrapper @error('otp_code') is-invalid @enderror">
+                                    <input 
+                                        type="text" 
+                                        name="otp_code" 
+                                        id="otp_code_real"
+                                        class="otp-input-real" 
+                                        maxlength="6" 
+                                        inputmode="numeric" 
+                                        pattern="\d{6}" 
+                                        required 
+                                        autocomplete="one-time-code"
+                                        autofocus
+                                    >
+                                    <div class="otp-display-box" id="otp_display_box">
+                                        - - - - - -
+                                    </div>
+                                </div>
                             </div>
 
                             <button type="submit" class="btn btn-emerald btn-lg w-100 mb-3 shadow-sm">
-                                <i class="bi bi-patch-check me-2"></i>Verify
+                                Verify
                             </button>
                         </form>
 
@@ -203,7 +199,7 @@
                         <!-- Resend Code Button -->
                         <form method="POST" action="{{ route('mfa.resend') }}" class="mb-3">
                             @csrf
-                            <button type="submit" class="btn btn-link text-decoration-none small" style="color: #10b981;" id="resend-btn" {{ $resendCooldown > 0 ? 'disabled' : '' }}>
+                            <button type="submit" class="btn btn-link text-decoration-none small" id="resend-btn" {{ $resendCooldown > 0 ? 'disabled' : '' }}>
                                 Resend code
                             </button>
                         </form>
@@ -213,7 +209,7 @@
                         <!-- Back to Login / Return Action -->
                         <div class="pt-1">
                             <a href="{{ route('login') }}" class="text-secondary text-decoration-none small hover-white">
-                                <i class="bi bi-arrow-left me-1"></i>Back to Login
+                                Back to Login
                             </a>
                         </div>
 
@@ -227,6 +223,28 @@
 
 @push('scripts')
 <script>
+    // Per-character Digit Masking Logic (na may katamtamang space)
+    const realInput = document.getElementById('otp_code_real');
+    const displayBox = document.getElementById('otp_display_box');
+
+    function updateOtpDisplay() {
+        if (!realInput || !displayBox) return;
+        let val = realInput.value.replace(/\D/g, '').substring(0, 6);
+        realInput.value = val;
+
+        let placeholders = ['-', '-', '-', '-', '-', '-'];
+        for (let i = 0; i < val.length; i++) {
+            placeholders[i] = val[i];
+        }
+        displayBox.textContent = placeholders.join(' ');
+    }
+
+    if (realInput) {
+        realInput.addEventListener('input', updateOtpDisplay);
+        realInput.addEventListener('keyup', updateOtpDisplay);
+        realInput.addEventListener('paste', () => setTimeout(updateOtpDisplay, 10));
+    }
+
     let remaining = {{ $resendCooldown }};
     const resendBtn = document.getElementById('resend-btn');
     const cooldownText = document.getElementById('resend-cooldown-text');

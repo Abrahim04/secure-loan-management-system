@@ -87,7 +87,7 @@
         background-color: rgba(255, 255, 255, 0.03) !important;
     }
 
-    /* Auto-Dismissing Custom Glass Alerts */
+    /* Auto-Dismissing Custom Glass Alerts (Walang X Close Button) */
     .glass-alert {
         display: flex;
         align-items: center;
@@ -101,12 +101,12 @@
         transition: opacity 0.5s ease, transform 0.5s ease;
     }
     .glass-alert-success {
-        background: rgba(16, 185, 129, 0.12);
+        background: rgba(16, 185, 129, 0.15);
         border: 1px solid rgba(16, 185, 129, 0.3);
         color: #10b981;
     }
     .glass-alert-danger {
-        background: rgba(239, 68, 68, 0.12);
+        background: rgba(239, 68, 68, 0.15);
         border: 1px solid rgba(239, 68, 68, 0.3);
         color: #ef4444;
     }
@@ -117,13 +117,13 @@
 </style>
 
 <div class="container-fluid px-0">
-    {{-- Dynamic Flash Alert Banner --}}
+    {{-- Dynamic Flash Alert Banner (Auto-dismiss, Walang X button)[cite: 19] --}}
     @if (session('success') || session('status'))
         @php
-            $isDanger = session('status') && (str_contains(strtolower(session('status')), 'reject') || str_contains(strtolower(session('status')), 'cancel'));
+            $isDanger = (session('status') && (str_contains(strtolower(session('status')), 'reject') || str_contains(strtolower(session('status')), 'cancel'))) || (session('success') && str_contains(strtolower(session('success')), 'reject'));
             $message = session('success') ?? session('status');
         @endphp
-        <div id="autoDismissAlert" class="glass-alert {{ $isDanger ? 'glass-alert-danger' : 'glass-alert-success' }} mb-4">
+        <div id="autoDismissAlert" class="glass-alert {{ $isDanger ? 'glass-alert-danger' : 'glass-alert-success' }} mb-4" role="alert">
             @if ($isDanger)
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
             @else
@@ -180,7 +180,7 @@
     @endif
 </div>
 
-{{-- JavaScript Script to Auto-Dismiss Alert after 5 Seconds --}}
+{{-- JavaScript Script to Auto-Dismiss Alert after 3.5 Seconds (Walang X button)[cite: 19] --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const alertBox = document.getElementById('autoDismissAlert');
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
                 alertBox.remove();
             }, 500);
-        }, 5000);
+        }, 3500);
     }
 });
 </script>
