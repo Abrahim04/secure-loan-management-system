@@ -11,13 +11,17 @@ class AuditLogController extends Controller
 {
     public function index(Request $request): View
     {
+        $search = $request->input('search');
+        $date = $request->input('date');
+
         $logs = AuditLog::with('user')
-            ->when($request->filled('action'), fn ($q) => $q->where('action', 'like', '%' . $request->input('action') . '%'))
-            ->when($request->filled('user'), function ($q) use ($request) {
-                $q->whereHas('user', fn ($uq) => $uq->where('name', 'like', '%' . $request->input('user') . '%'));
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($subQ) use ($search) {
+                    $subQ->where('action', 'like', '%' . $search . '%')
+                         ->orWhereHas('user', fn ($uq) => $uq->where('name', 'like', '%' . $search . '%'));
+                });
             })
-            ->when($request->filled('date_from'), fn ($q) => $q->whereDate('created_at', '>=', $request->input('date_from')))
-            ->when($request->filled('date_to'), fn ($q) => $q->whereDate('created_at', '<=', $request->input('date_to')))
+            ->when($date, fn ($q) => $q->whereDate('created_at', $date))
             ->latest()
             ->paginate(25)
             ->withQueryString();

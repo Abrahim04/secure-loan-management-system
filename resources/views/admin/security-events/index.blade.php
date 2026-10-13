@@ -3,9 +3,8 @@
 @section('title', 'Security Events')
 
 @section('content')
-<!-- Adaptive Glassmorphism & SaaS Clean UI Styling (100% Matched with Audit Logs Code) -->
+<!-- Adaptive Glassmorphism & SaaS Clean UI Styling (100% Matched with Loan Report Dropdown) -->
 <style>
-    /* Dash Card & Container Theme - Matched with Audit Logs Code */
     .dash-card {
         background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
@@ -16,15 +15,27 @@
         transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
     }
 
-    /* Dark Mode Theme Override - Ensures consistent Dark Slate Blue, never solid black */
+    .filter-card {
+        background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
+        border-radius: 14px;
+        position: relative;
+        overflow: visible !important;
+        z-index: 1050 !important;
+    }
+
     html[data-bs-theme="dark"] .dash-card,
+    html[data-bs-theme="dark"] .filter-card,
     body.dark-mode .dash-card,
-    .dark .dash-card {
+    body.dark-mode .filter-card,
+    .dark .dash-card,
+    .dark .filter-card {
         background: rgba(30, 41, 59, 0.55) !important;
         border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
-    /* Input Icon Wrapper Container */
     .input-icon-wrapper {
         position: relative;
         display: flex;
@@ -38,7 +49,6 @@
         transition: color 0.2s ease;
     }
 
-    /* Custom Form Control Styling with Icon Padding */
     .glass-input {
         background: rgba(100, 116, 139, 0.05) !important;
         border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
@@ -57,16 +67,66 @@
         box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
         outline: none;
     }
-    .glass-input:focus + .search-icon,
-    .input-icon-wrapper:focus-within .search-icon {
-        color: #0284c7;
-    }
     .glass-input::placeholder {
         color: var(--text-muted, #94a3b8);
         opacity: 0.7;
     }
 
-    /* Filter Action Button */
+    /* Custom Glassmorphism Dropdown Button (Exact Loan Report Style) */
+    .glass-dropdown-toggle {
+        background-color: rgba(100, 116, 139, 0.05) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        border-radius: 10px;
+        padding: 9px 16px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .glass-dropdown-toggle:hover, .glass-dropdown-toggle:focus {
+        border-color: #0284c7 !important;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    /* Custom Glassmorphism Dropdown Menu (Exact Loan Report Style)[cite: 14] */
+    .glass-dropdown-menu {
+        background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        border-radius: 12px;
+        box-shadow: var(--dash-card-shadow, 0 10px 25px -5px rgba(0, 0, 0, 0.3));
+        padding: 6px;
+        margin-top: 6px !important;
+        width: 100% !important;
+        z-index: 9999 !important;
+    }
+    .glass-dropdown-item {
+        color: var(--text-main, #f8fafc) !important;
+        font-size: 0.85rem;
+        font-weight: 500;
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: all 0.15s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-decoration: none;
+    }
+    .glass-dropdown-item:hover {
+        background-color: rgba(2, 132, 199, 0.15) !important;
+        color: #0284c7 !important;
+    }
+    .glass-dropdown-item.active {
+        background-color: #0284c7 !important;
+        color: #ffffff !important;
+    }
+
     .btn-filter-glass {
         display: inline-flex;
         align-items: center;
@@ -88,7 +148,6 @@
         transform: translateY(-1px);
     }
 
-    /* Modern Glass Table Styling - Exactly Matched with Audit Logs */
     .custom-table {
         width: 100%;
         margin-bottom: 0;
@@ -124,7 +183,6 @@
         vertical-align: middle;
     }
 
-    /* Monospace Tech Text */
     .mono-text {
         font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
         font-size: 0.825rem !important;
@@ -132,7 +190,6 @@
         letter-spacing: 0.3px;
     }
 
-    /* Clean Text Status Badges (No Background, Colored Text Only) */
     .action-text {
         font-size: 0.85rem;
         font-weight: 600;
@@ -147,7 +204,6 @@
     .action-danger  { color: #ef4444 !important; }
     .action-secondary { color: #94a3b8 !important; }
 
-    /* Custom Bootstrap Pagination Styling */
     .pagination {
         margin-bottom: 0;
         gap: 4px;
@@ -181,44 +237,63 @@
 </style>
 
 <div class="container-fluid px-0">
-    {{-- Header Section --}}
     <div class="mb-4">
         <h2 class="fw-bold text-main mb-1">Security Events</h2>
         <p class="text-muted small mb-0">Monitor system access, authentication logs, and potential security anomalies.</p>
     </div>
 
     {{-- Filter Search Card --}}
-    <div class="dash-card p-3 mb-4">
+    <div class="filter-card p-3 mb-4">
         <form method="GET" action="{{ route('admin.security-events.index') }}" class="row g-2 align-items-center">
             
             {{-- Search Input --}}
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="input-icon-wrapper">
                     <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     <input type="text" name="search" class="form-control glass-input has-icon" placeholder="Search user or IP..." value="{{ request('search') }}">
                 </div>
             </div>
 
-            {{-- Event Type Dropdown Filter --}}
+            {{-- Custom Glassmorphism Dropdown for Event Types (Matched with Loan Report)[cite: 14] --}}
             <div class="col-md-3">
-                <select name="event_type" class="form-select glass-input">
-                    <option value="">All Event Types</option>
-                    @foreach ($eventTypes as $type)
-                        <option value="{{ $type }}" {{ request('event_type') == $type ? 'selected' : '' }}>
-                            {{ ucfirst(str_replace('_', ' ', $type)) }}
-                        </option>
-                    @endforeach
-                </select>
+                @php
+                    $selectedEventType = request('event_type', 'all');
+                    $currentEventTypeLabel = $selectedEventType === 'all' || empty($selectedEventType) ? 'All Event Types' : ucfirst(str_replace('_', ' ', $selectedEventType));
+                @endphp
+                <div class="dropdown">
+                    <button class="glass-dropdown-toggle dropdown-toggle" type="button" id="eventTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>{{ $currentEventTypeLabel }}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end glass-dropdown-menu" aria-labelledby="eventTypeDropdown">
+                        <li>
+                            <a class="glass-dropdown-item {{ $selectedEventType === 'all' || empty($selectedEventType) ? 'active' : '' }}" href="{{ route('admin.security-events.index', array_merge(request()->except('event_type'), ['event_type' => 'all'])) }}">
+                                <span>All Event Types</span>
+                                @if ($selectedEventType === 'all' || empty($selectedEventType))
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                @endif
+                            </a>
+                        </li>
+                        @foreach ($eventTypes as $type)
+                            @php 
+                                $typeLabel = ucfirst(str_replace('_', ' ', $type));
+                                $isActive = $selectedEventType === $type;
+                            @endphp
+                            <li>
+                                <a class="glass-dropdown-item {{ $isActive ? 'active' : '' }}" href="{{ route('admin.security-events.index', array_merge(request()->except('event_type'), ['event_type' => $type])) }}">
+                                    <span>{{ $typeLabel }}</span>
+                                    @if ($isActive)
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    @endif
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
 
-            {{-- From Date --}}
-            <div class="col-md-2">
-                <input type="date" name="date_from" class="form-control glass-input" value="{{ request('date_from') }}" title="From Date">
-            </div>
-
-            {{-- To Date --}}
-            <div class="col-md-2">
-                <input type="date" name="date_to" class="form-control glass-input" value="{{ request('date_to') }}" title="To Date">
+            {{-- Single Date Picker --}}
+            <div class="col-md-3">
+                <input type="date" id="singleDatePicker" name="date" class="form-control glass-input" value="{{ request('date') }}" title="Select Date" style="cursor: pointer;">
             </div>
 
             {{-- Filter Submit Button --}}
@@ -303,9 +378,22 @@
                 of <span class="fw-semibold text-main">{{ $events->total() }}</span> results
             </div>
             <div>
-                {{ $events->links('pagination::bootstrap-5') }}
+                {{ $events->appends(request()->query())->links('pagination::bootstrap-5') }}
             </div>
         </div>
     @endif
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.getElementById('singleDatePicker');
+        if (dateInput) {
+            dateInput.addEventListener('click', function() {
+                if (typeof this.showPicker === 'function') {
+                    this.showPicker();
+                }
+            });
+        }
+    });
+</script>
 @endsection

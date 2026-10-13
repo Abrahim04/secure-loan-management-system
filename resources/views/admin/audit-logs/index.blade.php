@@ -3,9 +3,8 @@
 @section('title', 'Audit Logs')
 
 @section('content')
-<!-- Adaptive Glassmorphism & SaaS Clean UI Styling (100% Matched with Payment Report) -->
+<!-- Adaptive Glassmorphism & SaaS Clean UI Styling -->
 <style>
-    /* Dash Card & Container Theme - Matched with Payment & Loan Reports */
     .dash-card {
         background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
         backdrop-filter: blur(12px);
@@ -16,7 +15,6 @@
         transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
     }
 
-    /* Dark Mode Theme Override - Ensures consistent Dark Slate Blue, never solid black */
     html[data-bs-theme="dark"] .dash-card,
     body.dark-mode .dash-card,
     .dark .dash-card {
@@ -24,7 +22,6 @@
         border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
-    /* Input Icon Wrapper Container */
     .input-icon-wrapper {
         position: relative;
         display: flex;
@@ -38,7 +35,6 @@
         transition: color 0.2s ease;
     }
 
-    /* Custom Form Control Styling with Icon Padding */
     .glass-input {
         background: rgba(100, 116, 139, 0.05) !important;
         border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
@@ -66,7 +62,6 @@
         opacity: 0.7;
     }
 
-    /* Filter Action Button */
     .btn-filter-glass {
         display: inline-flex;
         align-items: center;
@@ -88,7 +83,6 @@
         transform: translateY(-1px);
     }
 
-    /* Modern Glass Table Styling - Exactly Matched with Payment Report */
     .custom-table {
         width: 100%;
         margin-bottom: 0;
@@ -124,7 +118,6 @@
         vertical-align: middle;
     }
 
-    /* Monospace Tech Text */
     .mono-text {
         font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
         font-size: 0.825rem !important;
@@ -132,7 +125,6 @@
         letter-spacing: 0.3px;
     }
 
-    /* Clean Text Status Badges (No Background, Colored Text Only) */
     .action-text {
         font-size: 0.85rem;
         font-weight: 600;
@@ -147,7 +139,6 @@
     .action-danger  { color: #ef4444 !important; }
     .action-secondary { color: #94a3b8 !important; }
 
-    /* Custom Bootstrap Pagination Styling */
     .pagination {
         margin-bottom: 0;
         gap: 4px;
@@ -181,32 +172,22 @@
 </style>
 
 <div class="container-fluid px-0">
-    {{-- Header Title --}}
     <div class="mb-4">
         <h2 class="fw-bold text-main mb-1">Audit Logs</h2>
         <p class="text-muted small mb-0">Track and monitor all system activities, actions, and administrative changes.</p>
     </div>
 
-    {{-- Filter Search Card --}}
+    {{-- Unified Filter Search Card --}}
     <div class="dash-card p-3 mb-4">
         <form method="GET" action="{{ route('admin.audit-logs.index') }}" class="row g-2 align-items-center">
-            <div class="col-md-3">
+            <div class="col-md-7">
                 <div class="input-icon-wrapper">
                     <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <input type="text" name="user" class="form-control glass-input has-icon" placeholder="Filter by user name..." value="{{ request('user') }}">
+                    <input type="text" name="search" class="form-control glass-input has-icon" placeholder="Search by user name or action..." value="{{ request('search') }}">
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="input-icon-wrapper">
-                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <input type="text" name="action" class="form-control glass-input has-icon" placeholder="Filter by action..." value="{{ request('action') }}">
-                </div>
-            </div>
-            <div class="col-md-2">
-                <input type="date" name="date_from" class="form-control glass-input" value="{{ request('date_from') }}" title="From Date">
-            </div>
-            <div class="col-md-2">
-                <input type="date" name="date_to" class="form-control glass-input" value="{{ request('date_to') }}" title="To Date">
+                <input type="date" id="singleDatePicker" name="date" class="form-control glass-input" value="{{ request('date') }}" title="Select Date" style="cursor: pointer;">
             </div>
             <div class="col-md-2">
                 <button type="submit" class="btn-filter-glass w-100">
@@ -304,4 +285,17 @@
         </div>
     @endif
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.getElementById('singleDatePicker');
+        if (dateInput) {
+            dateInput.addEventListener('click', function() {
+                if (typeof this.showPicker === 'function') {
+                    this.showPicker();
+                }
+            });
+        }
+    });
+</script>
 @endsection

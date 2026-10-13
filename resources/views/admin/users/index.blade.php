@@ -3,7 +3,7 @@
 @section('title', $showingTrash ? 'Archived Borrowers' : 'Borrower Management')
 
 @section('content')
-<!-- Adaptive Glassmorphism & SaaS Clean UI Styling (100% Matched with Audit Logs) -->
+<!-- Adaptive Glassmorphism & SaaS Clean UI Styling (Matched with Loan Report & Security Events Dropdown) -->
 <style>
     .dash-card {
         background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
@@ -22,6 +22,7 @@
         border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08)) !important;
         border-radius: 14px;
         position: relative;
+        overflow: visible !important;
         z-index: 1050 !important;
     }
 
@@ -56,51 +57,58 @@
         opacity: 0.7;
     }
 
-    .custom-select-btn {
-        width: 100%;
+    /* Custom Glassmorphism Dropdown Button (Exact Loan Report Style)[cite: 14] */
+    .glass-dropdown-toggle {
         background-color: rgba(100, 116, 139, 0.05) !important;
         color: var(--text-main, #f8fafc) !important;
         border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
         border-radius: 10px;
-        padding: 9px 14px;
+        padding: 9px 16px;
         font-size: 0.875rem;
-        text-align: left;
-        display: flex;
+        font-weight: 600;
+        display: inline-flex;
         align-items: center;
         justify-content: space-between;
+        width: 100%;
         cursor: pointer;
         transition: all 0.2s ease;
     }
-
-    .custom-select-btn:hover, .custom-select-btn:focus {
+    .glass-dropdown-toggle:hover, .glass-dropdown-toggle:focus {
         border-color: #0284c7 !important;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
         outline: none;
     }
 
-    .custom-select-menu {
-        width: 100% !important;
+    /* Custom Glassmorphism Dropdown Menu (Exact Loan Report Style)[cite: 14] */
+    .glass-dropdown-menu {
         background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
-        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.15)) !important;
-        border-radius: 10px;
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        border-radius: 12px;
+        box-shadow: var(--dash-card-shadow, 0 10px 25px -5px rgba(0, 0, 0, 0.3));
         padding: 6px;
-        margin-top: 6px;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35) !important;
+        margin-top: 6px !important;
+        width: 100% !important;
         z-index: 9999 !important;
-        position: absolute !important;
     }
-
-    .custom-select-item {
+    .glass-dropdown-item {
         color: var(--text-main, #f8fafc) !important;
-        padding: 9px 12px;
-        border-radius: 6px;
-        font-size: 0.875rem;
-        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 500;
+        padding: 8px 12px;
+        border-radius: 8px;
         transition: all 0.15s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-decoration: none;
     }
-
-    .custom-select-item:hover, .custom-select-item.active {
+    .glass-dropdown-item:hover {
+        background-color: rgba(2, 132, 199, 0.15) !important;
+        color: #0284c7 !important;
+    }
+    .glass-dropdown-item.active {
         background-color: #0284c7 !important;
         color: #ffffff !important;
     }
@@ -452,25 +460,45 @@
                     </div>
                 </div>
 
+                {{-- Glassmorphism Dropdown para sa Status Filter (Matched with Loan Report style)[cite: 14] --}}
                 <div class="col-md-4">
-                    <input type="hidden" name="status" id="filter_status_input" value="{{ request('status') }}">
-                    <div class="dropdown position-relative">
-                        <button class="custom-select-btn" type="button" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                            <span id="filter_status_text">
-                                @if(request('status') === 'active')
-                                    Active Only
-                                @elseif(request('status') === 'blocked')
-                                    Blocked Only
-                                @else
-                                    All Statuses
-                                @endif
-                            </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted"><path d="m6 9 6 6 6-6"/></svg>
+                    @php
+                        $statusVal = request('status', 'all');
+                        $statusLabel = match($statusVal) {
+                            'active' => 'Active Only',
+                            'blocked' => 'Blocked Only',
+                            default => 'All Statuses'
+                        };
+                    @endphp
+                    <div class="dropdown">
+                        <button class="glass-dropdown-toggle dropdown-toggle" type="button" id="statusFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span>{{ $statusLabel }}</span>
                         </button>
-                        <ul class="dropdown-menu custom-select-menu shadow-lg">
-                            <li><a class="dropdown-item custom-select-item" href="#" onclick="selectOption('filter_status_input', 'filter_status_text', '', 'All Statuses'); return false;">All Statuses</a></li>
-                            <li><a class="dropdown-item custom-select-item" href="#" onclick="selectOption('filter_status_input', 'filter_status_text', 'active', 'Active Only'); return false;">Active Only</a></li>
-                            <li><a class="dropdown-item custom-select-item" href="#" onclick="selectOption('filter_status_input', 'filter_status_text', 'blocked', 'Blocked Only'); return false;">Blocked Only</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end glass-dropdown-menu" aria-labelledby="statusFilterDropdown">
+                            <li>
+                                <a class="glass-dropdown-item {{ $statusVal === 'all' || empty($statusVal) ? 'active' : '' }}" href="{{ route('admin.users.index', array_merge(request()->except('status'), ['status' => 'all'])) }}">
+                                    <span>All Statuses</span>
+                                    @if ($statusVal === 'all' || empty($statusVal))
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    @endif
+                                </a>
+                            </li>
+                            <li>
+                                <a class="glass-dropdown-item {{ $statusVal === 'active' ? 'active' : '' }}" href="{{ route('admin.users.index', array_merge(request()->except('status'), ['status' => 'active'])) }}">
+                                    <span>Active Only</span>
+                                    @if ($statusVal === 'active')
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    @endif
+                                </a>
+                            </li>
+                            <li>
+                                <a class="glass-dropdown-item {{ $statusVal === 'blocked' ? 'active' : '' }}" href="{{ route('admin.users.index', array_merge(request()->except('status'), ['status' => 'blocked'])) }}">
+                                    <span>Blocked Only</span>
+                                    @if ($statusVal === 'blocked')
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    @endif
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -622,7 +650,7 @@
     @endif
 </div>
 
-{{-- Edit Modals --}}
+{{-- Edit Modals (Gumagamit na rin ng glass dropdowns sa loob) --}}
 @unless ($showingTrash)
     @foreach ($users as $user)
         <div class="modal fade theme-modal" id="editUserModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
@@ -648,14 +676,13 @@
                             <div class="mb-3">
                                 <label class="form-label">Role</label>
                                 <input type="hidden" name="role" id="role_input_{{ $user->id }}" value="{{ $user->role }}">
-                                <div class="dropdown position-relative">
-                                    <button class="custom-select-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="dropdown">
+                                    <button class="glass-dropdown-toggle dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span id="role_text_{{ $user->id }}">{{ $user->role === 'admin' ? 'Admin' : 'Borrower' }}</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted"><path d="m6 9 6 6 6-6"/></svg>
                                     </button>
-                                    <ul class="dropdown-menu custom-select-menu">
-                                        <li><a class="dropdown-item custom-select-item" onclick="selectOption('role_input_{{ $user->id }}', 'role_text_{{ $user->id }}', 'user', 'Borrower')">Borrower</a></li>
-                                        <li><a class="dropdown-item custom-select-item" onclick="selectOption('role_input_{{ $user->id }}', 'role_text_{{ $user->id }}', 'admin', 'Admin')">Admin</a></li>
+                                    <ul class="dropdown-menu glass-dropdown-menu">
+                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('role_input_{{ $user->id }}', 'role_text_{{ $user->id }}', 'user', 'Borrower'); return false;">Borrower</a></li>
+                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('role_input_{{ $user->id }}', 'role_text_{{ $user->id }}', 'admin', 'Admin'); return false;">Admin</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -663,14 +690,13 @@
                             <div class="mb-3">
                                 <label class="form-label">Account Status</label>
                                 <input type="hidden" name="status" id="status_input_{{ $user->id }}" value="{{ $user->is_active ? 'active' : 'blocked' }}">
-                                <div class="dropdown position-relative">
-                                    <button class="custom-select-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="dropdown">
+                                    <button class="glass-dropdown-toggle dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span id="status_text_{{ $user->id }}">{{ $user->is_active ? 'Active' : 'Blocked' }}</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted"><path d="m6 9 6 6 6-6"/></svg>
                                     </button>
-                                    <ul class="dropdown-menu custom-select-menu">
-                                        <li><a class="dropdown-item custom-select-item" onclick="selectOption('status_input_{{ $user->id }}', 'status_text_{{ $user->id }}', 'active', 'Active')">Active</a></li>
-                                        <li><a class="dropdown-item custom-select-item" onclick="selectOption('status_input_{{ $user->id }}', 'status_text_{{ $user->id }}', 'blocked', 'Blocked')">Blocked</a></li>
+                                    <ul class="dropdown-menu glass-dropdown-menu">
+                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('status_input_{{ $user->id }}', 'status_text_{{ $user->id }}', 'active', 'Active'); return false;">Active</a></li>
+                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('status_input_{{ $user->id }}', 'status_text_{{ $user->id }}', 'blocked', 'Blocked'); return false;">Blocked</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -678,14 +704,13 @@
                             <div class="mb-3">
                                 <label class="form-label">Verification Status</label>
                                 <input type="hidden" name="verification_status" id="verif_input_{{ $user->id }}" value="{{ $user->email_verified_at ? 'verified' : 'unverified' }}">
-                                <div class="dropdown position-relative">
-                                    <button class="custom-select-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="dropdown">
+                                    <button class="glass-dropdown-toggle dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span id="verif_text_{{ $user->id }}">{{ $user->email_verified_at ? 'Verified' : 'Unverified' }}</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted"><path d="m6 9 6 6 6-6"/></svg>
                                     </button>
-                                    <ul class="dropdown-menu custom-select-menu">
-                                        <li><a class="dropdown-item custom-select-item" onclick="selectOption('verif_input_{{ $user->id }}', 'verif_text_{{ $user->id }}', 'verified', 'Verified')">Verified</a></li>
-                                        <li><a class="dropdown-item custom-select-item" onclick="selectOption('verif_input_{{ $user->id }}', 'verif_text_{{ $user->id }}', 'unverified', 'Unverified')">Unverified</a></li>
+                                    <ul class="dropdown-menu glass-dropdown-menu">
+                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('verif_input_{{ $user->id }}', 'verif_text_{{ $user->id }}', 'verified', 'Verified'); return false;">Verified</a></li>
+                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('verif_input_{{ $user->id }}', 'verif_text_{{ $user->id }}', 'unverified', 'Unverified'); return false;">Unverified</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -742,14 +767,13 @@
                     <div class="mb-3">
                         <label class="form-label">Role</label>
                         <input type="hidden" name="role" id="add_role_input" value="user">
-                        <div class="dropdown position-relative">
-                            <button class="custom-select-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="dropdown">
+                            <button class="glass-dropdown-toggle dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span id="add_role_text">Borrower</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted"><path d="m6 9 6 6 6-6"/></svg>
                             </button>
-                            <ul class="dropdown-menu custom-select-menu">
-                                <li><a class="dropdown-item custom-select-item" onclick="selectOption('add_role_input', 'add_role_text', 'user', 'Borrower')">Borrower</a></li>
-                                <li><a class="dropdown-item custom-select-item" onclick="selectOption('add_role_input', 'add_role_text', 'admin', 'Admin')">Admin</a></li>
+                            <ul class="dropdown-menu glass-dropdown-menu">
+                                <li><a class="glass-dropdown-item" href="#" onclick="selectOption('add_role_input', 'add_role_text', 'user', 'Borrower'); return false;">Borrower</a></li>
+                                <li><a class="glass-dropdown-item" href="#" onclick="selectOption('add_role_input', 'add_role_text', 'admin', 'Admin'); return false;">Admin</a></li>
                             </ul>
                         </div>
                     </div>
@@ -757,14 +781,13 @@
                     <div class="mb-3">
                         <label class="form-label">Initial Verification Status</label>
                         <input type="hidden" name="verification_status" id="add_verif_input" value="unverified">
-                        <div class="dropdown position-relative">
-                            <button class="custom-select-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="dropdown">
+                            <button class="glass-dropdown-toggle dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span id="add_verif_text">Unverified</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted"><path d="m6 9 6 6 6-6"/></svg>
                             </button>
-                            <ul class="dropdown-menu custom-select-menu">
-                                <li><a class="dropdown-item custom-select-item" onclick="selectOption('add_verif_input', 'add_verif_text', 'unverified', 'Unverified')">Unverified</a></li>
-                                <li><a class="dropdown-item custom-select-item" onclick="selectOption('add_verif_input', 'add_verif_text', 'verified', 'Verified')">Verified</a></li>
+                            <ul class="dropdown-menu glass-dropdown-menu">
+                                <li><a class="glass-dropdown-item" href="#" onclick="selectOption('add_verif_input', 'add_verif_text', 'unverified', 'Unverified'); return false;">Unverified</a></li>
+                                <li><a class="glass-dropdown-item" href="#" onclick="selectOption('add_verif_input', 'add_verif_text', 'verified', 'Verified'); return false;">Verified</a></li>
                             </ul>
                         </div>
                     </div>

@@ -11,10 +11,20 @@ class SecurityEventController extends Controller
 {
     public function index(Request $request): View
     {
+        $search = $request->input('search');
+        $eventType = $request->input('event_type');
+        $date = $request->input('date');
+
         $events = SecurityEvent::with('user')
-            ->when($request->filled('event_type'), fn ($q) => $q->where('event_type', $request->input('event_type')))
-            ->when($request->filled('date_from'), fn ($q) => $q->whereDate('created_at', '>=', $request->input('date_from')))
-            ->when($request->filled('date_to'), fn ($q) => $q->whereDate('created_at', '<=', $request->input('date_to')))
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($subQ) use ($search) {
+                    $subQ->where('ip_address', 'like', '%' . $search . '%')
+                         ->orWhere('description', 'like', '%' . $search . '%')
+                         ->orWhereHas('user', fn ($uq) => $uq->where('name', 'like', '%' . $search . '%'));
+                });
+            })
+            ->when($eventType && $eventType !== 'all', fn ($q) => $q->where('event_type', $eventType))
+            ->when($date, fn ($q) => $q->whereDate('created_at', $date))
             ->latest()
             ->paginate(25)
             ->withQueryString();
