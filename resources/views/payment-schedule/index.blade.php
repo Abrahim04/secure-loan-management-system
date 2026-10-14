@@ -85,27 +85,28 @@
         font-weight: 600;
     }
 
-    /* Pay Button */
-    .btn-pay-gcash {
+    /* Unified Glass Action Button (Katulad ng sa Dashboard at Loan Details) */
+    .glass-btn-action {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 6px;
-        background: transparent;
-        border: 1px solid #0284c7;
-        color: #0284c7;
-        font-size: 0.8rem;
-        font-weight: 600;
-        padding: 5px 16px;
+        background: rgba(2, 132, 199, 0.12);
+        border: 1px solid rgba(2, 132, 199, 0.3);
+        color: #0284c7 !important;
         border-radius: 50px;
+        padding: 6px 18px;
+        font-size: 0.825rem;
+        font-weight: 600;
         text-decoration: none;
-        transition: all 0.2s ease;
+        transition: all 0.25s ease;
         white-space: nowrap;
     }
-    .btn-pay-gcash:hover {
+    .glass-btn-action:hover {
         background: #0284c7;
+        border-color: #0284c7;
         color: #ffffff !important;
-        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
         transform: translateY(-1px);
     }
 
@@ -210,8 +211,9 @@
                                             Pending Approval
                                         </span>
                                     @else
-                                        <a href="{{ route('payments.create', $schedule) }}" class="btn-pay-gcash">
-                                            Pay via GCash
+                                        {{-- Inilapat ang ating unified glass-btn-action style --}}
+                                        <a href="{{ route('payments.create', $schedule) }}" class="glass-btn-action">
+                                            <span>Pay via GCash</span>
                                         </a>
                                     @endif
                                 </td>

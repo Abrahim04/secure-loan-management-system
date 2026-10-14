@@ -215,7 +215,7 @@
                             <th>User</th>
                             <th>Action</th>
                             <th>Related Record</th>
-                            <th>Description</th>
+                            <th style="min-width: 280px;">Description</th>
                             <th>IP Address</th>
                         </tr>
                     </thead>
@@ -248,13 +248,15 @@
                                 </td>
                                 <td>
                                     @if ($log->related_type)
-                                        <span class="mono-text text-main">{{ $log->related_type }} #{{ $log->related_id }}</span>
+                                        <span class="mono-text text-main">
+                                            {{ class_basename($log->related_type) }}@if($log->related_id) #{{ $log->related_id }}@endif
+                                        </span>
                                     @else
                                         <span class="text-muted">—</span>
                                     @endif
                                 </td>
-                                <td style="max-width: 320px;">
-                                    <span class="text-muted small d-inline-block text-truncate w-100" title="{{ $log->description }}">
+                                <td style="min-width: 280px; max-width: 450px; white-space: normal; word-break: break-word;">
+                                    <span class="text-muted small d-block" style="line-height: 1.4;">
                                         {{ $log->description ?? '—' }}
                                     </span>
                                 </td>

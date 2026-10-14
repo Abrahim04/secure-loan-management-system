@@ -14,7 +14,7 @@
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    /* Modern Back Pill Button (Gayang-gaya sa Loan Details) */
+    /* Modern Back Pill Button */
     .glass-btn-back {
         display: inline-flex;
         align-items: center;
@@ -70,34 +70,34 @@
         opacity: 0.7;
     }
 
-    /* Primary Submit Button (Centered Text) */
+    /* Modern Glass Primary Action Button para sa Submit Payment */
     .btn-submit-payment {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        text-align: center;
-        background: #0284c7;
-        border: 1px solid #0284c7;
-        color: #ffffff;
+        background: rgba(2, 132, 199, 0.12);
+        border: 1px solid rgba(2, 132, 199, 0.3);
+        color: #0284c7;
         font-weight: 600;
         font-size: 0.9rem;
         padding: 11px 24px;
         border-radius: 50px;
         width: 100%;
         transition: all 0.25s ease;
-        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+        cursor: pointer;
+        text-decoration: none;
     }
     .btn-submit-payment:hover {
-        background: #0369a1;
-        border-color: #0369a1;
+        background: #0284c7;
+        border-color: #0284c7;
         color: #ffffff;
-        box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
         transform: translateY(-1px);
     }
 </style>
 
 <div class="container-fluid px-0">
-    {{-- Back Action Button (Nasa gilid katulad sa Loan Details) --}}
+    {{-- Back Action Button --}}
     <div class="mb-3">
         <a href="{{ url()->previous() != url()->current() ? url()->previous() : url('/payment-schedules') }}" class="glass-btn-back">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -108,9 +108,8 @@
         </a>
     </div>
 
-    {{-- Main Payment Form Card (Centered at may fixed max-width para maganda pa rin ang hugis) --}}
+    {{-- Main Payment Form Card --}}
     <div class="dash-card p-4 p-md-5 mx-auto" style="max-width: 680px;">
-        {{-- Header Section (Walang Icon) --}}
         <div class="border-bottom pb-3 mb-4" style="border-color: var(--dash-card-border) !important;">
             <h3 class="fw-bold text-main mb-1">Pay via GCash</h3>
             <p class="text-muted small mb-0">
@@ -192,7 +191,7 @@
                        accept=".jpg,.jpeg,.png,.pdf" required>
             </div>
 
-            {{-- Submit Button (Centered Text) --}}
+            {{-- Submit Button (Glassmorphism Style) --}}
             <button type="submit" class="btn-submit-payment">
                 Submit Payment
             </button>

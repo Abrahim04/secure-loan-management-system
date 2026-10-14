@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\LoanType;
@@ -46,14 +47,14 @@ class SystemSettingsController extends Controller
         return view('admin.settings.penalties', compact('settings'));
     }
 
-    public function updateGeneral(Request $request): RedirectResponse
+   public function updateGeneral(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'otp_expiry_minutes' => ['required', 'integer', 'min:1', 'max:60'],
             'otp_max_attempts' => ['required', 'integer', 'min:1', 'max:10'],
             'otp_resend_cooldown_seconds' => ['required', 'integer', 'min:10', 'max:600'],
             'otp_free_resend_attempts' => ['required', 'integer', 'min:0', 'max:20'],
-            'maintenance_mode' => ['required', 'in:0,1,2'], // Na-update para sa 3 states: 0=Operational, 1=Maintenance, 2=Shutdown
+            'maintenance_mode' => ['required', 'in:0,1,2'],
             'admin_notify_loan_application' => ['nullable', 'in:0,1'],
             'admin_notify_large_repayment' => ['nullable', 'in:0,1'],
         ]);
@@ -62,15 +63,27 @@ class SystemSettingsController extends Controller
         $validated['admin_notify_large_repayment'] = $request->has('admin_notify_large_repayment') ? '1' : '0';
 
         foreach ($validated as $key => $value) {
-            SystemSetting::set($key, (string) $value);
+            SystemSetting::updateOrCreate(
+                ['key' => $key],
+                ['value' => (string) $value]
+            );
+            Cache::forget("setting:{$key}");
         }
 
+        $stateLabels = [
+            '0' => 'Operational (Normal Operation)',
+            '1' => 'Under Maintenance (App Closed for Borrowers)',
+            '2' => 'Emergency Shutdown / System Offline (Service Halted)'
+        ];
+        $selectedLabel = $stateLabels[$validated['maintenance_mode']] ?? 'Operational';
+
+        // Naka-set na sa null ang related_id para SystemSetting lamang ang lumabas nang walang hashtag/ID
         AuditLog::record(
             auth()->id(),
             'Updated System Settings',
             'SystemSetting',
             null,
-            "Updated general system settings and system operational state."
+            "Changed system operational state to {$selectedLabel}."
         );
 
         return back()->with('status', 'System settings updated successfully.');

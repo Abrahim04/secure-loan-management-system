@@ -77,17 +77,17 @@
         opacity: 0.7;
     }
 
-    /* Custom Dropdown Trigger Container */
+    /* Custom Dropdown Trigger Container (Security Events Style) */
     .custom-dropdown-container {
         position: relative;
         width: 100%;
     }
     .custom-dropdown-toggle {
         width: 100%;
-        background-color: var(--input-bg, var(--dash-card-bg, #ffffff));
-        color: var(--text-main, #0f172a);
-        border: 1px solid var(--dash-card-border, rgba(0, 0, 0, 0.15));
-        border-radius: 10px;
+        background-color: var(--input-bg, var(--dash-card-bg, #ffffff)) !important;
+        color: var(--text-main, #0f172a) !important;
+        border: 1px solid var(--dash-card-border, rgba(0, 0, 0, 0.15)) !important;
+        border-radius: 10px !important;
         padding: 0.65rem 0.9rem;
         display: flex;
         align-items: center;
@@ -98,7 +98,7 @@
     }
     .custom-dropdown-toggle:hover,
     .custom-dropdown-container.show .custom-dropdown-toggle {
-        border-color: #0284c7;
+        border-color: #0284c7 !important;
         box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25);
     }
     .custom-dropdown-toggle i {
@@ -109,14 +109,16 @@
         transform: rotate(180deg);
     }
 
-    /* Dynamic Menu List (Configured to Drop UP) */
+    /* Dynamic Menu List (Configured to Drop UP na may Security Events Glassmorphism Style) */
     .custom-dropdown-menu {
         position: absolute;
-        bottom: calc(100% + 6px); /* Pataas ang labas ng menu sa itaas ng input box */
+        bottom: calc(100% + 6px);
         top: auto;
         left: 0;
         right: 0;
-        background-color: var(--dash-card-bg, #ffffff) !important;
+        background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         border: 1px solid var(--dash-card-border, rgba(0, 0, 0, 0.12));
         border-radius: 12px;
         padding: 6px;
@@ -135,7 +137,7 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Dropdown Item Base Styling */
+    /* Dropdown Item Base Styling (Security Events Match) */
     .custom-dropdown-item {
         padding: 9px 14px;
         color: var(--text-main, #334155) !important;
@@ -144,28 +146,29 @@
         border-radius: 8px;
         cursor: pointer;
         background-color: transparent !important;
-        transition: background-color 0.15s ease, color 0.15s ease;
+        transition: all 0.15s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
     .custom-dropdown-item.selected {
-        background-color: rgba(2, 132, 199, 0.12) !important;
-        color: #0284c7 !important;
-        font-weight: 600;
-    }
-
-    .custom-dropdown-item:hover {
         background-color: #0284c7 !important;
         color: #ffffff !important;
         font-weight: 600;
     }
 
-    .custom-dropdown-menu:hover .custom-dropdown-item.selected:not(:hover) {
-        background-color: transparent !important;
-        color: var(--text-main, #334155) !important;
-        font-weight: 500;
+    .custom-dropdown-item:hover {
+        background-color: rgba(2, 132, 199, 0.15) !important;
+        color: #0284c7 !important;
     }
 
-    /* Action Buttons */
+    .custom-dropdown-item.selected:hover {
+        background-color: #0284c7 !important;
+        color: #ffffff !important;
+    }
+
+    /* Action Buttons (Unified Glass Style katulad ng View Full Schedule) */
     .glass-btn-action {
         display: inline-flex;
         align-items: center;
@@ -174,8 +177,8 @@
         border: 1px solid rgba(2, 132, 199, 0.3);
         color: #0284c7 !important;
         border-radius: 50px;
-        padding: 6px 16px;
-        font-size: 0.825rem;
+        padding: 7px 18px;
+        font-size: 0.85rem;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.25s ease;
@@ -188,28 +191,26 @@
         transform: translateY(-1px);
     }
 
-    /* Modern Glass Primary Button */
-    .glass-btn-primary {
+    /* Overdue Variant para sa Pay Now kapag overdue ang status */
+    .glass-btn-danger {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        gap: 8px;
-        background: #0284c7 !important;
-        border: 1px solid #0284c7 !important;
-        color: #ffffff !important;
-        border-radius: 50px !important;
-        padding: 8px 22px !important;
+        gap: 6px;
+        background: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444 !important;
+        border-radius: 50px;
+        padding: 7px 18px;
         font-size: 0.85rem;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.25s ease;
-        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
     }
-    .glass-btn-primary:hover {
-        background: #0369a1 !important;
-        border-color: #0369a1 !important;
+    .glass-btn-danger:hover {
+        background: #ef4444;
+        border-color: #ef4444;
         color: #ffffff !important;
-        box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         transform: translateY(-1px);
     }
 
@@ -257,8 +258,8 @@
                     {{ $nextDue->loan->loanType->name }} #{{ $nextDue->loan_id }} • Month {{ $nextDue->month_number }}
                 </div>
             </div>
-            <a href="{{ route('payments.create', $nextDue) }}" class="btn {{ $nextDue->status === 'overdue' ? 'btn-outline-danger' : 'btn-primary' }} px-4 py-2 fw-semibold shadow-sm text-nowrap" style="border-radius: 8px;">
-                Pay Now 
+            <a href="{{ route('payments.create', $nextDue) }}" class="{{ $nextDue->status === 'overdue' ? 'glass-btn-danger' : 'glass-btn-action' }}">
+                <span>Pay Now</span>
             </a>
         </div>
     @endif
@@ -288,7 +289,7 @@
                         </div>
                         <h2 class="fw-bold mb-2" style="color: var(--text-main, #0f172a);">{{ $repaymentPercent }}%</h2>
                         <div class="progress mb-2" style="height: 8px; background-color: rgba(0,0,0,0.08);">
-                            <div class="progress-bar bg-success rounded-pill" role="progressbar" style="width: {{ $repaymentPercent }}%;" aria-valuenow="{{ $repaymentPercent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-success rounded-pill" role="progressbar" style="width: {{ $repaymentPercent }}\%;" aria-valuenow="{{ $repaymentPercent }}" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
                     <p class="mb-0 small mt-1" style="color: var(--text-muted, #64748b);">
@@ -405,12 +406,12 @@
             @else
                 <div class="table-responsive">
                     <table class="table user-table align-middle mb-0">
-                        <thead>
-                            <tr class="small text-uppercase" style="color: var(--text-muted, #64748b);">
-                                <th>Loan Details</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                                <th class="text-end">Submitted</th>
+                       <thead>
+                            <tr class="text-uppercase" style="border-bottom: 1px solid var(--dash-card-border, rgba(0, 0, 0, 0.08));">
+                                <th style="color: #64748b !important; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; padding-bottom: 10px;">Loan Details</th>
+                                <th style="color: #64748b !important; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; padding-bottom: 10px;">Amount</th>
+                                <th style="color: #64748b !important; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; padding-bottom: 10px;">Status</th>
+                                <th class="text-end" style="color: #64748b !important; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; padding-bottom: 10px;">Submitted</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -455,7 +456,7 @@
                 <div class="col-md-4">
                     <label class="form-label small fw-medium" style="color: var(--text-muted, #64748b);">Loan Type</label>
                     
-                    <!-- CUSTOM THEME-AWARE DROPUP DROPDOWN -->
+                    <!-- CUSTOM THEME-AWARE DROPUP DROPDOWN (Security Events Glass Style) -->
                     <div class="custom-dropdown-container" id="loanTypeDropdown">
                         <div class="custom-dropdown-toggle">
                             <span id="selectedLoanTypeLabel">Select a loan type</span>
@@ -463,7 +464,8 @@
                         </div>
                         <div class="custom-dropdown-menu">
                             <div class="custom-dropdown-item selected" data-value="" data-label="Select a loan type">
-                                Select a loan type
+                                <span>Select a loan type</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="check-icon"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             </div>
                             @foreach ($loanTypes as $type)
                                 <div class="custom-dropdown-item" 
@@ -474,7 +476,8 @@
                                     data-max-amount="{{ $type->max_amount }}"
                                     data-min-term="{{ $type->min_term_months }}"
                                     data-max-term="{{ $type->max_term_months }}">
-                                    {{ $type->name }} ({{$type->interest_rate }}%)
+                                    <span>{{ $type->name }} ({{$type->interest_rate }}%)</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="check-icon d-none"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                 </div>
                             @endforeach
                         </div>
@@ -515,7 +518,7 @@
             </div>
 
             <div class="mt-4 d-flex justify-content-end">
-                <a href="{{ route('loans.create') }}" class="glass-btn-primary">
+                <a href="{{ route('loans.create') }}" class="glass-btn-action">
                     <span>Apply for a Loan</span>
                 </a>
             </div>
@@ -552,9 +555,16 @@
     // Option Selection
     dropdownItems.forEach(item => {
         item.addEventListener('click', () => {
-            dropdownItems.forEach(i => i.classList.remove('selected'));
+            dropdownItems.forEach(i => {
+                i.classList.remove('selected');
+                const icon = i.querySelector('.check-icon');
+                if (icon) icon.classList.add('d-none');
+            });
             item.classList.add('selected');
-            selectedLabel.textContent = item.dataset.label;
+            const currentIcon = item.querySelector('.check-icon');
+            if (currentIcon) currentIcon.classList.remove('d-none');
+
+            selectedLabel.textContent = item.getAttribute('data-label') || item.textContent.trim();
             activeOption = item;
             dropdownContainer.classList.remove('show');
             recalculate();

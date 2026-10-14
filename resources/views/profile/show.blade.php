@@ -56,6 +56,29 @@
         transform: translateY(-1px);
     }
 
+    /* Auto-Dismissing Custom Glass Alerts */
+    .glass-alert {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .glass-alert-success {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #10b981;
+    }
+    .glass-alert.fade-out {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
     /* Strict Circle Crop Styling */
     .cropper-view-box,
     .cropper-face {
@@ -83,7 +106,6 @@
         filter: invert(1) grayscale(100%) brightness(200%);
     }
 
-    /* Cancel Button na may banayad na kulay sa loob at magiging solid kapag hinover */
     .btn-crop-cancel {
         background: rgba(100, 116, 139, 0.12) !important;
         color: var(--text-main) !important;
@@ -101,7 +123,6 @@
         transform: translateY(-1px);
     }
 
-    /* Crop & Upload Button na may banayad na kulay sa loob at magiging solid blue pag hinover */
     .btn-crop-save {
         background: rgba(2, 132, 199, 0.12) !important;
         color: #0284c7 !important;
@@ -132,13 +153,11 @@
         </a>
     </div>
 
+    {{-- Modern Auto-Dismissing Glass Alert --}}
     @if (session('status'))
-        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4" role="alert">
-            <div class="d-flex align-items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                <span>{{ session('status') }}</span>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div id="autoDismissAlert" class="glass-alert glass-alert-success mb-4" role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span>{{ session('status') }}</span>
         </div>
     @endif
 
@@ -204,15 +223,6 @@
                         <span class="fw-semibold text-main fs-6">{{ $user->address ?? 'Not provided' }}</span>
                     </div>
                 </div>
-
-                <hr class="my-4" style="border-color: var(--dash-card-border, rgba(255, 255, 255, 0.08));">
-
-                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                    <span class="text-muted small">Need to update your details or change your password?</span>
-                    <a href="{{ auth()->user()->isAdmin() ? route('admin.settings.system') : route('profile.show') }}" class="btn-pill-outline">
-                        <span>Go to Settings</span>
-                    </a>
-                </div>
             </div>
         </div>
     </div>
@@ -241,6 +251,17 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Auto-Dismiss Alert Script
+        const alertBox = document.getElementById('autoDismissAlert');
+        if (alertBox) {
+            setTimeout(function() {
+                alertBox.classList.add('fade-out');
+                setTimeout(function() {
+                    alertBox.remove();
+                }, 500);
+            }, 3500);
+        }
+
         let cropperInstance = null;
         const tempImageInput = document.getElementById('tempImageInput');
         const cropModalEl = document.getElementById('cropModal');
