@@ -358,6 +358,77 @@
         opacity: 0;
         transform: translateY(-10px);
     }
+
+    .glass-dropdown-toggle {
+    width: 100%;
+    background-color: rgba(100, 116, 139, 0.06) !important;
+    color: var(--text-main, #f8fafc) !important;
+    border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.14)) !important;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.glass-dropdown-toggle:hover,
+.glass-dropdown-toggle:focus,
+.glass-dropdown-toggle[aria-expanded="true"] {
+    background-color: rgba(2, 132, 199, 0.08) !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+    color: var(--text-main, #f8fafc) !important;
+}
+
+.glass-dropdown-menu {
+    width: 100%;
+    background-color: var(--dash-card-bg, #1e293b) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.14)) !important;
+    border-radius: 12px;
+    padding: 6px;
+    margin-top: 6px !important;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+    z-index: 1050;
+}
+
+.glass-dropdown-item {
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-main, #f8fafc) !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin-bottom: 2px;
+}
+
+.glass-dropdown-item:last-child {
+    margin-bottom: 0;
+}
+
+.glass-dropdown-item:hover,
+.glass-dropdown-item:focus {
+    background-color: rgba(2, 132, 199, 0.14) !important;
+    color: #0284c7 !important;
+}
+
+.glass-dropdown-item.active,
+.glass-dropdown-item.active:hover,
+.glass-dropdown-item.active:focus {
+    background-color: #0284c7 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+}
 </style>
 
 <div class="container-fluid px-0">
