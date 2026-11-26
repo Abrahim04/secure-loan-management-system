@@ -33,7 +33,7 @@
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     }
 
-    /* OTP Masked Container Box */
+    /* Individual Digit Boxes OTP Style */
     .otp-wrapper {
         position: relative;
         width: 100%;
@@ -50,27 +50,40 @@
         cursor: pointer;
     }
 
-    .otp-display-box {
+    .otp-boxes-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .otp-digit-box {
+        flex: 1;
+        height: 50px;
         background-color: #1e293b;
         border: 1px solid #334155;
         color: #10b981;
         font-weight: 700;
         font-size: 1.25rem;
-        letter-spacing: 12px; /* Ibinalik sa orihinal na 12px */
         border-radius: 0.375rem;
-        padding: 0.5rem 1rem;
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         transition: all 0.2s ease-in-out;
         user-select: none;
     }
 
-    .otp-input-real:focus + .otp-display-box {
+    .otp-input-real:focus ~ .otp-boxes-container .otp-digit-box {
+        border-color: #334155;
+    }
+
+    .otp-input-real:focus ~ .otp-boxes-container .otp-digit-box.active,
+    .otp-input-real:focus ~ .otp-boxes-container .otp-digit-box:focus {
         border-color: #10b981;
-        box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25);
+        box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.25);
         background-color: #0f172a;
     }
 
-    .otp-wrapper.is-invalid .otp-display-box {
+    .otp-wrapper.is-invalid .otp-digit-box {
         border-color: #ef4444;
     }
 
@@ -180,8 +193,13 @@
                                         autocomplete="one-time-code"
                                         autofocus
                                     >
-                                    <div class="otp-display-box" id="otp_display_box">
-                                        - - - - - -
+                                    <div class="otp-boxes-container" id="otp_boxes_container">
+                                        <div class="otp-digit-box">-</div>
+                                        <div class="otp-digit-box">-</div>
+                                        <div class="otp-digit-box">-</div>
+                                        <div class="otp-digit-box">-</div>
+                                        <div class="otp-digit-box">-</div>
+                                        <div class="otp-digit-box">-</div>
                                     </div>
                                 </div>
                             </div>
@@ -223,26 +241,44 @@
 
 @push('scripts')
 <script>
-    // Per-character Digit Masking Logic (na may katamtamang space)
+    // Multi-box Digit Masking Logic
     const realInput = document.getElementById('otp_code_real');
-    const displayBox = document.getElementById('otp_display_box');
+    const digitBoxes = document.querySelectorAll('.otp-digit-box');
 
     function updateOtpDisplay() {
-        if (!realInput || !displayBox) return;
+        if (!realInput) return;
         let val = realInput.value.replace(/\D/g, '').substring(0, 6);
         realInput.value = val;
 
-        let placeholders = ['-', '-', '-', '-', '-', '-'];
-        for (let i = 0; i < val.length; i++) {
-            placeholders[i] = val[i];
-        }
-        displayBox.textContent = placeholders.join(' ');
+        digitBoxes.forEach((box, index) => {
+            if (index < val.length) {
+                box.textContent = val[index];
+                box.style.color = '#10b981';
+            } else {
+                box.textContent = '-';
+                box.style.color = '#64748b';
+            }
+            
+            // Highlight current active box
+            if (index === val.length || (val.length === 6 && index === 5)) {
+                box.classList.add('active');
+            } else {
+                box.classList.remove('active');
+            }
+        });
     }
 
     if (realInput) {
         realInput.addEventListener('input', updateOtpDisplay);
         realInput.addEventListener('keyup', updateOtpDisplay);
         realInput.addEventListener('paste', () => setTimeout(updateOtpDisplay, 10));
+        realInput.addEventListener('focus', updateOtpDisplay);
+        realInput.addEventListener('blur', () => {
+            digitBoxes.forEach(box => box.classList.remove('active'));
+        });
+        
+        // Initial call
+        updateOtpDisplay();
     }
 
     let remaining = {{ $resendCooldown }};

@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\LoanType;
+use App\Models\SecurityEvent;
 use App\Models\SystemSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class SystemSettingsController extends Controller
@@ -77,7 +81,6 @@ class SystemSettingsController extends Controller
         ];
         $selectedLabel = $stateLabels[$validated['maintenance_mode']] ?? 'Operational';
 
-        // Naka-set na sa null ang related_id para SystemSetting lamang ang lumabas nang walang hashtag/ID
         AuditLog::record(
             auth()->id(),
             'Updated System Settings',
@@ -143,5 +146,30 @@ class SystemSettingsController extends Controller
         );
 
         return back()->with('status', 'Penalty policy updated.');
+    }
+
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $admin = auth()->user();
+
+        $validated = $request->validate([
+            'current_password' => ['required'],
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
+        ]);
+
+        if (! Hash::check($validated['current_password'], $admin->password)) {
+            SecurityEvent::record($admin->id, 'failed_password_change', 'Incorrect current password entered while changing admin password');
+
+            throw ValidationException::withMessages([
+                'current_password' => 'Your current password is incorrect.',
+            ]);
+        }
+
+        $admin->update(['password' => Hash::make($validated['password'])]);
+
+        AuditLog::record($admin->id, 'Changed Admin Password', 'User', $admin->id, 'Admin updated security password.');
+        SecurityEvent::record($admin->id, 'password_changed', 'Password changed from admin settings');
+
+        return back()->with('status', 'Password changed successfully.');
     }
 }

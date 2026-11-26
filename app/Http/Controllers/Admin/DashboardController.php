@@ -31,7 +31,9 @@ class DashboardController extends Controller
             // User Management summary
             'activeUsersCount' => User::where('role', 'user')->where('is_active', true)->count(),
             'blockedUsersCount' => User::where('role', 'user')->where('is_active', false)->count(),
-            'unverifiedUsersCount' => User::where('role', 'user')->whereNull('email_verified_at')->count(),
+            'verifiedUsersCount' => User::where('role', 'user')->where('verification_status', 'verified')->count(),
+            'pendingUsersCount' => User::where('role', 'user')->where('verification_status', 'pending')->count(),
+            'unverifiedUsersCount' => User::where('role', 'user')->where('verification_status', 'unverified')->count(),
         ]);
     }
 }

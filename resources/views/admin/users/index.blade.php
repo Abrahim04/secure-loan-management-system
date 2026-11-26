@@ -57,7 +57,7 @@
         opacity: 0.7;
     }
 
-    /* Custom Glassmorphism Dropdown Button (Exact Loan Report Style)[cite: 14] */
+    /* Custom Glassmorphism Dropdown Button (Exact Loan Report Style) */
     .glass-dropdown-toggle {
         background-color: rgba(100, 116, 139, 0.05) !important;
         color: var(--text-main, #f8fafc) !important;
@@ -79,7 +79,7 @@
         outline: none;
     }
 
-    /* Custom Glassmorphism Dropdown Menu (Exact Loan Report Style)[cite: 14] */
+    /* Custom Glassmorphism Dropdown Menu (Exact Loan Report Style) */
     .glass-dropdown-menu {
         background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
         backdrop-filter: blur(16px);
@@ -238,6 +238,7 @@
     .custom-table tbody tr {
         transition: background-color 0.15s ease;
         background: transparent !important;
+        cursor: pointer;
     }
     .custom-table tbody tr:hover {
         background-color: rgba(255, 255, 255, 0.03) !important;
@@ -411,7 +412,7 @@
         <div>
             <h2 class="fw-bold text-main mb-1">{{ $showingTrash ? 'Archived Borrowers' : 'Borrower Management' }}</h2>
             <p class="text-muted small mb-0">
-                {{ $showingTrash ? 'Manage deleted borrower accounts and restore them if needed.' : 'View, edit, and manage registered borrower accounts and permissions.' }}
+                {{ $showingTrash ? 'Manage deleted borrower accounts and restore them if needed.' : 'View, edit, and manage registered borrower accounts and permissions. Click any row to view details.' }}
             </p>
         </div>
         <div class="d-flex align-items-center gap-2">
@@ -460,7 +461,7 @@
                     </div>
                 </div>
 
-                {{-- Glassmorphism Dropdown para sa Status Filter (Matched with Loan Report style)[cite: 14] --}}
+                {{-- Glassmorphism Dropdown para sa Status Filter (Matched with Loan Report style) --}}
                 <div class="col-md-4">
                     @php
                         $statusVal = request('status', 'all');
@@ -539,9 +540,9 @@
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="align-middle">
                         @foreach ($users as $user)
-                            <tr>
+                            <tr onclick="openBorrowerDetails({{ $user->id }})" title="Click to view borrower details">
                                 <td class="ps-4">
                                     <div class="d-flex align-items-center gap-3">
                                         {{-- Na-update upang ipakita ang profile photo gamit ang AvatarController route --}}
@@ -569,15 +570,17 @@
                                             <span class="badge-soft badge-soft-danger">Blocked</span>
                                         @endif
                                     </td>
-                                    <td class="text-center">
-                                        @if ($user->email_verified_at)
+                                   <td class="text-center">
+                                        @if ($user->verification_status === 'verified')
                                             <span class="badge-soft badge-soft-success">Verified</span>
+                                        @elseif ($user->verification_status === 'pending')
+                                            <span class="badge-soft badge-soft-warning">Pending Review</span>
                                         @else
-                                            <span class="badge-soft badge-soft-warning">Unverified</span>
+                                            <span class="badge-soft badge-soft-danger">Unverified</span>
                                         @endif
                                     </td>
                                     <td class="text-center text-muted small">{{ $user->created_at->format('M d, Y') }}</td>
-                                    <td class="text-center">
+                                    <td class="text-center" onclick="event.stopPropagation()">
                                         <div class="d-inline-flex align-items-center justify-content-center gap-1">
                                             <button type="button" class="btn-tbl-action btn-tbl-edit" style="min-width: 58px;" data-bs-toggle="modal" data-bs-target="#editUserModal{{ $user->id }}">
                                                 Edit
@@ -607,7 +610,7 @@
                                     </td>
                                 @else
                                     <td class="text-muted small">{{ $user->deleted_at->format('M d, Y h:i A') }}</td>
-                                    <td class="text-center">
+                                    <td class="text-center" onclick="event.stopPropagation()">
                                         <div class="d-inline-flex align-items-center justify-content-center gap-1">
                                             <form method="POST" action="{{ route('admin.users.restore', $user->id) }}" class="d-inline">
                                                 @csrf
@@ -681,8 +684,8 @@
                                         <span id="role_text_{{ $user->id }}">{{ $user->role === 'admin' ? 'Admin' : 'Borrower' }}</span>
                                     </button>
                                     <ul class="dropdown-menu glass-dropdown-menu">
-                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('role_input_{{ $user->id }}', 'role_text_{{ $user->id }}', 'user', 'Borrower'); return false;">Borrower</a></li>
-                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('role_input_{{ $user->id }}', 'role_text_{{ $user->id }}', 'admin', 'Admin'); return false;">Admin</a></li>
+                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('role_input_{{ $user->id }}', 'role_text_{{$user->id }}', 'user', 'Borrower'); return false;">Borrower</a></li>
+                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('role_input_{{ $user->id }}', 'role_text_{{$user->id }}', 'admin', 'Admin'); return false;">Admin</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -695,8 +698,8 @@
                                         <span id="status_text_{{ $user->id }}">{{ $user->is_active ? 'Active' : 'Blocked' }}</span>
                                     </button>
                                     <ul class="dropdown-menu glass-dropdown-menu">
-                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('status_input_{{ $user->id }}', 'status_text_{{ $user->id }}', 'active', 'Active'); return false;">Active</a></li>
-                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('status_input_{{ $user->id }}', 'status_text_{{ $user->id }}', 'blocked', 'Blocked'); return false;">Blocked</a></li>
+                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('status_input_{{ $user->id }}', 'status_text_{{$user->id }}', 'active', 'Active'); return false;">Active</a></li>
+                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('status_input_{{ $user->id }}', 'status_text_{{$user->id }}', 'blocked', 'Blocked'); return false;">Blocked</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -709,8 +712,8 @@
                                         <span id="verif_text_{{ $user->id }}">{{ $user->email_verified_at ? 'Verified' : 'Unverified' }}</span>
                                     </button>
                                     <ul class="dropdown-menu glass-dropdown-menu">
-                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('verif_input_{{ $user->id }}', 'verif_text_{{ $user->id }}', 'verified', 'Verified'); return false;">Verified</a></li>
-                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('verif_input_{{ $user->id }}', 'verif_text_{{ $user->id }}', 'unverified', 'Unverified'); return false;">Unverified</a></li>
+                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('verif_input_{{ $user->id }}', 'verif_text_{{$user->id }}', 'verified', 'Verified'); return false;">Verified</a></li>
+                                        <li><a class="glass-dropdown-item" href="#" onclick="selectOption('verif_input_{{ $user->id }}', 'verif_text_{{$user->id }}', 'unverified', 'Unverified'); return false;">Unverified</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -802,10 +805,59 @@
     </div>
 </div>
 
+<!-- Borrower Details Modal -->
+<div class="modal fade theme-modal" id="borrowerDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content p-3">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold text-main">Borrower Personal Information</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-3" id="borrowerDetailsBody">
+                <div class="text-center py-4 text-muted">Loading details...</div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-secondary py-2 px-4 rounded-pill" data-bs-dismiss="modal" style="background: rgba(100, 116, 139, 0.2); border: none; color: var(--text-main);">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    function openBorrowerDetails(userId) {
+        const modal = new bootstrap.Modal(document.getElementById('borrowerDetailsModal'));
+        modal.show();
+
+        const container = document.getElementById('borrowerDetailsBody');
+        container.innerHTML = '<div class="text-center py-4 text-muted">Loading details...</div>';
+
+        fetch(`/admin/users/${userId}/details`)
+            .then(res => res.json())
+            .then(data => {
+                container.innerHTML = `
+                    <div class="row g-3">
+                        <div class="col-md-6"><strong class="text-muted small d-block">Full Name</strong><span class="text-main">${data.name}</span></div>
+                        <div class="col-md-6"><strong class="text-muted small d-block">Email</strong><span class="text-main">${data.email}</span></div>
+                        <div class="col-md-6"><strong class="text-muted small d-block">Phone</strong><span class="text-main">${data.phone}</span></div>
+                        <div class="col-md-6"><strong class="text-muted small d-block">Date of Birth</strong><span class="text-main">${data.dob}</span></div>
+                        <div class="col-md-6"><strong class="text-muted small d-block">Gender & Nationality</strong><span class="text-main">${data.gender} / ${data.nationality}</span></div>
+                        <div class="col-md-6"><strong class="text-muted small d-block">Address</strong><span class="text-main">${data.address}</span></div>
+                        <div class="col-md-6"><strong class="text-muted small d-block">ID Type & Number</strong><span class="text-main">${data.id_type} - ${data.id_number}</span></div>
+                        <div class="col-md-6"><strong class="text-muted small d-block">Employment Status</strong><span class="text-main">${data.employment_status} (${data.occupation || 'N/A'})</span></div>
+                        <div class="col-md-6"><strong class="text-muted small d-block">Monthly Income</strong><span class="text-main">${data.monthly_income} (${data.income_source || 'N/A'})</span></div>
+                        <div class="col-md-6"><strong class="text-muted small d-block">Verification Status</strong><span class="text-main">${data.verification_status}</span></div>
+                        ${data.id_image_url ? `<div class="col-12 mt-3"><strong class="text-muted small d-block mb-2">Uploaded Valid ID</strong><a href="${data.id_image_url}" target="_blank"><img src="${data.id_image_url}" class="img-fluid rounded border shadow-sm" style="max-height: 250px; object-fit: contain;"></a></div>` : ''}
+                    </div>
+                `;
+            })
+            .catch(err => {
+                container.innerHTML = '<div class="text-center py-4 text-danger">Failed to load borrower details.</div>';
+            });
+    }
+
     function selectOption(inputId, textId, value, label) {
         document.getElementById(inputId).value = value;
         document.getElementById(textId).innerText = label;

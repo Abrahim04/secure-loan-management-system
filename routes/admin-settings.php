@@ -9,4 +9,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/settings/system', [SystemSettingsController::class, 'general'])->name('settings.system');
     Route::put('/settings/system', [SystemSettingsController::class, 'updateGeneral'])->name('settings.system.update');
     Route::put('/settings/loantypes', [SystemSettingsController::class, 'updateLoanTypes'])->name('settings.loantypes.update');
+    
+    // Idagdag ang Route para sa Admin Password Change dito:
+    Route::put('/settings/password', [SystemSettingsController::class, 'updatePassword'])->name('settings.password.update');
 });

@@ -145,4 +145,56 @@ class UserManagementController extends Controller
 
         return back()->with('status', "Borrower \"{$name}\" permanently deleted.");
     }
+
+    /**
+     * Approve the borrower's verification request.
+     */
+    public function approveVerification(User $user): RedirectResponse
+    {
+        $user->update([
+            'verification_status' => 'verified',
+        ]);
+
+        AuditLog::record(auth()->id(), 'Approved Borrower Verification', 'User', $user->id, "Approved verification for {$user->name}");
+
+        return back()->with('status', "Borrower \"{$user->name}\" has been successfully verified.");
+    }
+
+    /**
+     * Reject the borrower's verification request, reverting back to unverified.
+     */
+    public function rejectVerification(User $user): RedirectResponse
+    {
+        $user->update([
+            'verification_status' => 'unverified',
+            // Opsyonal: Pwede ring i-clear ang ID image kung kinakailangan i-upload ulit
+        ]);
+
+        AuditLog::record(auth()->id(), 'Rejected Borrower Verification', 'User', $user->id, "Rejected verification for {$user->name}");
+
+        return back()->with('status', "Borrower \"{$user->name}\" verification was rejected.");
+    }
+
+    public function detailsJson(User $user)
+    {
+        return response()->json([
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone ?? 'N/A',
+            'dob' => $user->dob ? $user->dob->format('M d, Y') : 'N/A',
+            'gender' => $user->gender ?? 'N/A',
+            'nationality' => $user->nationality ?? 'N/A',
+            'address' => $user->address ?? 'N/A',
+            'id_type' => $user->id_type ?? 'N/A',
+            'id_number' => $user->id_number ?? 'N/A',
+            'id_image_url' => $user->id_image_path ? asset('storage/' . $user->id_image_path) : null,
+            'employment_status' => $user->employment_status ?? 'N/A',
+            'occupation' => $user->occupation ?? 'N/A',
+            'job_position' => $user->job_position ?? 'N/A',
+            'monthly_income' => $user->monthly_income ?? 'N/A',
+            'income_source' => $user->income_source ?? 'N/A',
+            'verification_status' => ucfirst($user->verification_status),
+            'joined' => $user->created_at->format('M d, Y'),
+        ]);
+    }
 }

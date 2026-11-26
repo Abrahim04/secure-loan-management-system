@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
-<!-- Adaptive Glassmorphism & Professional IT Styling -->
+<!-- Adaptive Glassmorphism & Enterprise IT Styling -->
 <style>
     .dash-card {
         background: var(--dash-card-bg, rgba(30, 41, 59, 0.45)) !important;
@@ -54,6 +54,62 @@
         color: #ffffff;
         box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
         transform: translateY(-1px);
+    }
+
+    /* Enterprise Status Pill Badges */
+    .status-badge-pro {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        line-height: 1;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+    
+    .status-badge-pro .badge-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+
+    /* Verified / Admin Style */
+    .badge-verified-pro {
+        background: rgba(16, 185, 129, 0.1) !important;
+        border: 1px solid rgba(16, 185, 129, 0.25) !important;
+        color: #10b981 !important;
+    }
+    .badge-verified-pro .badge-dot {
+        background-color: #10b981;
+        box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+    }
+
+    /* Pending Review Style */
+    .badge-pending-pro {
+        background: rgba(245, 158, 11, 0.1) !important;
+        border: 1px solid rgba(245, 158, 11, 0.25) !important;
+        color: #f59e0b !important;
+    }
+    .badge-pending-pro .badge-dot {
+        background-color: #f59e0b;
+        box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
+    }
+
+    /* Unverified Style */
+    .badge-unverified-pro {
+        background: rgba(148, 163, 184, 0.1) !important;
+        border: 1px solid rgba(148, 163, 184, 0.2) !important;
+        color: #94a3b8 !important;
+    }
+    .badge-unverified-pro .badge-dot {
+        background-color: #94a3b8;
     }
 
     /* Auto-Dismissing Custom Glass Alerts */
@@ -148,8 +204,11 @@
             <h2 class="fw-bold text-main mb-1">My Profile</h2>
             <p class="text-muted small mb-0">Overview of your registered personal information and profile picture.</p>
         </div>
-        <a href="{{ auth()->user()->isAdmin() ? route('admin.settings.system') : route('profile.show') }}" class="btn-pill-outline">
+        <a href="{{ auth()->user()->isAdmin() ? route('admin.settings.system') : route('settings') }}" class="btn-pill-outline position-relative">
             <span>Edit Credentials in Settings</span>
+            @if(auth()->user()->isAdminIncomplete())
+                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" style="width: 10px; height: 10px;" title="Please complete your personal details"></span>
+            @endif
         </a>
     </div>
 
@@ -193,36 +252,94 @@
             </div>
         </div>
 
-        {{-- Read-Only Personal Details --}}
+        {{-- Read-Only Personal Details Card --}}
         <div class="col-lg-8">
-            <div class="dash-card p-4">
-                <div class="mb-4">
-                    <h5 class="fw-bold text-main mb-0">Personal Information (Read-Only)</h5>
-                    <span class="text-muted small">Your profile details registered in the system.</span>
+           <div class="dash-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div>
+                   <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h5 class="fw-bold text-main mb-0">Personal Information</h5>
+                            <span class="text-muted small">Your profile details registered in the system.</span>
+                        </div>
+                        <div>
+                            {{-- Ipakita LAMANG ang KYC status badge para sa mga Borrower/User --}}
+                            @if(!$user->isAdmin())
+                                @if($user->verification_status === 'verified')
+                                    <span class="status-badge-pro badge-verified-pro">
+                                        <span class="badge-dot"></span>
+                                        <span>Verified</span>
+                                    </span>
+                                @elseif($user->verification_status === 'pending')
+                                    <span class="status-badge-pro badge-pending-pro">
+                                        <span class="badge-dot"></span>
+                                        <span>Pending Review</span>
+                                    </span>
+                                @else
+                                    <span class="status-badge-pro badge-unverified-pro">
+                                        <span class="badge-dot"></span>
+                                        <span>Unverified</span>
+                                    </span>
+                                @endif
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Full Name</span>
+                            <span class="fw-semibold text-main fs-6">{{ $user->name }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Email Address</span>
+                            <span class="fw-semibold text-main fs-6">{{ $user->email }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Phone Number</span>
+                            <span class="fw-semibold text-main fs-6">{{ $user->phone ?? 'N/A' }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Date of Birth</span>
+                            <span class="fw-semibold text-main fs-6">{{ $user->dob ? $user->dob->format('M d, Y') : 'N/A' }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Gender</span>
+                            <span class="fw-semibold text-main fs-6">{{ $user->gender ?? 'N/A' }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Nationality</span>
+                            <span class="fw-semibold text-main fs-6">{{ $user->nationality ?? 'N/A' }}</span>
+                        </div>
+                        <div class="col-md-12">
+                            <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Address</span>
+                            <span class="fw-semibold text-main fs-6">{{ $user->address ?? 'N/A' }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">ID Type & Number</span>
+                            <span class="fw-semibold text-main fs-6">{{ $user->id_type ? $user->id_type . ' (' . $user->id_number . ')' : 'N/A' }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Employment Status</span>
+                            <span class="fw-semibold text-main fs-6">{{ $user->employment_status ?? 'N/A' }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Occupation / Position</span>
+                            <span class="fw-semibold text-main fs-6">{{ $user->occupation ? $user->occupation . ' / ' . ($user->job_position ?? 'N/A') : 'N/A' }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Monthly Income & Source</span>
+                            <span class="fw-semibold text-main fs-6">{{ $user->monthly_income ? $user->monthly_income . ' (' . ($user->income_source ?? 'N/A') . ')' : 'N/A' }}</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Full Name</span>
-                        <span class="fw-semibold text-main fs-6">{{ $user->name }}</span>
+                {{-- Action Button sa Ibabang Bahagi ng Personal Information Card (Para sa Borrower lamang) --}}
+                @if(!$user->isAdmin() && $user->verification_status !== 'verified' && $user->verification_status !== 'pending')
+                    <div class="pt-4 mt-3 text-end" style="border-top: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08));">
+                        <a href="{{ route('verification.form') }}" class="btn-pill-outline">
+                            <span>Verify Your Account</span>
+                        </a>
                     </div>
-                    <div class="col-md-6">
-                        <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Email Address</span>
-                        <span class="fw-semibold text-main fs-6">{{ $user->email }}</span>
-                    </div>
-                    <div class="col-md-6">
-                        <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Phone Number</span>
-                        <span class="fw-semibold text-main fs-6">{{ $user->phone ?? 'Not provided' }}</span>
-                    </div>
-                    <div class="col-md-6">
-                        <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Role</span>
-                        <span class="fw-semibold text-main fs-6">{{ ucfirst($user->role) }}</span>
-                    </div>
-                    <div class="col-md-12">
-                        <span class="text-muted small text-uppercase fw-bold d-block mb-1" style="font-size: 0.75rem;">Address</span>
-                        <span class="fw-semibold text-main fs-6">{{ $user->address ?? 'Not provided' }}</span>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>

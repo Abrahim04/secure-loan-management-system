@@ -21,6 +21,11 @@ Route::get('/', function () {
 // Protected routes with authentication and 3-State Operational Check (Operational / Maintenance / Shutdown)
 Route::middleware(['auth', 'operational'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Settings Route para sa User
+    Route::get('/settings', function () {
+        return view('settings');
+    })->name('settings');
 });
 
 require __DIR__.'/auth.php';

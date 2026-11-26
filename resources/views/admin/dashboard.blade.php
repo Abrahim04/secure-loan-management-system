@@ -207,7 +207,7 @@
         </div>
     </div>
 
-    {{-- User Management quick access --}}
+   {{-- User Management quick access --}}
     <div class="col-md-5">
         <div class="dash-card h-100 p-4 d-flex flex-column justify-content-between">
             <div>
@@ -218,22 +218,28 @@
                     <h6 class="dash-title fw-bold mb-0">User Management</h6>
                 </div>
                 <div class="row text-center py-2 g-2">
-                    <div class="col-4">
+                    <div class="col-3">
                         <div class="p-2 rounded-3" style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25);">
-                            <div class="fw-bold fs-4" style="color: #10b981;">{{ $activeUsersCount }}</div>
-                            <div class="small dash-subtext" style="font-size: 0.75rem;">Active</div>
+                            <div class="fw-bold fs-5" style="color: #10b981;">{{ $activeUsersCount }}</div>
+                            <div class="small dash-subtext" style="font-size: 0.7rem;">Active</div>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <div class="p-2 rounded-3" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25);">
-                            <div class="fw-bold fs-4" style="color: #ef4444;">{{ $blockedUsersCount }}</div>
-                            <div class="small dash-subtext" style="font-size: 0.75rem;">Blocked</div>
+                   <div class="col-3">
+                        <div class="p-2 rounded-3" style="background: rgba(2, 132, 199, 0.12); border: 1px solid rgba(2, 132, 199, 0.25);">
+                            <div class="fw-bold fs-5" style="color: #0284c7;">{{ $verifiedUsersCount ?? 0 }}</div>
+                            <div class="small dash-subtext" style="font-size: 0.7rem;">Verified</div>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
                         <div class="p-2 rounded-3" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25);">
-                            <div class="fw-bold fs-4" style="color: #f59e0b;">{{ $unverifiedUsersCount }}</div>
-                            <div class="small dash-subtext" style="font-size: 0.75rem;">Unverified</div>
+                            <div class="fw-bold fs-5 text-warning">{{ $pendingUsersCount ?? 0 }}</div>
+                            <div class="small dash-subtext" style="font-size: 0.7rem;">Pending</div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="p-2 rounded-3" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25);">
+                            <div class="fw-bold fs-5" style="color: #ef4444;">{{ $unverifiedUsersCount }}</div>
+                            <div class="small dash-subtext" style="font-size: 0.7rem;">Unverified</div>
                         </div>
                     </div>
                 </div>

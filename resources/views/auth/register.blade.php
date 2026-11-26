@@ -89,9 +89,11 @@
             box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
         }
 
+        /* Tinanggal ang default Bootstrap red validation icon para hindi sumabay sa eye icon */
         .custom-input.is-invalid {
             border-color: #ef4444 !important;
             background-color: #fef2f2 !important;
+            background-image: none !important;
         }
 
         .eye-toggle {

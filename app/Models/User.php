@@ -24,6 +24,19 @@ class User extends Authenticatable
         'is_active',
         'avatar_path',
         'email_verified_at',
+        // Mga bagong ID at Verification fields:
+        'verification_status',
+        'dob',
+        'gender',
+        'nationality',
+        'id_type',
+        'id_number',
+        'id_image_path',
+        'employment_status',
+        'occupation',
+        'job_position',
+        'monthly_income',
+        'income_source',
     ];
 
     protected $hidden = [
@@ -38,6 +51,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_active' => 'boolean',
             'last_login_at' => 'datetime',
+            'dob' => 'date',
         ];
     }
 
@@ -88,6 +102,18 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    /**
+     * Tinitingnan kung ang Admin ay kulang pa sa kinakailangang personal details.
+     * Mag-o-trigger ito ng Red Alert Notification Badge sa Sidebar at Profile UI.
+     */
+    public function isAdminIncomplete(): bool
+    {
+        if ($this->isAdmin()) {
+            return empty($this->phone) || empty($this->address) || empty($this->dob);
+        }
+        return false;
     }
 
     /**

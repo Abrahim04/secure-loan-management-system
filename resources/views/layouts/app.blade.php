@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'PautangPro')</title>
     <!-- Bootstrap Icons CDN -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
@@ -333,34 +333,44 @@
             margin: 0 auto 16px auto;
         }
 
+        /* Cancel button: Katulad ng .btn-modal-cancel ng Review Loan Modal */
         .btn-logout-cancel {
-            background: rgba(100, 116, 139, 0.1) !important;
-            border: 1px solid var(--dash-card-border, rgba(100, 116, 139, 0.2)) !important;
-            color: var(--text-main) !important;
+            background: rgba(100, 116, 139, 0.12) !important;
+            color: var(--text-main, #f8fafc) !important;
+            border: 1px solid rgba(100, 116, 139, 0.3) !important;
             font-weight: 600;
-            border-radius: 10px;
-            padding: 9px 20px;
             font-size: 0.875rem;
+            padding: 8px 20px;
+            border-radius: 50px;
             transition: all 0.2s ease;
         }
         .btn-logout-cancel:hover {
-            background: rgba(100, 116, 139, 0.2) !important;
+            background: rgba(100, 116, 139, 0.3) !important;
+            color: var(--text-main, #f8fafc) !important;
+            border-color: rgba(100, 116, 139, 0.5) !important;
+            transform: translateY(-1px);
         }
 
+        /* Logout button: Katulad ng .btn-reject-glass ng Review Loan Modal */
         .btn-logout-confirm {
-            background: #ef4444 !important;
-            border: 1px solid #dc2626 !important;
-            color: #ffffff !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(239, 68, 68, 0.12) !important;
+            border: 1px solid rgba(239, 68, 68, 0.3) !important;
+            color: #ef4444 !important;
             font-weight: 600;
-            border-radius: 10px;
-            padding: 9px 20px;
             font-size: 0.875rem;
+            padding: 8px 24px;
+            border-radius: 50px;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+            cursor: pointer;
         }
         .btn-logout-confirm:hover {
-            background: #dc2626 !important;
-            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+            background: #ef4444 !important;
+            border-color: #ef4444 !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
             transform: translateY(-1px);
         }
 
@@ -412,13 +422,12 @@
                     <span>Dashboard</span>
                 </a>
 
-                    @if (auth()->user()->isAdmin())
+                @if (auth()->user()->isAdmin())
                     <a href="{{ route('admin.loans.index') }}" class="nav-link {{ request()->routeIs('admin.loans.index') || request()->routeIs('admin.loans.show') ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
                         <span>Pending Loans</span>
                     </a>
 
-                    {{-- BAGONG LINK FOR LOAN HISTORY / RECORDS --}}
                     <a href="{{ route('admin.loans.history') }}" class="nav-link {{ request()->routeIs('admin.loans.history') ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
                         <span>Loan History</span>
@@ -439,10 +448,16 @@
                     </a>
                 @endif
 
-                <a href="{{ route('profile.show') }}" class="nav-link {{ request()->routeIs('profile.*') ? 'active' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    <span>My Profile</span>
-                </a>
+                  <!-- MY PROFILE LINK WITH RED DOT ALERT -->
+<a href="{{ route('profile.show') }}" class="nav-link d-flex align-items-center justify-content-between {{ request()->routeIs('profile.*') ? 'active' : '' }}">
+    <div class="d-flex align-items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span>My Profile</span>
+    </div>
+    @if(auth()->user()->isAdminIncomplete())
+        <span class="rounded-circle bg-danger d-inline-block" style="width: 8px; height: 8px; box-shadow: 0 0 6px rgba(239, 68, 68, 0.8);" title="Incomplete Personal Details"></span>
+    @endif
+</a>
 
                 <a href="{{ route('notifications.index') }}" class="nav-link d-flex justify-content-between align-items-center {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
                     <div class="d-flex align-items-center gap-2">
@@ -455,12 +470,25 @@
                     @endif
                 </a>
 
+                {{-- SETTINGS LINK FOR REGULAR USER SIDE --}}
+                @if (!auth()->user()->isAdmin())
+                    <a href="{{ route('settings') }}" class="nav-link {{ request()->routeIs('settings') ? 'active' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        <span>Settings</span>
+                    </a>
+                @endif
+
                 @if (auth()->user()->isAdmin())
                     <div class="nav-section-label">Administration</div>
                     
                     <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 1 0 7.75"></path></svg>
                         <span>Borrower Management</span>
+                    </a>
+
+                    <a href="{{ route('admin.verifications.index') }}" class="nav-link {{ request()->routeIs('admin.verifications.*') ? 'active' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                        <span>Verification Management</span>
                     </a>
 
                     <a href="{{ route('admin.reports.index') }}" class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
@@ -478,9 +506,15 @@
                         <span>Security Events</span>
                     </a>
 
-                    <a href="{{ route('admin.settings.system') }}" class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                        <span>Settings</span>
+                    <a href="{{ route('admin.settings.system') }}" class="nav-link d-flex align-items-center justify-content-between {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                        <div class="d-flex align-items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                            <span>Settings</span>
+                        </div>
+                        {{-- Red Alert Dot Indicator kapag kulang pa ang details ng Admin --}}
+                        @if(auth()->user()->isAdminIncomplete())
+                            <span class="badge bg-danger rounded-circle p-1" style="width: 8px; height: 8px;" title="Please complete your personal details"></span>
+                        @endif
                     </a>
                 @endif
             </div>
@@ -530,9 +564,9 @@
 
                         <form method="POST" action="{{ route('logout') }}" class="d-flex align-items-center justify-content-center gap-2">
                             @csrf
-                            <button type="button" class="btn btn-logout-cancel w-100" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-logout-confirm w-100 d-inline-flex align-items-center justify-content-center gap-2">
-                                <span>Logout</span>
+                            <button type="button" class="btn btn-logout-cancel" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-logout-confirm">
+                                Yes, Logout
                             </button>
                         </form>
                     </div>
@@ -595,7 +629,6 @@
         @endauth
 
         <main class="container-fluid py-4 px-4">
-
             @yield('content')
         </main>
     </div>

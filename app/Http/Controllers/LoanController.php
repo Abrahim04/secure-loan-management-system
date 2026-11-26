@@ -25,6 +25,7 @@ class LoanController extends Controller
 
     public function create(): View
     {
+        // Hahayaan nating mag-load ang view para lumitaw ang center modal kung unverified
         $loanTypes = LoanType::where('is_active', true)->get();
 
         return view('loans.create', compact('loanTypes'));
@@ -32,6 +33,12 @@ class LoanController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        // I-check sa store method para harangin ang pag-submit kung sakaling ma-bypass ang form
+        if (auth()->user()->verification_status !== 'verified') {
+            return redirect()->route('verification.form')
+                ->with('error', 'Kailangan mo munang ma-verify ang iyong account bago ka makapag-apply ng loan.');
+        }
+
         $loanType = LoanType::findOrFail($request->input('loan_type_id'));
 
         $validated = $request->validate([

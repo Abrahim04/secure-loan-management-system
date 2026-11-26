@@ -35,7 +35,7 @@
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     }
 
-    /* OTP Masked Container Box */
+    /* Individual Digit Boxes OTP Style */
     .otp-wrapper {
         position: relative;
         width: 100%;
@@ -52,23 +52,36 @@
         cursor: pointer;
     }
 
-    .otp-display-box {
+    .otp-boxes-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .otp-digit-box {
+        flex: 1;
+        height: 50px;
         background-color: #1e293b;
         border: 1px solid #334155;
         color: #10b981;
         font-weight: 700;
         font-size: 1.25rem;
-        letter-spacing: 12px;
         border-radius: 0.375rem;
-        padding: 0.5rem 1rem;
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         transition: all 0.2s ease-in-out;
         user-select: none;
     }
 
-    .otp-input-real:focus + .otp-display-box {
+    .otp-input-real:focus ~ .otp-boxes-container .otp-digit-box {
+        border-color: #334155;
+    }
+
+    .otp-input-real:focus ~ .otp-boxes-container .otp-digit-box.active,
+    .otp-input-real:focus ~ .otp-boxes-container .otp-digit-box:focus {
         border-color: #10b981;
-        box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25);
+        box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.25);
         background-color: #0f172a;
     }
 
@@ -149,7 +162,7 @@
                             <div class="alert alert-danger text-start small border-0 mb-4" style="background-color: rgba(239, 68, 68, 0.15); color: #f87171;">
                                 <ul class="mb-0 ps-3">
                                     @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}[cite: 20]</li>
+                                        <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -172,8 +185,13 @@
                                         autocomplete="one-time-code"
                                         autofocus
                                     >
-                                    <div class="otp-display-box" id="otp_display_box_reset">
-                                        - - - - - -
+                                    <div class="otp-boxes-container" id="otp_boxes_container_reset">
+                                        <div class="otp-digit-box">-</div>
+                                        <div class="otp-digit-box">-</div>
+                                        <div class="otp-digit-box">-</div>
+                                        <div class="otp-digit-box">-</div>
+                                        <div class="otp-digit-box">-</div>
+                                        <div class="otp-digit-box">-</div>
                                     </div>
                                 </div>
                             </div>
@@ -184,7 +202,7 @@
 
                         <!-- Cooldown Timer -->
                         <div id="resend-cooldown-text" class="text-secondary small mb-1" style="{{ $resendCooldown <= 0 ? 'display:none;' : '' }}">
-                            Resend code in <span id="cooldown-timer" class="fw-bold text-light">{{ sprintf('%02d:%02d', intdiv($resendCooldown, 60),$resendCooldown % 60) }}</span>[cite: 20]
+                            Resend code in <span id="cooldown-timer" class="fw-bold text-light">{{ sprintf('%02d:%02d', intdiv($resendCooldown, 60),$resendCooldown % 60) }}</span>
                         </div>
 
                         <!-- Resend Form -->
@@ -215,26 +233,44 @@
 
 @push('scripts')
 <script>
-    // Per-character Digit Masking Logic for Password Reset
+    // Multi-box Digit Masking Logic for Password Reset
     const realInputReset = document.getElementById('otp_code_real_reset');
-    const displayBoxReset = document.getElementById('otp_display_box_reset');
+    const digitBoxesReset = document.querySelectorAll('#otp_boxes_container_reset .otp-digit-box');
 
     function updateOtpDisplayReset() {
-        if (!realInputReset || !displayBoxReset) return;
+        if (!realInputReset) return;
         let val = realInputReset.value.replace(/\D/g, '').substring(0, 6);
         realInputReset.value = val;
 
-        let placeholders = ['-', '-', '-', '-', '-', '-'];
-        for (let i = 0; i < val.length; i++) {
-            placeholders[i] = val[i];
-        }
-        displayBoxReset.textContent = placeholders.join(' ');
+        digitBoxesReset.forEach((box, index) => {
+            if (index < val.length) {
+                box.textContent = val[index];
+                box.style.color = '#10b981';
+            } else {
+                box.textContent = '-';
+                box.style.color = '#64748b';
+            }
+            
+            // Highlight current active box
+            if (index === val.length || (val.length === 6 && index === 5)) {
+                box.classList.add('active');
+            } else {
+                box.classList.remove('active');
+            }
+        });
     }
 
     if (realInputReset) {
         realInputReset.addEventListener('input', updateOtpDisplayReset);
         realInputReset.addEventListener('keyup', updateOtpDisplayReset);
         realInputReset.addEventListener('paste', () => setTimeout(updateOtpDisplayReset, 10));
+        realInputReset.addEventListener('focus', updateOtpDisplayReset);
+        realInputReset.addEventListener('blur', () => {
+            digitBoxesReset.forEach(box => box.classList.remove('active'));
+        });
+        
+        // Initial call
+        updateOtpDisplayReset();
     }
 
     let remaining = {{ $resendCooldown }};

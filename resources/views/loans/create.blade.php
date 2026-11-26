@@ -135,28 +135,93 @@
         font-weight: 500;
     }
 
-    /* Primary Rounded Action Button (Centered, No Icon) */
-    .btn-submit-glass {
-        display: flex;
+    /* Unified Dashboard Action Button Style para sa Submit */
+    .glass-btn-action {
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        text-align: center;
-        background: #0284c7;
-        border: 1px solid #0284c7;
-        color: #ffffff;
-        font-weight: 600;
-        font-size: 0.9rem;
-        padding: 11px 24px;
+        gap: 6px;
+        background: rgba(2, 132, 199, 0.12);
+        border: 1px solid rgba(2, 132, 199, 0.3);
+        color: #0284c7 !important;
         border-radius: 50px;
-        width: 100%;
+        padding: 10px 24px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
         transition: all 0.25s ease;
+        width: 100%;
         cursor: pointer;
-        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
     }
-    .btn-submit-glass:hover {
-        background: #0369a1;
-        border-color: #0369a1;
-        box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
+    .glass-btn-action:hover {
+        background: #0284c7;
+        border-color: #0284c7;
+        color: #ffffff !important;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+        transform: translateY(-1px);
+    }
+
+    /* Modern Glassmorphism Confirmation Modal Styles */
+    .glass-modal .modal-content {
+        background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
+        border-radius: 20px;
+        box-shadow: var(--dash-card-shadow, 0 20px 40px rgba(0, 0, 0, 0.4));
+        color: var(--text-main, #f8fafc);
+    }
+    .modal-icon-badge {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 12px;
+    }
+    .modal-icon-badge.warning {
+        background: rgba(245, 158, 11, 0.15);
+        color: #f59e0b;
+    }
+    .btn-modal-cancel {
+        background: rgba(100, 116, 139, 0.12) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border: 1px solid rgba(100, 116, 139, 0.3) !important;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 8px 20px;
+        border-radius: 50px;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+    .btn-modal-cancel:hover {
+        background: rgba(100, 116, 139, 0.3) !important;
+        color: var(--text-main, #f8fafc) !important;
+        border-color: rgba(100, 116, 139, 0.5) !important;
+        transform: translateY(-1px);
+    }
+
+    /* Pill Outline Button (Para sa Yes, Submit Application) */
+    .btn-pill-outline {
+        background: rgba(2, 132, 199, 0.12);
+        border: 1px solid rgba(2, 132, 199, 0.3);
+        color: #0284c7;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 8px 20px;
+        border-radius: 50px;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    .btn-pill-outline:hover {
+        background: #0284c7;
+        color: #ffffff;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
         transform: translateY(-1px);
     }
 </style>
@@ -201,7 +266,7 @@
                     <div class="mb-4">
                         <label class="form-label text-main fw-semibold small text-uppercase" style="letter-spacing: 0.5px;">Loan Type</label>
 
-                        <!-- Hidden input para ma-submit pa rin sa controller ang napiling loan_type_id -->
+                        <!-- Hidden input to submit the selected loan_type_id to the controller -->
                         <input type="hidden" name="loan_type_id" id="loan_type_id" value="{{ old('loan_type_id') }}" required>
 
                         <div class="custom-dropdown-container" id="loanTypeDropdown">
@@ -248,9 +313,9 @@
                         <textarea name="purpose" class="form-control glass-input" rows="3" placeholder="Write the reason or purpose of the loan...">{{ old('purpose') }}</textarea>
                     </div>
 
-                    {{-- Submit Button --}}
+                    {{-- Submit Button (Triggers Confirmation Modal) --}}
                     <div class="pt-2">
-                        <button type="submit" class="btn-submit-glass">
+                        <button type="button" class="glass-btn-action" data-bs-toggle="modal" data-bs-target="#confirmLoanModal">
                             <span>Submit Application</span>
                         </button>
                     </div>
@@ -259,6 +324,52 @@
         </div>
     </div>
 </div>
+
+{{-- Confirmation Modal para sa Loan Application --}}
+<div class="modal fade glass-modal" id="confirmLoanModal" tabindex="-1" aria-labelledby="confirmLoanModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-3">
+            <div class="modal-body pt-4">
+                <div class="modal-icon-badge warning mx-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </div>
+                <h4 class="fw-bold text-main mb-2">Submit Loan Application?</h4>
+                <p class="text-muted small mb-0 px-3">
+                    Are you sure you want to submit this loan application? Please review your details before proceeding.
+                </p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-3 gap-2">
+                <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn-pill-outline" id="confirmLoanSubmitBtn">
+                    Yes, Submit Application
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Unverified User Modal Pop-up --}}
+@if(auth()->user()->verification_status !== 'verified')
+<div class="modal fade show glass-modal" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel" aria-modal="true" role="dialog" style="display: block; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px);">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-3">
+            <div class="modal-body pt-4">
+                <div class="modal-icon-badge warning mx-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </div>
+                <h4 class="fw-bold text-main mb-2">Account Verification Required</h4>
+                <p class="text-muted small mb-0 px-3">
+                    Your account is not yet verified. You must complete the borrower verification process before you can apply for a loan in the system.
+                </p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-3 gap-2">
+                <a href="{{ route('profile.show') }}" class="btn btn-modal-cancel">Cancel</a>
+                <a href="{{ route('verification.form') }}" class="btn-pill-outline">Verify First</a>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 
 @push('scripts')
 <script>
@@ -316,6 +427,14 @@
                 dropdownContainer.classList.remove('show');
             });
         });
+
+        // Submit form upon confirming modal button click
+        const confirmBtn = document.getElementById('confirmLoanSubmitBtn');
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', function() {
+                document.getElementById('loanForm').submit();
+            });
+        }
     });
 </script>
 @endpush

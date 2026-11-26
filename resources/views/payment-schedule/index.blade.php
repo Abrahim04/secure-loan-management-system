@@ -152,7 +152,7 @@
 
     @if ($schedules->isEmpty())
         <div class="dash-card p-4 text-center">
-            <p class="text-muted fw-semibold mb-0 py-2">Wala ka pang payment schedule.</p>
+            <p class="text-muted fw-semibold mb-0 py-2">No payment schedule has been set as of this time.</p>
         </div>
     @else
         <div class="dash-card p-0 overflow-hidden mb-4">

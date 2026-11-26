@@ -13,6 +13,7 @@
         border-radius: 16px;
         box-shadow: var(--dash-card-shadow, 0 8px 32px 0 rgba(0, 0, 0, 0.25));
         transition: all 0.2s ease;
+        overflow: visible !important;
     }
 
     html[data-bs-theme="dark"] .dash-card,
@@ -87,7 +88,31 @@
         outline: none;
     }
 
-    /* Glass Primary Action Button (Pareho sa View Uploaded Receipt) */
+    .form-control-glass.is-invalid {
+        border-color: #ef4444 !important;
+        background-color: rgba(239, 68, 68, 0.05) !important;
+        background-image: none !important;
+        padding-right: 2.8rem !important;
+    }
+
+    /* Eye Toggle Button for Glass Inputs */
+    .eye-toggle {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: var(--text-muted, #94a3b8);
+        cursor: pointer;
+        z-index: 5;
+    }
+
+    .eye-toggle:hover {
+        color: var(--text-main, #f8fafc);
+    }
+
+    /* Glass Primary Action Button */
     .btn-glass-primary {
         display: inline-flex;
         align-items: center;
@@ -168,57 +193,103 @@
         background-color: rgba(255, 255, 255, 0.03) !important;
     }
 
-    /* Custom Glassmorphism Dropdown */
-    .glass-dropdown-toggle {
+    /* Custom Glassmorphism Dropdown Container with Smart Dropup/Dropdown */
+    .custom-dropdown-container {
+        position: relative;
+        width: 100%;
+        overflow: visible !important;
+    }
+    .custom-dropdown-toggle {
+        width: 100%;
         background-color: rgba(100, 116, 139, 0.05) !important;
         color: var(--text-main, #f8fafc) !important;
         border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
         border-radius: 10px;
-        padding: 10px 16px;
+        padding: 9px 14px;
         font-size: 0.875rem;
-        font-weight: 600;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 100%;
         cursor: pointer;
+        user-select: none;
         transition: all 0.2s ease;
     }
-    .glass-dropdown-toggle:hover, .glass-dropdown-toggle:focus {
+    .custom-dropdown-toggle:hover,
+    .custom-dropdown-container.show .custom-dropdown-toggle {
         border-color: #0284c7 !important;
         box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
     }
+    .custom-dropdown-toggle svg {
+        transition: transform 0.2s ease;
+        color: var(--text-muted, #94a3b8);
+    }
+    .custom-dropdown-container.show .custom-dropdown-toggle svg {
+        transform: rotate(180deg);
+    }
 
-    .glass-dropdown-menu {
-        background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.95)) !important;
+   /* Unang Card na naglalaman ng Personal Information */
+    #accountCat .dash-card:first-child {
+        position: relative !important;
+        z-index: 50 !important;
+        overflow: visible !important;
+    }
+
+    /* Custom Glassmorphism Dropdown Menu na mas mataas kaysa sa susunod na card */
+    .custom-dropdown-menu {
+        position: absolute;
+        left: 0;
+        right: 0;
+        background-color: var(--dash-card-bg, rgba(30, 41, 59, 0.98)) !important;
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.12)) !important;
         border-radius: 12px;
-        box-shadow: var(--dash-card-shadow, 0 10px 25px -5px rgba(0, 0, 0, 0.3));
         padding: 6px;
-        margin-top: 6px !important;
-        width: 100%;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        z-index: 999999 !important;
+        display: none;
+        max-height: 200px;
+        overflow-y: auto;
+    
     }
-    .glass-dropdown-item {
+    .custom-dropdown-container.dropup .custom-dropdown-menu {
+        bottom: calc(100% + 6px);
+        top: auto !important;
+    }
+    .custom-dropdown-container:not(.dropup) .custom-dropdown-menu {
+        top: calc(100% + 6px);
+        bottom: auto !important;
+    }
+    .custom-dropdown-container.show .custom-dropdown-menu {
+        display: block;
+        animation: dropDownFade 0.15s ease-out;
+    }
+    @keyframes dropDownFade {
+        from { opacity: 0; transform: translateY(-6px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .custom-dropdown-item {
+        padding: 8px 12px;
         color: var(--text-main, #f8fafc) !important;
-        font-size: 0.85rem;
         font-weight: 500;
-        padding: 10px 14px;
+        font-size: 0.85rem;
         border-radius: 8px;
+        cursor: pointer;
+        background-color: transparent !important;
         transition: all 0.15s ease;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        cursor: pointer;
     }
-    .glass-dropdown-item:hover {
+    .custom-dropdown-item:hover {
         background-color: rgba(2, 132, 199, 0.15) !important;
         color: #0284c7 !important;
     }
-    .glass-dropdown-item.active {
+    .custom-dropdown-item.selected {
         background-color: #0284c7 !important;
         color: #ffffff !important;
+        font-weight: 600;
     }
 
     /* Modern Glassmorphism Confirmation Modals */
@@ -310,32 +381,32 @@
                 <span class="text-muted small text-uppercase fw-bold d-block px-2 mb-2" style="font-size: 0.7rem; letter-spacing: 0.05em;">Categories</span>
                 
                 <div class="settings-nav-group">
-                    <button type="button" class="settings-nav-item active" onclick="showSettingsCategory('accountCat', this)">
+                    <button type="button" class="settings-nav-item active" onclick="switchAdminTab('accountCat', this)">
                         <span class="nav-title">Account & Security</span>
                         <span class="nav-desc">Personal details & password</span>
                     </button>
 
-                    <button type="button" class="settings-nav-item" onclick="showSettingsCategory('authCat', this)">
+                    <button type="button" class="settings-nav-item" onclick="switchAdminTab('authCat', this)">
                         <span class="nav-title">Authentication (MFA/OTP)</span>
                         <span class="nav-desc">OTP duration & attempt limits</span>
                     </button>
 
-                    <button type="button" class="settings-nav-item" onclick="showSettingsCategory('maintenanceCat', this)">
+                    <button type="button" class="settings-nav-item" onclick="switchAdminTab('maintenanceCat', this)">
                         <span class="nav-title">System Operational State</span>
                         <span class="nav-desc">Operational, maintenance & shutdown</span>
                     </button>
 
-                    <button type="button" class="settings-nav-item" onclick="showSettingsCategory('loanDefaultsCat', this)">
+                    <button type="button" class="settings-nav-item" onclick="switchAdminTab('loanDefaultsCat', this)">
                         <span class="nav-title">Loan Defaults</span>
                         <span class="nav-desc">Interest rates & max loan terms</span>
                     </button>
 
-                    <button type="button" class="settings-nav-item" onclick="showSettingsCategory('alertsCat', this)">
+                    <button type="button" class="settings-nav-item" onclick="switchAdminTab('alertsCat', this)">
                         <span class="nav-title">Notification & Alerts</span>
                         <span class="nav-desc">Email alert triggers for admin</span>
                     </button>
 
-                    <button type="button" class="settings-nav-item" onclick="showSettingsCategory('penaltyCat', this)">
+                    <button type="button" class="settings-nav-item" onclick="switchAdminTab('penaltyCat', this)">
                         <span class="nav-title">Penalty Policy</span>
                         <span class="nav-desc">Overdue rates & grace periods</span>
                     </button>
@@ -349,14 +420,13 @@
             <div id="accountCat" class="settings-content-panel">
                 <div class="dash-card p-4 mb-4">
                     <h5 class="fw-bold text-main mb-1">Personal Information</h5>
-                    <p class="text-muted small mb-4">Update your basic name, email, and contact number.</p>
+                    <p class="text-muted small mb-4">Update your complete personal information to clear profile verification requirements.</p>
 
-                    <form method="POST" action="{{ route('profile.update') }}">
-                        @csrf
+<form method="POST" action="{{ route('profile.update') }}" id="personalDetailsForm" enctype="multipart/form-data">                        @csrf
                         @method('PUT')
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small text-muted">Full Name</label>
+                                <label class="form-label fw-semibold small text-muted">Full Name *</label>
                                 <input type="text" name="name" class="form-control form-control-glass" value="{{ old('name', auth()->user()->name) }}" required>
                             </div>
                             <div class="col-md-6">
@@ -364,41 +434,211 @@
                                 <input type="email" class="form-control form-control-glass" value="{{ auth()->user()->email }}" disabled readonly>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small text-muted">Phone Number</label>
-                                <input type="text" name="phone" class="form-control form-control-glass" value="{{ old('phone', auth()->user()->phone) }}" placeholder="e.g. 09123456789">
+                                <label class="form-label fw-semibold small text-muted">Phone Number *</label>
+                                <input type="text" name="phone" class="form-control form-control-glass" value="{{ old('phone', auth()->user()->phone) }}" placeholder="e.g. 09123456789" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-muted">Date of Birth *</label>
+                                <input type="date" name="dob" class="form-control form-control-glass" value="{{ old('dob', auth()->user()->dob ? auth()->user()->dob->format('Y-m-d') : '') }}" required>
+                            </div>
+
+                            {{-- Custom Gender Dropdown --}}
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-muted">Gender</label>
+                                <input type="hidden" name="gender" id="gender_input" value="{{ old('gender', auth()->user()->gender) }}">
+                                <div class="custom-dropdown-container" id="genderDropdown">
+                                    <div class="custom-dropdown-toggle">
+                                        <span class="selected-text">{{ old('gender', auth()->user()->gender) ? old('gender', auth()->user()->gender) : 'Select Gender' }}</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                    </div>
+                                    <div class="custom-dropdown-menu">
+                                        <div class="custom-dropdown-item {{ old('gender', auth()->user()->gender) == 'Male' ? 'selected' : '' }}" data-value="Male">Male</div>
+                                        <div class="custom-dropdown-item {{ old('gender', auth()->user()->gender) == 'Female' ? 'selected' : '' }}" data-value="Female">Female</div>
+                                        <div class="custom-dropdown-item {{ old('gender', auth()->user()->gender) == 'Other' ? 'selected' : '' }}" data-value="Other">Other</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-muted">Nationality</label>
+                                <input type="text" name="nationality" class="form-control form-control-glass" value="{{ old('nationality', auth()->user()->nationality ?? 'Filipino') }}" placeholder="e.g. Filipino">
                             </div>
                             <div class="col-md-12">
-                                <label class="form-label fw-semibold small text-muted">Address</label>
-                                <textarea name="address" class="form-control form-control-glass" rows="2" placeholder="Enter complete address">{{ old('address', auth()->user()->address) }}</textarea>
+                                <label class="form-label fw-semibold small text-muted">Address *</label>
+                                <textarea name="address" class="form-control form-control-glass" rows="2" placeholder="Enter complete address" required>{{ old('address', auth()->user()->address) }}</textarea>
+                            </div>
+
+                            {{-- Custom ID Type Dropdown --}}
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-muted">ID Type</label>
+                                <input type="hidden" name="id_type" id="id_type_input" value="{{ old('id_type', auth()->user()->id_type) }}">
+                                <div class="custom-dropdown-container" id="idTypeDropdown">
+                                    <div class="custom-dropdown-toggle">
+                                        <span class="selected-text">{{ old('id_type', auth()->user()->id_type) ? old('id_type', auth()->user()->id_type) : 'Select Valid ID' }}</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                    </div>
+                                    <div class="custom-dropdown-menu">
+                                        <div class="custom-dropdown-item {{ old('id_type', auth()->user()->id_type) == 'PhilSys National ID' ? 'selected' : '' }}" data-value="PhilSys National ID">PhilSys National ID</div>
+                                        <div class="custom-dropdown-item {{ old('id_type', auth()->user()->id_type) == "Driver's License" ? 'selected' : '' }}" data-value="Driver's License">Driver's License</div>
+                                        <div class="custom-dropdown-item {{ old('id_type', auth()->user()->id_type) == 'UMID Card' ? 'selected' : '' }}" data-value="UMID Card">UMID Card</div>
+                                        <div class="custom-dropdown-item {{ old('id_type', auth()->user()->id_type) == 'SSS ID' ? 'selected' : '' }}" data-value="SSS ID">SSS ID</div>
+                                        <div class="custom-dropdown-item {{ old('id_type', auth()->user()->id_type) == 'Postal ID' ? 'selected' : '' }}" data-value="Postal ID">Postal ID</div>
+                                        <div class="custom-dropdown-item {{ old('id_type', auth()->user()->id_type) == 'Student ID' ? 'selected' : '' }}" data-value="Student ID">Student ID</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-muted">ID Number</label>
+                                <input type="text" name="id_number" class="form-control form-control-glass" value="{{ old('id_number', auth()->user()->id_number) }}" placeholder="e.g. 2316548978/974">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-muted">Upload ID Picture / Document</label>
+                                <input type="file" name="id_picture" class="form-control form-control-glass @error('id_picture') is-invalid @enderror" accept="image/*,.pdf">
+                                @error('id_picture')
+                                    <div class="text-danger small mt-1" style="font-size: 0.8rem;">
+                                        <i class="bi bi-exclamation-circle me-1"></i>{{ $message }}
+                                    </div>
+                                @enderror
+                                <small class="text-muted" style="font-size: 0.75rem;">Supported: JPG, PNG, PDF (Max: 2MB)</small>
+                            </div>
+
+                            {{-- Custom Employment Status Dropdown --}}
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold small text-muted">Employment Status</label>
+                                <input type="hidden" name="employment_status" id="employment_status_input" value="{{ old('employment_status', auth()->user()->employment_status ?? 'Employed') }}">
+                                <div class="custom-dropdown-container" id="empStatusDropdown">
+                                    <div class="custom-dropdown-toggle">
+                                        <span class="selected-text">{{ old('employment_status', auth()->user()->employment_status) ? old('employment_status', auth()->user()->employment_status) : 'Select Status' }}</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                    </div>
+                                    <div class="custom-dropdown-menu">
+                                        <div class="custom-dropdown-item {{ old('employment_status', auth()->user()->employment_status) == 'Employed' ? 'selected' : '' }}" data-value="Employed">Employed</div>
+                                        <div class="custom-dropdown-item {{ old('employment_status', auth()->user()->employment_status) == 'Unemployed' ? 'selected' : '' }}" data-value="Unemployed">Unemployed</div>
+                                        <div class="custom-dropdown-item {{ old('employment_status', auth()->user()->employment_status) == 'Student' ? 'selected' : '' }}" data-value="Student">Student</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold small text-muted">Occupation</label>
+                                <input type="text" name="occupation" class="form-control form-control-glass" value="{{ old('occupation', auth()->user()->occupation) }}" placeholder="e.g. IT Operations">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold small text-muted">Position</label>
+                                <input type="text" name="job_position" class="form-control form-control-glass" value="{{ old('job_position', auth()->user()->job_position) }}" placeholder="e.g. System Admin">
+                            </div>
+
+                            {{-- Custom Monthly Income Dropdown --}}
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-muted">Monthly Income Range</label>
+                                <input type="hidden" name="monthly_income" id="monthly_income_input" value="{{ old('monthly_income', auth()->user()->monthly_income) }}">
+                                <div class="custom-dropdown-container" id="incomeDropdown">
+                                    <div class="custom-dropdown-toggle">
+                                        <span class="selected-text">{{ old('monthly_income', auth()->user()->monthly_income) ? old('monthly_income', auth()->user()->monthly_income) : 'Select Range' }}</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                    </div>
+                                    <div class="custom-dropdown-menu">
+                                        <div class="custom-dropdown-item {{ old('monthly_income', auth()->user()->monthly_income) == 'Below ₱10,000' ? 'selected' : '' }}" data-value="Below ₱10,000">Below ₱10,000</div>
+                                        <div class="custom-dropdown-item {{ old('monthly_income', auth()->user()->monthly_income) == '₱10,000 - ₱25,000' ? 'selected' : '' }}" data-value="₱10,000 - ₱25,000">₱10,000 - ₱25,000</div>
+                                        <div class="custom-dropdown-item {{ old('monthly_income', auth()->user()->monthly_income) == '₱25,000 - ₱50,000' ? 'selected' : '' }}" data-value="₱25,000 - ₱50,000">₱25,000 - ₱50,000</div>
+                                        <div class="custom-dropdown-item {{ old('monthly_income', auth()->user()->monthly_income) == 'Above ₱50,000' ? 'selected' : '' }}" data-value="Above ₱50,000">Above ₱50,000</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-muted">Income Source</label>
+                                <input type="text" name="income_source" class="form-control form-control-glass" value="{{ old('income_source', auth()->user()->income_source) }}" placeholder="e.g. Salary">
                             </div>
                         </div>
-                        <div class="mt-4 text-end">
-                            <button type="submit" class="btn-glass-primary">Save Personal Details</button>
+                        <div class="mt-5 pt-3 text-end">
+                            <button type="button" class="btn-glass-primary" data-bs-toggle="modal" data-bs-target="#confirmPersonalModal">
+                                Save Personal Details
+                            </button>
                         </div>
                     </form>
                 </div>
 
                 <div class="dash-card p-4">
                     <h5 class="fw-bold text-main mb-1">Account Security</h5>
-                    <p class="text-muted small mb-4">Update your password to keep your admin account safe.</p>
+                    <p class="text-muted small mb-4">Update your password to keep your admin account safe with strict security rules.</p>
 
-                    <form method="POST" action="{{ route('profile.password') }}">
+                    <form method="POST" action="{{ route('admin.settings.password.update') }}">
                         @csrf
                         @method('PUT')
                         <div class="row g-3">
+                            {{-- Current Password --}}
                             <div class="col-md-12">
-                                <label class="form-label fw-semibold small text-muted">Current Password</label>
-                                <input type="password" name="current_password" class="form-control form-control-glass" required>
+                                <label class="form-label fw-semibold small text-muted">Current Password *</label>
+                                <div class="position-relative">
+                                    <input type="password" name="current_password" id="admin_current_password" class="form-control form-control-glass @error('current_password') is-invalid @enderror" placeholder="Enter current password" required>
+                                    <button type="button" class="eye-toggle" onclick="togglePassword('admin_current_password', this)">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                @error('current_password')
+                                    <div class="text-danger small mt-1" style="font-size: 0.8rem;">
+                                        <i class="bi bi-exclamation-circle me-1"></i>{{ $message }}
+                                    </div>
+                                @enderror
                             </div>
+
+                            {{-- New Password --}}
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small text-muted">New Password</label>
-                                <input type="password" name="password" class="form-control form-control-glass" required>
+                                <label class="form-label fw-semibold small text-muted">New Password *</label>
+                                <div class="position-relative">
+                                    <input type="password" name="password" id="adminNewPassword" class="form-control form-control-glass @error('password') is-invalid @enderror" placeholder="Create a strong password" required>
+                                    <button type="button" class="eye-toggle" onclick="togglePassword('adminNewPassword', this)">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                @error('password')
+                                    <div class="text-danger small mt-1" style="font-size: 0.8rem;">
+                                        <i class="bi bi-exclamation-circle me-1"></i>{{ $message }}
+                                    </div>
+                                @enderror
                             </div>
+
+                            {{-- Confirm New Password --}}
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small text-muted">Confirm New Password</label>
-                                <input type="password" name="password_confirmation" class="form-control form-control-glass" required>
+                                <label class="form-label fw-semibold small text-muted">Confirm New Password *</label>
+                                <div class="position-relative">
+                                    <input type="password" name="password_confirmation" id="adminConfirmPassword" class="form-control form-control-glass" placeholder="Confirm your password" required>
+                                    <button type="button" class="eye-toggle" onclick="togglePassword('adminConfirmPassword', this)">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
+
+                        {{-- Live Password Requirements Box --}}
+                        <div class="p-3 my-3 rounded-3 transition-all" id="adminReqBox" style="background-color: rgba(100, 116, 139, 0.05); border: 1px solid var(--dash-card-border, rgba(255, 255, 255, 0.08));">
+                            <div class="d-flex align-items-center gap-2 mb-2 text-secondary fw-semibold" style="font-size: 0.82rem;">
+                                <i class="bi bi-shield text-secondary" id="adminShieldHeaderIcon" style="font-size: 1rem;"></i>
+                                <span id="adminShieldHeaderText">Password Requirements:</span>
+                            </div>
+
+                            <div class="d-flex flex-column gap-1" style="font-size: 0.82rem;">
+                                <div id="adminRuleLength" class="text-secondary transition-all d-flex align-items-center gap-2">
+                                    <i class="bi bi-circle" id="adminIconLength" style="font-size: 0.75rem;"></i> At least 8 characters
+                                </div>
+                                <div id="adminRuleUpper" class="text-secondary transition-all d-flex align-items-center gap-2">
+                                    <i class="bi bi-circle" id="adminIconUpper" style="font-size: 0.75rem;"></i> One uppercase letter (A-Z)
+                                </div>
+                                <div id="adminRuleLower" class="text-secondary transition-all d-flex align-items-center gap-2">
+                                    <i class="bi bi-circle" id="adminIconLower" style="font-size: 0.75rem;"></i> One lowercase letter (a-z)
+                                </div>
+                                <div id="adminRuleNumber" class="text-secondary transition-all d-flex align-items-center gap-2">
+                                    <i class="bi bi-circle" id="adminIconNumber" style="font-size: 0.75rem;"></i> One number (0-9)
+                                </div>
+                                <div id="adminRuleSpecial" class="text-secondary transition-all d-flex align-items-center gap-2">
+                                    <i class="bi bi-circle" id="adminIconSpecial" style="font-size: 0.75rem;"></i> One special character (!@#$%^&*)
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="mt-4 text-end">
                             <button type="submit" class="btn-pill-danger">Change Password</button>
                         </div>
@@ -506,7 +746,6 @@
                         </div>
 
                         <div class="text-end">
-                            {{-- Triggers Confirmation Modal --}}
                             <button type="button" class="btn-glass-primary" data-bs-toggle="modal" data-bs-target="#confirmStateModal">
                                 Save Operational State
                             </button>
@@ -668,15 +907,100 @@
     </div>
 </div>
 
+{{-- CONFIRMATION MODAL PARA SA PERSONAL DETAILS --}}
+<div class="modal fade glass-modal" id="confirmPersonalModal" tabindex="-1" aria-labelledby="confirmPersonalModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-3">
+            <div class="modal-body pt-4">
+                <div class="modal-icon-badge warning mx-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </div>
+                <h4 class="fw-bold text-main mb-2">Save Personal Details?</h4>
+                <p class="text-muted small mb-0 px-3">
+                    Are you sure you want to update your personal information and profile verification details?
+                </p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-3 gap-2">
+                <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn-glass-primary" id="confirmPersonalSubmitBtn">
+                    Yes, Save Details
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function showSettingsCategory(catId, btn) {
         document.querySelectorAll('.settings-content-panel').forEach(el => el.style.display = 'none');
         document.querySelectorAll('.settings-nav-item').forEach(el => el.classList.remove('active'));
         document.getElementById(catId).style.display = 'block';
-        btn.classList.add('active');
+        if (btn) btn.classList.add('active');
     }
 
-    // Auto-Dismiss Alert Script
+    function switchAdminTab(catId, btn) {
+        showSettingsCategory(catId, btn);
+        localStorage.setItem('admin_settings_active_tab', catId);
+    }
+
+    // Eye Toggle Script
+    function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('bi-eye', 'bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('bi-eye-slash', 'bi-eye');
+        }
+    }
+
+    // Live Password Requirement Checker Script para sa Admin
+    const adminNewPassInput = document.getElementById('adminNewPassword');
+    if (adminNewPassInput) {
+        adminNewPassInput.addEventListener('input', function () {
+            const val = this.value;
+            function updateAdminRule(ruleId, iconId, isValid) {
+                const ruleEl = document.getElementById(ruleId);
+                const iconEl = document.getElementById(iconId);
+                if (isValid) {
+                    ruleEl.className = 'text-success fw-medium transition-all d-flex align-items-center gap-2';
+                    iconEl.className = 'bi bi-check-circle-fill text-success';
+                } else {
+                    ruleEl.className = 'text-secondary transition-all d-flex align-items-center gap-2';
+                    iconEl.className = 'bi bi-circle text-secondary';
+                }
+            }
+            const hasLength  = val.length >= 8;
+            const hasUpper   = /[A-Z]/.test(val);
+            const hasLower   = /[a-z]/.test(val);
+            const hasNumber  = /[0-9]/.test(val);
+            const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(val);
+
+            updateAdminRule('adminRuleLength',  'adminIconLength',  hasLength);
+            updateAdminRule('adminRuleUpper',   'adminIconUpper',   hasUpper);
+            updateAdminRule('adminRuleLower',   'adminIconLower',   hasLower);
+            updateAdminRule('adminRuleNumber',  'adminIconNumber',  hasNumber);
+            updateAdminRule('adminRuleSpecial', 'adminIconSpecial', hasSpecial);
+
+            const allValid = hasLength && hasUpper && hasLower && hasNumber && hasSpecial;
+            const reqBox = document.getElementById('adminReqBox');
+            const shieldIcon = document.getElementById('adminShieldHeaderIcon');
+
+            if (allValid) {
+                reqBox.style.backgroundColor = 'rgba(16, 185, 129, 0.08)';
+                reqBox.style.borderColor = 'rgba(16, 185, 129, 0.2)';
+                shieldIcon.className = 'bi bi-shield-check text-success';
+            } else {
+                reqBox.style.backgroundColor = 'rgba(100, 116, 139, 0.05)';
+                reqBox.style.borderColor = 'var(--dash-card-border, rgba(255, 255, 255, 0.08))';
+                shieldIcon.className = 'bi bi-shield text-secondary';
+            }
+        });
+    }
+
+    // Custom Glassmorphism Dropdown Script with Smart Dropup/Dropdown
     document.addEventListener('DOMContentLoaded', function() {
         const alertBox = document.getElementById('autoDismissAlert');
         if (alertBox) {
@@ -688,7 +1012,53 @@
             }, 3500);
         }
 
-        // Custom Dropdown Item Click Handler
+        // Generic Custom Dropdown Handler with Smart Position Detection
+        document.querySelectorAll('.custom-dropdown-container').forEach(container => {
+            const toggle = container.querySelector('.custom-dropdown-toggle');
+            const selectedText = container.querySelector('.selected-text');
+            const items = container.querySelectorAll('.custom-dropdown-item');
+            const hiddenInput = container.previousElementSibling;
+
+            toggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // Suriin kung malapit sa ibaba ng screen para kusa itong mag-dropup
+                const rect = container.getBoundingClientRect();
+                const spaceBelow = window.innerHeight - rect.bottom;
+                if (spaceBelow < 220) {
+                    container.classList.add('dropup');
+                } else {
+                    container.classList.remove('dropup');
+                }
+
+                // Isara ang iba pang nakabukas na dropdowns
+                document.querySelectorAll('.custom-dropdown-container').forEach(c => {
+                    if (c !== container) c.classList.remove('show', 'dropup');
+                });
+                container.classList.toggle('show');
+            });
+
+            items.forEach(item => {
+                item.addEventListener('click', () => {
+                    items.forEach(i => i.classList.remove('selected'));
+                    item.classList.add('selected');
+                    
+                    const val = item.getAttribute('data-value');
+                    selectedText.textContent = val;
+                    if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                        hiddenInput.value = val;
+                    }
+                    container.classList.remove('show', 'dropup');
+                });
+            });
+        });
+
+        // Isara ang mga dropdowns kapag nag-click sa labas
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.custom-dropdown-container').forEach(c => c.classList.remove('show', 'dropup'));
+        });
+
+        // Custom Dropdown Item Click Handler para sa Maintenance State
         document.querySelectorAll('.state-option').forEach(item => {
             item.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -708,13 +1078,43 @@
             });
         });
 
-        // Submit form upon confirming modal button click
+        // Submit form upon confirming modal button click (System State)
         const confirmBtn = document.getElementById('confirmStateSubmitBtn');
         if (confirmBtn) {
             confirmBtn.addEventListener('click', function() {
                 document.getElementById('systemStateForm').submit();
             });
         }
+
+        // Submit form upon confirming modal button click (Personal Details)
+        const confirmPersonalBtn = document.getElementById('confirmPersonalSubmitBtn');
+        if (confirmPersonalBtn) {
+            confirmPersonalBtn.addEventListener('click', function() {
+                document.getElementById('personalDetailsForm').submit();
+            });
+        }
+
+        @if ($errors->any())
+            @if ($errors->has('current_password') || $errors->has('password') || $errors->has('name') || $errors->has('phone') || $errors->has('address') || $errors->has('dob'))
+                switchAdminTab('accountCat', document.querySelector('[onclick*="accountCat"]'));
+            @elseif ($errors->has('otp_expiry_minutes') || $errors->has('otp_max_attempts') || $errors->has('otp_resend_cooldown_seconds') || $errors->has('otp_free_resend_attempts'))
+                switchAdminTab('authCat', document.querySelector('[onclick*="authCat"]'));
+            @elseif ($errors->has('maintenance_mode'))
+                switchAdminTab('maintenanceCat', document.querySelector('[onclick*="maintenanceCat"]'));
+            @elseif ($errors->has('loan_types.*'))
+                switchAdminTab('loanDefaultsCat', document.querySelector('[onclick*="loanDefaultsCat"]'));
+            @elseif ($errors->has('penalty_per_day') || $errors->has('grace_period_days') || $errors->has('max_penalty'))
+                switchAdminTab('penaltyCat', document.querySelector('[onclick*="penaltyCat"]'));
+            @endif
+        @else
+            const savedAdminTab = localStorage.getItem('admin_settings_active_tab');
+            if (savedAdminTab && document.getElementById(savedAdminTab)) {
+                const btn = document.querySelector(`[onclick*="${savedAdminTab}"]`);
+                if (btn) {
+                    showSettingsCategory(savedAdminTab, btn);
+                }
+            }
+        @endif
     });
 </script>
 @endsection

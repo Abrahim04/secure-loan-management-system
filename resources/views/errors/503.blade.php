@@ -77,26 +77,29 @@
             line-height: 1.6;
         }
 
-        .btn-pill-home {
-            background: linear-gradient(135deg, #0284c7 0%, #10b981 100%);
-            color: white;
-            border: none;
-            padding: 10px 28px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            text-decoration: none;
+        /* Eksaktong .btn-glass-primary style mula sa Settings page */
+        .btn-glass-primary {
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            background: rgba(2, 132, 199, 0.12);
+            border: 1px solid rgba(2, 132, 199, 0.3);
+            color: #0284c7;
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 9px 28px;
+            border-radius: 50px;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            text-decoration: none;
         }
 
-        .btn-pill-home:hover {
-            opacity: 0.95;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
-            color: white;
+        .btn-glass-primary:hover {
+            background: #0284c7;
+            border-color: #0284c7;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+            transform: translateY(-1px);
         }
     </style>
 </head>
@@ -107,55 +110,49 @@
         $systemState = SystemSetting::get('maintenance_mode', '1');
     @endphp
 
-    <div class="container px-3">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="maintenance-card">
-                    <!-- Brand Logo -->
-                    <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
-                        <img src="{{ asset('images/logo.png') }}" alt="PautangPro Logo" class="brand-logo-img mb-0">
-                        <div class="text-start">
-                            <div class="fw-bold fs-5 lh-1 text-white">
-                                Pautang<span style="color: var(--primary-emerald);">Pro</span>
-                            </div>
-                            <div class="text-muted small mt-1" style="font-size: 0.72rem; color: #94a3b8 !important;">Your Loan, Our Priority</div>
-                        </div>
-                    </div>
-
-                    @if($systemState === '2')
-                        <!-- EMERGENCY SHUTDOWN STATE -->
-                        <div class="maintenance-icon icon-shutdown">
-                            <i class="bi bi-shield-slash-fill"></i>
-                        </div>
-                        <h3 class="fw-bold text-white mb-2">System Offline</h3>
-                        <p class="notice-text mb-4">
-                            PautangPro services are currently offline due to an emergency system shutdown. Please contact the system administrator for further assistance.
-                        </p>
-                    @else
-                        <!-- SCHEDULED MAINTENANCE STATE -->
-                        <div class="maintenance-icon icon-maintenance">
-                            <i class="bi bi-tools"></i>
-                        </div>
-                        <h3 class="fw-bold text-white mb-2">Under Maintenance</h3>
-                        <p class="notice-text mb-4">
-                            We are currently performing scheduled system maintenance and upgrades. Please check back shortly.
-                        </p>
-                    @endif
-
-                  <div class="pt-2">
-    <form action="{{ route('logout') }}" method="POST" class="d-inline">
-        @csrf
-        <button type="submit" class="btn-pill-home border-0 cursor-pointer">
-            Back to Home
-        </button>
-    </form>
-</div>
-
-                    <div class="mt-4" style="font-size: 0.75rem; color: #64748b;">
-                        &copy; {{ date('Y') }} PautangPro. All rights reserved.
-                    </div>
+    <div class="maintenance-card mx-3">
+        <!-- Brand Logo -->
+        <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
+            <img src="{{ asset('images/logo.png') }}" alt="PautangPro Logo" class="brand-logo-img mb-0">
+            <div class="text-start">
+                <div class="fw-bold fs-5 lh-1 text-white">
+                    Pautang<span style="color: var(--primary-emerald);">Pro</span>
                 </div>
+                <div class="text-muted small mt-1" style="font-size: 0.72rem; color: #94a3b8 !important;">Your Loan, Our Priority</div>
             </div>
+        </div>
+
+        @if($systemState === '2')
+            <!-- EMERGENCY SHUTDOWN STATE -->
+            <div class="maintenance-icon icon-shutdown">
+                <i class="bi bi-shield-slash-fill"></i>
+            </div>
+            <h3 class="fw-bold text-white mb-2">System Offline</h3>
+            <p class="notice-text mb-4">
+                PautangPro services are currently offline due to an emergency system shutdown. Please contact the system administrator for further assistance.
+            </p>
+        @else
+            <!-- SCHEDULED MAINTENANCE STATE -->
+            <div class="maintenance-icon icon-maintenance">
+                <i class="bi bi-tools"></i>
+            </div>
+            <h3 class="fw-bold text-white mb-2">Under Maintenance</h3>
+            <p class="notice-text mb-4">
+                We are currently performing scheduled system maintenance and upgrades. Please check back shortly.
+            </p>
+        @endif
+
+        <div class="pt-2">
+            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                @csrf
+                <button type="submit" class="btn-glass-primary">
+                    Back to Home
+                </button>
+            </form>
+        </div>
+
+        <div class="mt-4" style="font-size: 0.75rem; color: #64748b;">
+            &copy; {{ date('Y') }} PautangPro. All rights reserved.
         </div>
     </div>
 
